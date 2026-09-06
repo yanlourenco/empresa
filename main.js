@@ -359,4 +359,177 @@ document.addEventListener('DOMContentLoaded', () => {
       window.open(`https://wa.me/5511999999999?text=${encodedMsg}`, '_blank');
     });
   }
+
+  // ==========================================================================
+  // 1. CALCULADORA INTERATIVA DE ROI
+  // ==========================================================================
+  function initRoiCalculator() {
+    const clientsSlider = document.getElementById('roi-clients-slider');
+    const ticketSlider = document.getElementById('roi-ticket-slider');
+    const clientsDisplay = document.getElementById('roi-clients-display');
+    const ticketDisplay = document.getElementById('roi-ticket-display');
+    const monthlyResult = document.getElementById('roi-monthly-result');
+    const annualResult = document.getElementById('roi-annual-result');
+    const netReturn = document.getElementById('roi-net-return');
+    const paybackPill = document.getElementById('roi-payback-pill');
+    const nichePills = document.querySelectorAll('.niche-pill');
+    const btnRoiCta = document.getElementById('btn-roi-cta');
+
+    if (!clientsSlider || !ticketSlider) return;
+
+    function calculate() {
+      const clients = parseInt(clientsSlider.value, 10);
+      const ticket = parseInt(ticketSlider.value, 10);
+
+      clientsDisplay.textContent = `${clients} clientes/mês`;
+      ticketDisplay.textContent = `R$ ${ticket.toLocaleString('pt-BR')},00`;
+
+      const monthly = clients * ticket;
+      const annual = monthly * 12;
+      const net = annual - 1200; // Deduct setup cost
+      const dailyIncome = monthly / 30;
+      const paybackDays = dailyIncome > 0 ? Math.max(1, Math.round(1200 / dailyIncome)) : 90;
+
+      if (monthlyResult) {
+        monthlyResult.innerHTML = `R$ ${monthly.toLocaleString('pt-BR')}<small>/mês</small>`;
+      }
+      if (annualResult) {
+        annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> extras por ano`;
+      }
+      if (netReturn) {
+        netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
+      }
+      if (paybackPill) {
+        paybackPill.textContent = `Se paga em ${paybackDays} dias`;
+      }
+    }
+
+    // Slider inputs
+    clientsSlider.addEventListener('input', calculate);
+    ticketSlider.addEventListener('input', calculate);
+
+    // Niche preset pills
+    nichePills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        nichePills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        const ticket = parseInt(pill.dataset.ticket, 10);
+        const clients = parseInt(pill.dataset.clients, 10);
+
+        if (ticketSlider) ticketSlider.value = ticket;
+        if (clientsSlider) clientsSlider.value = clients;
+
+        calculate();
+      });
+    });
+
+    // ROI CTA Click -> Pre-fill Goal in Contact Form
+    if (btnRoiCta) {
+      btnRoiCta.addEventListener('click', () => {
+        const goalInput = document.getElementById('goal');
+        const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'meu negócio';
+        const monthly = parseInt(clientsSlider.value, 10) * parseInt(ticketSlider.value, 10);
+        if (goalInput) {
+          goalInput.value = `Gostaria de estruturar o site para ${activeNiche} com meta de retorno de aprox. R$ ${monthly.toLocaleString('pt-BR')}/mês em novos clientes.`;
+          goalInput.focus();
+        }
+      });
+    }
+
+    calculate();
+  }
+
+  // ==========================================================================
+  // 2. FAQ ACORDEÃO INTERATIVO
+  // ==========================================================================
+  function initFaqAccordion() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      if (!question) return;
+
+      question.addEventListener('click', () => {
+        const isOpen = item.classList.contains('active');
+
+        // Close other items
+        faqItems.forEach(other => {
+          if (other !== item) {
+            other.classList.remove('active');
+            other.querySelector('.faq-question')?.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Toggle current item
+        if (isOpen) {
+          item.classList.remove('active');
+          question.setAttribute('aria-expanded', 'false');
+        } else {
+          item.classList.add('active');
+          question.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  }
+
+  // ==========================================================================
+  // 3. SOCIAL PROOF TOAST (NOTIFICAÇÕES FLUTUANTES)
+  // ==========================================================================
+  function initSocialProofToasts() {
+    const toast = document.getElementById('social-proof-toast');
+    const avatar = document.getElementById('toast-avatar');
+    const title = document.getElementById('toast-title');
+    const time = document.getElementById('toast-time');
+    const msg = document.getElementById('toast-msg');
+    const btnClose = document.getElementById('btn-close-toast');
+
+    if (!toast) return;
+
+    const events = [
+      { avatar: 'BM', title: 'Dovena Farmácia', time: 'há 3 min', msg: 'Atingiu +340% em agendamentos pelo novo site.' },
+      { avatar: 'LV', title: 'Barbearia Dark Beard', time: 'há 8 min', msg: '100% da agenda preenchida na 1ª semana do lançamento.' },
+      { avatar: 'BG', title: 'Be Greater Studio', time: 'há 15 min', msg: '85 novas matrículas registradas no 1º mês.' },
+      { avatar: 'JM', title: 'Jacket Masters', time: 'há 24 min', msg: '+4.8x retenção de clientes e 14.2% em conversão.' },
+      { avatar: 'SO', title: 'Soundar Audio', time: 'há 38 min', msg: 'R$ 78.000 em pré-vendas faturadas pelo novo site.' }
+    ];
+
+    let currentIndex = 0;
+    let toastTimeout = null;
+
+    function showNextToast() {
+      const ev = events[currentIndex];
+      if (avatar) avatar.textContent = ev.avatar;
+      if (title) title.textContent = ev.title;
+      if (time) time.textContent = ev.time;
+      if (msg) msg.textContent = ev.msg;
+
+      toast.classList.add('visible');
+
+      // Hide after 6 seconds
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 6000);
+
+      currentIndex = (currentIndex + 1) % events.length;
+    }
+
+    if (btnClose) {
+      btnClose.addEventListener('click', () => {
+        toast.classList.remove('visible');
+        if (toastTimeout) clearTimeout(toastTimeout);
+      });
+    }
+
+    // First toast after 4 seconds, then repeat every 20 seconds
+    setTimeout(() => {
+      showNextToast();
+      setInterval(showNextToast, 22000);
+    }, 4000);
+  }
+
+  // Initialize new features
+  initRoiCalculator();
+  initFaqAccordion();
+  initSocialProofToasts();
 });
+
