@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalWeb Pro - Sites Profissionais de Alta Performance para Negócios Locais</title>
+  <meta name="description" content="Desenvolvimento web profissional, sóbrio e eficiente para pequenos negócios locais. Sites rápidos, otimizados para SEO e integrados ao WhatsApp.">
+  
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Header Fixo de Navegação -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#inicio" class="brand-logo">
+        <span class="logo-mark">◼</span>
+        <span class="logo-text">LOCALWEB<span class="logo-accent">PRO</span></span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#inicio" class="nav-link active">Início</a>
+        <a href="#solucoes" class="nav-link">Soluções</a>
+        <a href="#projetos" class="nav-link">Projetos & Feedbacks</a>
+        <a href="#precos" class="nav-link">Valores</a>
+        <a href="#contato" class="nav-link">Contato</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Botão de Alternância de Tema Claro / Escuro -->
+        <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Alternar entre tema escuro e claro" title="Alternar tema claro/escuro">
+          <span class="theme-icon-slot">
+            <svg class="theme-icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="theme-icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </span>
+          <span class="theme-label" id="theme-label-text">Tema</span>
+        </button>
+
+        <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20para%20o%20meu%20neg%C3%B3cio." target="_blank" rel="noopener noreferrer" class="btn-primary-sm">
+          <span>Falar no WhatsApp</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.14 4.162 4.148-1.088z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="inicio">
+    <div class="container hero-container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Sites Profissionais para Negócios Locais</span>
+      </div>
+
+      <!-- Efeito 1: Stagger Text Rise no Título Principal -->
+      <h1 class="hero-title" data-stagger-text="Desenvolvimento Web de Alta Performance para Fortalecer Seu Negócio Local" data-stagger-ms="25" data-stagger-y="35">
+        Desenvolvimento Web de Alta Performance para <span class="highlight-text">Fortalecer Seu Negócio Local</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Criamos sites elegantes, rápidos e focados em gerar novos clientes via WhatsApp e Google Meu Negócio. Sem burocracia, entregue em até 7 dias.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#projetos" class="btn-primary-lg">
+          <span>Ver Projetos Entregues</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contato" class="btn-secondary-lg">
+          <span>Solicitar Orçamento</span>
+        </a>
+      </div>
+
+      <!-- Trust Grid metrics -->
+      <div class="trust-metrics-grid">
+        <div class="metric-card">
+          <span class="metric-num">5 a 7 Dias</span>
+          <span class="metric-desc">Prazo Médio de Entrega</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-num">+300%</span>
+          <span class="metric-desc">Aumento Médio em Conversões</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-num">100%</span>
+          <span class="metric-desc">Design Sob Medida & SEO Local</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Soluções & Serviços -->
+  <section class="services-section" id="solucoes">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">O que entregamos</span>
+        <h2 class="section-title" data-stagger-text="Soluções Sob Medida para o Seu Segmento" data-stagger-ms="30">Soluções Sob Medida para o Seu Segmento</h2>
+        <p class="section-subtitle">Desenvolvemos a estrutura completa para que o seu estabelecimento transmita credibilidade e converta visitantes em clientes reais.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon-box">01</div>
+          <h3 class="service-title">Design Sob Medida & Sóbrio</h3>
+          <p class="service-text">Visual limpo, elegante e profissional. Nada de modelos ultrapassados ou layouts genéricos.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon-box">02</div>
+          <h3 class="service-title">Integração Direta no WhatsApp</h3>
+          <p class="service-text">Botões estratégicos e fluxos que direcionam o visitante direto para a conversa com o seu atendimento.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon-box">03</div>
+          <h3 class="service-title">SEO Local & Google Meu Negócio</h3>
+          <p class="service-text">Estrutura técnica otimizada para que o seu estabelecimento apareça nas primeiras buscas da sua região.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon-box">04</div>
+          <h3 class="service-title">Carregamento Ultra-Rápido</h3>
+          <p class="service-text">Hospedagem em servidores cloud de alta velocidade. Seu site abre em menos de 1 segundo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO DE PROJETOS ENTREGUES & FEEDBACKS (CARROSSEL DINÂMICO & LIVE PREVIEW) -->
+  <section class="projects-section" id="projetos">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag" id="projects-section-tag">Portfólio & Resultados Reais</span>
+        <h2 class="section-title" data-stagger-text="Projetos Entregues & Casos de Sucesso" data-stagger-ms="28">Projetos Entregues & Casos de Sucesso</h2>
+        <p class="section-subtitle">Navegue pelas soluções criadas sob medida para pequenos negócios. Clique em qualquer projeto para testar a demonstração interativa ao vivo.</p>
+      </div>
+
+      <!-- Container do Carrossel 3D Minimalista & Dinâmico -->
+      <div class="carousel-wrapper">
+        <div class="modern-carousel-container" id="webgl-carousel-container"></div>
+      </div>
+
+      <!-- Feedback Detail Card do Projeto Ativo -->
+      <div class="feedback-card-container" id="active-feedback-box">
+        <div class="feedback-card">
+          <div class="feedback-header">
+            <div class="client-meta">
+              <div class="client-avatar" id="fb-avatar">BM</div>
+              <div class="client-info">
+                <h4 id="fb-client-name">Dra. Beatriz Mendes</h4>
+                <p id="fb-client-role">Diretora Técnica • Dovena Farmácia</p>
+              </div>
+            </div>
+            <div class="feedback-rating-badge">
+              <div class="rating-stars-svg" id="fb-rating-stars" aria-label="Avaliação 5 de 5 estrelas">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="#F59E0B"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <span class="verified-label">Avaliação Verificada</span>
+            </div>
+          </div>
+
+          <blockquote class="feedback-quote" id="fb-quote">
+            "A LocalWeb Pro transformou a forma como nossos pacientes agendam consultas e compram medicamentos. Nosso atendimento no WhatsApp triplicou de eficiência e o site carrega instantaneamente."
+          </blockquote>
+
+          <div class="feedback-footer">
+            <div class="meta-item">
+              <span class="meta-label">Projeto Entregue:</span>
+              <strong id="fb-project-title">Dovena - Farmácia & Clínica</strong>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Prazo de Produção:</span>
+              <strong id="fb-delivery-time">5 Dias Úteis</strong>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Resultado Obtido:</span>
+              <strong class="highlight-val" id="fb-results-metric">+340% em agendamentos</strong>
+            </div>
+          </div>
+
+          <!-- Botão para Abrir a Demonstração Interativa Completa do Projeto -->
+          <div class="feedback-action-bar">
+            <button class="btn-primary-lg full-width" id="btn-open-project-live">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/></svg>
+              <span>Explorar Projeto Ao Vivo (Demonstração Completa)</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MODAL DE VISUALIZAÇÃO DE PROJETO INTERATIVO AO VIVO (RESPONSIVO COM DEVICE SWITCHER) -->
+  <div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true">
+    <div class="modal-window">
+      <header class="modal-header">
+        
+        <!-- Left: Secure Domain & Title -->
+        <div class="modal-header-left">
+          <div class="modal-address-bar">
+            <svg class="lock-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            <span class="modal-url" id="modal-url-display">https://dovena.localwebpro.com.br</span>
+          </div>
+        </div>
+
+        <!-- Center: Device Switcher (Desktop / Tablet / Mobile) -->
+        <div class="modal-device-switcher">
+          <button class="device-btn active" data-viewport="desktop" title="Visualização Desktop">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>Desktop</span>
+          </button>
+          <button class="device-btn" data-viewport="tablet" title="Visualização Tablet (768px)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Tablet</span>
+          </button>
+          <button class="device-btn" data-viewport="mobile" title="Visualização Celular (375px)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            <span>Mobile</span>
+          </button>
+        </div>
+
+        <!-- Right: External Link & Close Button -->
+        <div class="modal-header-right">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="modal-ext-link-btn" id="modal-external-link-btn" title="Abrir em Nova Aba">
+            <span>Abrir Externa</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+          <button class="modal-close-btn" id="btn-close-project-modal" title="Fechar Demonstração (Esc)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+      </header>
+
+      <!-- Viewport Frame with Responsive Resizing -->
+      <div class="modal-viewport-wrapper">
+        <div class="modal-viewport-frame viewport-desktop" id="modal-viewport-frame">
+          <div class="modal-body" id="project-demo-viewport">
+            <!-- Injetado dinamicamente via JS com o site demonstrativo -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Seção Valores & Transparência -->
+  <section class="pricing-section" id="precos">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">Investimento Transparente</span>
+        <h2 class="section-title" data-stagger-text="Valores Claros & Sem Surpresas" data-stagger-ms="30">Valores Claros & Sem Surpresas</h2>
+        <p class="section-subtitle">Preço justo e condições transparentes para o lançamento e manutenção do site da sua empresa.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card featured">
+          <div class="card-badge">Setup Inicial</div>
+          <h3 class="price-title">Criação & Lançamento</h3>
+          <div class="price-amount">
+            <span class="currency">R$</span>
+            <span class="val">1.200</span>
+            <span class="period">Taxa Única</span>
+          </div>
+          <ul class="price-features">
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Layout Exclusivo Sob Medida</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Responsivo para Celular, Tablet e PC</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Otimização Completa de SEO Local</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Integração com WhatsApp & Redes Sociais</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Entrega Garantida em 5 a 7 Dias Úteis</li>
+          </ul>
+        </div>
+
+        <div class="price-card">
+          <div class="card-badge badge-secondary">Suporte MRR</div>
+          <h3 class="price-title">Hospedagem & Manutenção</h3>
+          <div class="price-amount">
+            <span class="currency">R$</span>
+            <span class="val">150</span>
+            <span class="period">/mês</span>
+          </div>
+          <ul class="price-features">
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Servidor Cloud de Alta Velocidade</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Certificado de Segurança SSL Inclusivo</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Backups Semanais Automáticos</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Alterações de Textos e Imagens Inclusas</li>
+            <li><svg class="check-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Suporte Prioritário no WhatsApp</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Contato / Orçamento -->
+  <section class="contact-section" id="contato">
+    <div class="container">
+      <div class="contact-box">
+        <div class="contact-info">
+          <span class="section-tag">Vamos conversar</span>
+          <h2 data-stagger-text="Pronto para Profissionalizar a Presença Digital do Seu Negócio?" data-stagger-ms="25">Pronto para Profissionalizar a Presença Digital do Seu Negócio?</h2>
+          <p>Preencha os dados ao lado para receber um diagnóstico rápido e o orçamento detalhado no seu WhatsApp.</p>
+          
+          <div class="contact-meta-list">
+            <div class="meta-line">Atendimento Nacional & Presencial Regional</div>
+            <div class="meta-line">Resposta em até 2 horas úteis</div>
+            <div class="meta-line">WhatsApp: (11) 95220-6393</div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrapper">
+          <form id="contact-form" onsubmit="return false;">
+            <div class="form-group">
+              <label for="company">Nome da Sua Empresa:</label>
+              <input type="text" id="company" class="input-field" placeholder="Ex: Barbearia Silva ou Clínica Rocha" required>
+            </div>
+
+            <div class="form-group">
+              <label for="niche">Nicho de Atuação:</label>
+              <select id="niche" class="input-field" required>
+                <option value="Barbearia / Salão">Barbearia / Salão de Beleza</option>
+                <option value="Saúde / Nutrição">Saúde / Clínica / Nutrição</option>
+                <option value="Academia / Studio">Academia / Studio Fitness</option>
+                <option value="Loja / Comercio">Loja de Roupas / Comércio</option>
+                <option value="Prestador de Serviços">Prestador de Serviços</option>
+                <option value="Outro Segmento">Outro Segmento</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Seu WhatsApp de Contato:</label>
+              <input type="tel" id="phone" class="input-field" placeholder="(11) 99999-9999" required>
+            </div>
+
+            <div class="form-group">
+              <label for="goal">O que você mais precisa melhorar?</label>
+              <input type="text" id="goal" class="input-field" placeholder="Ex: Receber mais agendamentos e passar mais credibilidade">
+            </div>
+
+            <button type="submit" class="btn-primary-lg full-width">
+              <span>Solicitar Orçamento no WhatsApp</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <span class="logo-text">LOCALWEB<span class="logo-accent">PRO</span></span>
+        <p>Desenvolvimento web profissional de alta performance para negócios locais.</p>
+      </div>
+
+      <div class="footer-copy">
+        <p>© 2026 LocalWeb Pro. Todos os direitos reservados. • <a href="/admin-leads.html" style="color: inherit; opacity: 0.6; text-decoration: none;">Painel de Leads</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
