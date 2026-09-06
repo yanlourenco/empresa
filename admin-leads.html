@@ -3,115 +3,302 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel de Leads & Orçamentos | LocalWeb Pro</title>
+  <title>Dashboard Executivo & Métricas Neon | LocalWeb Pro</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
-    .admin-container {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 24px;
+    /* ==========================================================================
+       DASHBOARD EXECUTIVO - ESPAÇAMENTO GENEROSO & DESIGN SYSTEM RESILIENTE
+       ========================================================================== */
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding-bottom: 80px;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
+
+    .admin-container {
+      max-width: 1320px;
+      margin: 48px auto 0;
+      padding: 0 36px;
+    }
+
     .admin-header {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 40px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-subtle);
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .admin-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .admin-breadcrumbs {
+      display: flex;
       align-items: center;
-      margin-bottom: 32px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--midnight-border);
+      gap: 12px;
+      font-size: 0.88rem;
     }
-    .admin-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #FFFFFF;
+
+    .back-link {
+      color: var(--midnight-vivid);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
     }
+    .back-link:hover {
+      opacity: 0.8;
+    }
+
     .db-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(0, 230, 153, 0.12);
-      border: 1px solid rgba(0, 230, 153, 0.3);
-      color: #00E699;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #10B981;
       font-size: 0.8rem;
-      font-weight: 600;
-      padding: 6px 14px;
+      font-weight: 700;
+      padding: 5px 14px;
       border-radius: 9999px;
     }
+
     .pulse-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #00E699;
-      box-shadow: 0 0 8px #00E699;
+      background: #10B981;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulseAnim 2s infinite ease-in-out;
     }
+
+    @keyframes pulseAnim {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .admin-title {
+      font-family: var(--font-heading);
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .admin-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-toggle-dash {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      height: 42px;
+      padding: 0 16px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .theme-toggle-dash:hover {
+      border-color: var(--midnight-vivid);
+    }
+
+    .refresh-btn {
+      background: var(--midnight-surface);
+      color: #FFFFFF;
+      border: 1px solid var(--midnight-border);
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .refresh-btn:hover {
+      background: var(--midnight-navy);
+      border-color: var(--midnight-vivid);
+    }
+
+    /* Cards de Estatísticas com Espaçamento Amplo */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
     }
+
     .stat-card {
-      background: #0D121F;
-      border: 1px solid var(--midnight-border);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 20px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s, border-color 0.2s;
     }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--midnight-border-hover);
+    }
+
     .stat-val {
-      font-family: 'Syne', sans-serif;
-      font-size: 2rem;
+      font-family: var(--font-heading);
+      font-size: 2.3rem;
       font-weight: 800;
-      color: #60A5FA;
-      margin-bottom: 4px;
+      color: #3B82F6;
+      line-height: 1.1;
     }
+
     .stat-lbl {
-      font-size: 0.85rem;
-      color: #94A3B8;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
     }
+
+    .stat-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Abas de Navegação no Dashboard */
+    .dashboard-tabs {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+
+    .dash-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .dash-tab-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .dash-tab-btn.active {
+      color: #FFFFFF;
+      background: var(--midnight-accent);
+      border-color: var(--midnight-accent);
+    }
+
+    [data-theme="light"] .dash-tab-btn.active {
+      color: #FFFFFF;
+      background: #1D4ED8;
+    }
+
+    /* Tabela e Seções de Conteúdo */
+    .table-section {
+      display: none;
+    }
+    .table-section.active {
+      display: block;
+    }
+
     .leads-table-wrapper {
-      background: #0D121F;
-      border: 1px solid var(--midnight-border);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       overflow-x: auto;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
+      min-width: 800px;
     }
+
     th {
-      background: #090E1A;
-      color: #94A3B8;
-      font-weight: 600;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--midnight-border);
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      font-weight: 700;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-subtle);
       text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
+      font-size: 0.78rem;
+      letter-spacing: 0.6px;
     }
+
     td {
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      color: #E2E8F0;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      vertical-align: middle;
     }
+
     tr:last-child td {
       border-bottom: none;
     }
+
     tr:hover td {
       background: rgba(255, 255, 255, 0.02);
     }
+    [data-theme="light"] tr:hover td {
+      background: rgba(15, 23, 42, 0.02);
+    }
+
     .badge-status {
       display: inline-block;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
       text-transform: capitalize;
     }
-    .badge-novo { background: rgba(59, 130, 246, 0.18); color: #60A5FA; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-novo {
+      background: rgba(59, 130, 246, 0.15);
+      color: #3B82F6;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
     .whatsapp-btn {
       display: inline-flex;
       align-items: center;
@@ -119,122 +306,281 @@
       background: #25D366;
       color: #05070B;
       font-weight: 700;
-      font-size: 0.78rem;
-      padding: 6px 12px;
+      font-size: 0.8rem;
+      padding: 7px 14px;
       border-radius: 6px;
       text-decoration: none;
+      transition: background-color 0.2s;
     }
     .whatsapp-btn:hover {
-      background: #22bf5b;
+      background: #20BA5C;
     }
-    .refresh-btn {
-      background: #1E293B;
-      color: #FFFFFF;
-      border: 1px solid #334155;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.85rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .refresh-btn:hover {
-      background: #334155;
-    }
+
     .empty-state {
-      padding: 60px 20px;
+      padding: 80px 24px;
       text-align: center;
-      color: #64748B;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Light Theme Adjustments */
+    [data-theme="light"] body {
+      background-color: #FFFFFF;
+      color: #05070B;
+    }
+    [data-theme="light"] .admin-title {
+      color: #05070B;
+    }
+    [data-theme="light"] .admin-subtitle {
+      color: #1E293B;
+    }
+    [data-theme="light"] .stat-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+    }
+    [data-theme="light"] .stat-val {
+      color: #1D4ED8;
+    }
+    [data-theme="light"] .stat-lbl {
+      color: #05070B;
+    }
+    [data-theme="light"] .stat-hint {
+      color: #334155;
+    }
+    [data-theme="light"] .leads-table-wrapper {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+    }
+    [data-theme="light"] th {
+      background: #F8FAFC;
+      color: #05070B;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    [data-theme="light"] td {
+      color: #05070B;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    [data-theme="light"] .refresh-btn {
+      background: #05070B;
+      border-color: #05070B;
+      color: #FFFFFF;
+    }
+    [data-theme="light"] .refresh-btn:hover {
+      background: #1E293B;
     }
   </style>
 </head>
 <body>
   <div class="admin-container">
-    <div class="admin-header">
-      <div>
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-          <a href="/" style="color: #94A3B8; text-decoration: none; font-size: 0.85rem;">← Voltar para o Site</a>
+    <header class="admin-header">
+      <div class="admin-title-group">
+        <div class="admin-breadcrumbs">
+          <a href="/" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Voltar para o Site
+          </a>
           <span class="db-badge">
             <span class="pulse-dot"></span>
-            Neon PostgreSQL Conectado
+            Neon Cloud PostgreSQL Conectado
           </span>
         </div>
-        <h1 class="admin-title">Painel de Leads & Orçamentos</h1>
+        <h1 class="admin-title">Painel Executivo & Métricas</h1>
+        <p class="admin-subtitle">Monitoramento em tempo real de captação de leads, simulações de retorno financeiro e telemetria de tráfego no banco Neon.</p>
       </div>
-      <button class="refresh-btn" id="btn-refresh">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-        Atualizar Dados
-      </button>
-    </div>
 
+      <div class="header-actions">
+        <button class="theme-toggle-dash" id="btn-theme-dash" title="Alternar tema claro/escuro">
+          <span id="theme-dash-text">☀️ Modo Claro</span>
+        </button>
+        <button class="refresh-btn" id="btn-refresh">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          Atualizar Dados
+        </button>
+      </div>
+    </header>
+
+    <!-- Métricas do Neon -->
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-val" id="stat-total">0</div>
-        <div class="stat-lbl">Total de Leads Captados</div>
+        <div class="stat-val" id="stat-leads-total">0</div>
+        <div class="stat-lbl">Leads Registrados</div>
+        <div class="stat-hint" id="stat-leads-today">0 registrados hoje</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val" id="stat-hoje" style="color: #00E699;">0</div>
-        <div class="stat-lbl">Registrados Hoje</div>
+        <div class="stat-val" id="stat-roi-total" style="color: #10B981;">0</div>
+        <div class="stat-lbl">Simulações de ROI</div>
+        <div class="stat-hint" id="stat-roi-avg">Média: R$ 0/mês</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val" id="stat-database" style="font-size: 1.3rem; color: #A78BFA; line-height: 2rem;">Neon Cloud</div>
-        <div class="stat-lbl">PostgreSQL 18 (AWS sa-east-1)</div>
+        <div class="stat-val" id="stat-wa-clicks" style="color: #25D366;">0</div>
+        <div class="stat-lbl">Cliques no WhatsApp</div>
+        <div class="stat-hint">Conversões diretas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-database" style="font-size: 1.4rem; color: #8B5CF6; line-height: 2.2rem;">Neon DB</div>
+        <div class="stat-lbl">AWS sa-east-1 (SP)</div>
+        <div class="stat-hint">PostgreSQL 18 Ativo</div>
       </div>
     </div>
 
-    <div class="leads-table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Empresa</th>
-            <th>Nicho</th>
-            <th>WhatsApp</th>
-            <th>Objetivo do Site</th>
-            <th>Status</th>
-            <th>Data de Envio</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody id="leads-table-body">
-          <tr>
-            <td colspan="8" class="empty-state">Carregando leads do Neon PostgreSQL...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Navegação por Abas -->
+    <nav class="dashboard-tabs" aria-label="Abas do painel">
+      <button class="dash-tab-btn active" data-tab="tab-leads">
+        📋 Leads Captados (<span id="tab-leads-count">0</span>)
+      </button>
+      <button class="dash-tab-btn" data-tab="tab-simulations">
+        💡 Simulações de ROI (<span id="tab-sim-count">0</span>)
+      </button>
+      <button class="dash-tab-btn" data-tab="tab-analytics">
+        📈 Telemetria de Eventos
+      </button>
+    </nav>
+
+    <!-- Seção 1: Leads -->
+    <section class="table-section active" id="tab-leads">
+      <div class="leads-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Empresa</th>
+              <th>Nicho</th>
+              <th>WhatsApp</th>
+              <th>Objetivo Comercial</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="leads-table-body">
+            <tr>
+              <td colspan="8" class="empty-state">Carregando leads do Neon PostgreSQL...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Seção 2: Simulações de ROI -->
+    <section class="table-section" id="tab-simulations">
+      <div class="leads-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nicho Simulado</th>
+              <th>Novos Clientes/Mês</th>
+              <th>Ticket Médio</th>
+              <th>Faturamento Mensal Previsto</th>
+              <th>Faturamento Anual</th>
+              <th>Payback</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="simulations-table-body">
+            <tr>
+              <td colspan="8" class="empty-state">Carregando simulações do Neon...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Seção 3: Telemetria de Eventos -->
+    <section class="table-section" id="tab-analytics">
+      <div class="leads-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo de Evento</th>
+              <th>Página</th>
+              <th>Detalhes</th>
+              <th>Data & Hora</th>
+            </tr>
+          </thead>
+          <tbody id="analytics-table-body">
+            <tr>
+              <td colspan="4" class="empty-state">Carregando telemetria...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 
   <script>
+    // Theme Management no Dashboard
+    const btnThemeDash = document.getElementById('btn-theme-dash');
+    const themeDashText = document.getElementById('theme-dash-text');
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('localweb_theme', theme);
+      if (themeDashText) {
+        themeDashText.textContent = theme === 'light' ? '🌙 Modo Escuro' : '☀️ Modo Claro';
+      }
+    }
+
+    const currentSaved = localStorage.getItem('localweb_theme') || 'dark';
+    applyTheme(currentSaved);
+
+    if (btnThemeDash) {
+      btnThemeDash.addEventListener('click', () => {
+        const active = document.documentElement.getAttribute('data-theme') || 'dark';
+        applyTheme(active === 'light' ? 'dark' : 'light');
+      });
+    }
+
+    // Tabs Management
+    const tabBtns = document.querySelectorAll('.dash-tab-btn');
+    const sections = document.querySelectorAll('.table-section');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+
+        btn.classList.add('active');
+        const target = document.getElementById(btn.dataset.tab);
+        if (target) target.classList.add('active');
+      });
+    });
+
+    // Data Fetching
+    async function loadDashboardData() {
+      await Promise.allSettled([loadLeads(), loadSimulations(), loadAnalytics()]);
+    }
+
     async function loadLeads() {
       const tbody = document.getElementById('leads-table-body');
-      const statTotal = document.getElementById('stat-total');
-      const statHoje = document.getElementById('stat-hoje');
+      const statTotal = document.getElementById('stat-leads-total');
+      const statToday = document.getElementById('stat-leads-today');
+      const tabCount = document.getElementById('tab-leads-count');
 
       try {
         const res = await fetch('/api/leads');
         const json = await res.json();
 
         if (!json.success || !json.data) {
-          tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Nenhum lead encontrado ou erro na resposta da API.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Erro ao carregar leads do Neon.</td></tr>`;
           return;
         }
 
         const leads = json.data;
         statTotal.textContent = leads.length;
+        if (tabCount) tabCount.textContent = leads.length;
 
         const todayStr = new Date().toISOString().slice(0, 10);
         const todayCount = leads.filter(l => (l.created_at || '').slice(0, 10) === todayStr).length;
-        statHoje.textContent = todayCount;
+        statToday.textContent = `${todayCount} registrados hoje`;
 
         if (leads.length === 0) {
           tbody.innerHTML = `
             <tr>
               <td colspan="8" class="empty-state">
-                Nenhum lead registrado ainda.<br>
-                Preencha o formulário de diagnóstico na página inicial para testar!
+                Nenhum lead captado ainda.<br>
+                Preencha o formulário de diagnóstico na página inicial para registrar o primeiro!
               </td>
             </tr>
           `;
@@ -248,13 +594,13 @@
 
           return `
             <tr>
-              <td style="color: #64748B; font-weight: 600;">#${l.id}</td>
-              <td style="font-weight: 700; color: #FFFFFF;">${escapeHtml(l.company_name)}</td>
-              <td><span style="color: #94A3B8;">${escapeHtml(l.niche || 'Geral')}</span></td>
-              <td style="font-family: monospace;">${escapeHtml(l.phone)}</td>
-              <td style="max-width: 250px; color: #CBD5E1;">${escapeHtml(l.goal || 'Site institucional')}</td>
+              <td style="color: var(--text-muted); font-weight: 700;">#${l.id}</td>
+              <td style="font-weight: 700; color: var(--text-primary);">${escapeHtml(l.company_name)}</td>
+              <td><span style="color: var(--text-secondary); font-weight: 600;">${escapeHtml(l.niche || 'Geral')}</span></td>
+              <td style="font-family: monospace; font-weight: 600;">${escapeHtml(l.phone)}</td>
+              <td style="max-width: 280px; color: var(--text-secondary);">${escapeHtml(l.goal || 'Site institucional de alta conversão')}</td>
               <td><span class="badge-status badge-novo">${escapeHtml(l.status || 'novo')}</span></td>
-              <td style="font-size: 0.8rem; color: #64748B;">${date}</td>
+              <td style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500;">${date}</td>
               <td>
                 <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
                   <span>Conversar</span>
@@ -264,7 +610,100 @@
           `;
         }).join('');
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="8" class="empty-state" style="color: #EF4444;">Erro ao conectar com a API: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-state" style="color: #EF4444;">Erro ao conectar com API Neon: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function loadSimulations() {
+      const tbody = document.getElementById('simulations-table-body');
+      const statRoiTotal = document.getElementById('stat-roi-total');
+      const statRoiAvg = document.getElementById('stat-roi-avg');
+      const tabSimCount = document.getElementById('tab-sim-count');
+
+      try {
+        const res = await fetch('/api/simulations');
+        const json = await res.json();
+
+        if (!json.success || !json.data) {
+          tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Sem dados de simulação ainda.</td></tr>`;
+          return;
+        }
+
+        const sims = json.data;
+        statRoiTotal.textContent = json.count || sims.length;
+        if (tabSimCount) tabSimCount.textContent = json.count || sims.length;
+
+        if (json.stats && json.stats.avg_projected_monthly) {
+          const avg = parseFloat(json.stats.avg_projected_monthly) || 0;
+          statRoiAvg.textContent = `Média: R$ ${Math.round(avg).toLocaleString('pt-BR')}/mês`;
+        }
+
+        if (sims.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="8" class="empty-state">
+                Nenhuma simulação registrada ainda.<br>
+                Acesse o Simulador de ROI na página inicial e mova os controles para registrar!
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = sims.map(s => {
+          const date = new Date(s.created_at).toLocaleString('pt-BR');
+          const monthly = parseFloat(s.projected_monthly) || 0;
+          const annual = parseFloat(s.projected_annual) || 0;
+          const ticket = parseFloat(s.average_ticket) || 0;
+
+          return `
+            <tr>
+              <td style="color: var(--text-muted); font-weight: 700;">#${s.id}</td>
+              <td style="font-weight: 700; color: var(--text-primary);">${escapeHtml(s.niche || 'Geral')}</td>
+              <td style="font-weight: 600;">${s.clients_per_month} clientes</td>
+              <td style="color: var(--text-secondary); font-weight: 600;">R$ ${ticket.toLocaleString('pt-BR')},00</td>
+              <td style="color: #10B981; font-weight: 800;">R$ ${monthly.toLocaleString('pt-BR')},00</td>
+              <td style="color: var(--text-primary); font-weight: 700;">R$ ${annual.toLocaleString('pt-BR')},00</td>
+              <td><span style="font-size: 0.8rem; font-weight: 600; color: #3B82F6;">${escapeHtml(s.payback_days || '30 dias')}</span></td>
+              <td style="font-size: 0.82rem; color: var(--text-muted);">${date}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" class="empty-state">Erro: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function loadAnalytics() {
+      const tbody = document.getElementById('analytics-table-body');
+      const statWa = document.getElementById('stat-wa-clicks');
+
+      try {
+        const res = await fetch('/api/analytics');
+        const json = await res.json();
+
+        if (json.success && json.summary) {
+          statWa.textContent = json.summary.whatsapp_clicks || 0;
+        }
+
+        if (!json.success || !json.recent || json.recent.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Nenhum evento registrado ainda.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = json.recent.map(e => {
+          const date = new Date(e.created_at).toLocaleString('pt-BR');
+          return `
+            <tr>
+              <td style="font-weight: 700; color: #3B82F6;">${escapeHtml(e.event_type)}</td>
+              <td>${escapeHtml(e.page_path || '/')}</td>
+              <td style="font-family: monospace; font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(JSON.stringify(e.event_data || {}))}</td>
+              <td style="font-size: 0.82rem; color: var(--text-muted);">${date}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Erro: ${err.message}</td></tr>`;
       }
     }
 
@@ -278,8 +717,8 @@
         .replace(/'/g, '&#039;');
     }
 
-    document.getElementById('btn-refresh').addEventListener('click', loadLeads);
-    loadLeads();
+    document.getElementById('btn-refresh').addEventListener('click', loadDashboardData);
+    loadDashboardData();
   </script>
 </body>
 </html>

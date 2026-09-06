@@ -29,7 +29,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-      const { company, niche, phone, goal } = body;
+      const { company, niche, phone, goal, email, estimated_budget, source } = body;
 
       if (!company || !phone) {
         return res.status(400).json({
@@ -42,10 +42,10 @@ export default async function handler(req, res) {
       const userAgent = req.headers['user-agent'] || null;
 
       const insertRes = await query(`
-        INSERT INTO leads (company_name, niche, phone, goal, ip_address, user_agent)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO leads (company_name, niche, phone, goal, email, estimated_budget, source, ip_address, user_agent)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         RETURNING *;
-      `, [company, niche || 'Outro', phone, goal || null, ip, userAgent]);
+      `, [company, niche || 'Outro', phone, goal || null, email || null, estimated_budget || null, source || 'form_contato', ip, userAgent]);
 
       return res.status(201).json({
         success: true,

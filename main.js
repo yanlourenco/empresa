@@ -70,6 +70,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set initial theme
   initTheme();
 
+  // Mobile Menu Navigation Toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const navLinksContainer = document.getElementById('nav-links');
+
+  if (mobileMenuBtn && navLinksContainer) {
+    mobileMenuBtn.addEventListener('click', () => {
+      const isOpen = navLinksContainer.classList.toggle('open');
+      mobileMenuBtn.classList.toggle('open', isOpen);
+      mobileMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    navLinksContainer.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinksContainer.classList.remove('open');
+        mobileMenuBtn.classList.remove('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
   /**
    * Applies Dynamic Brand Color Background Transition & WCAG Contrast to Projects Section
    */
@@ -377,6 +397,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!clientsSlider || !ticketSlider) return;
 
+    let roiSaveTimeout = null;
+    function persistSimulation() {
+      if (roiSaveTimeout) clearTimeout(roiSaveTimeout);
+      roiSaveTimeout = setTimeout(() => {
+        const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
+        const clients = parseInt(clientsSlider.value, 10);
+        const ticket = parseInt(ticketSlider.value, 10);
+        const monthly = clients * ticket;
+        const annual = monthly * 12;
+        const paybackDays = paybackPill ? paybackPill.textContent : '30 dias';
+
+        fetch('/api/simulations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            niche: activeNiche,
+            clients,
+            ticket,
+            monthly,
+            annual,
+            paybackDays
+          })
+        }).catch(() => {});
+      }, 1800);
+    }
+
     function calculate() {
       const clients = parseInt(clientsSlider.value, 10);
       const ticket = parseInt(ticketSlider.value, 10);
@@ -402,6 +448,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (paybackPill) {
         paybackPill.textContent = `Se paga em ${paybackDays} dias`;
       }
+
+      persistSimulation();
     }
 
     // Slider inputs
@@ -439,6 +487,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     calculate();
   }
+
+  // Telemetry event tracking
+  function trackEvent(eventType, eventData = {}) {
+    try {
+      fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventType,
+          eventData,
+          pagePath: window.location.pathname
+        })
+      }).catch(() => {});
+    } catch (_) {}
+  }
+
+  // Track page view
+  trackEvent('page_view', { referrer: document.referrer, screenWidth: window.innerWidth });
+
+  // Track all WhatsApp clicks
+  document.querySelectorAll('a[href*="wa.me"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      trackEvent('click_whatsapp', { position: btn.className || 'wa_button' });
+    });
+  });
 
   // ==========================================================================
   // 2. FAQ ACORDEÃO INTERATIVO
