@@ -2581,24 +2581,33 @@ body {
   color: #34D399;
 }
 
-.roi-highlight-sub {
-  font-size: 0.92rem;
-  color: var(--text-primary);
+.roi-results-card .roi-highlight-label {
+  color: #94A3B8 !important;
 }
 
-.roi-comparison-mini {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border-subtle);
+.roi-results-card .roi-highlight-sub {
+  color: #E2E8F0 !important;
+}
+
+.roi-results-card .roi-comparison-mini {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-sm);
-  padding: 14px;
+  padding: 16px;
   margin-bottom: 24px;
 }
 
-.comparison-row {
+.roi-results-card .comparison-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
-  padding: 4px 0;
+  font-size: 0.88rem;
+  color: #CBD5E1 !important;
+  padding: 6px 0;
+}
+
+.roi-results-card .comparison-row span:last-child {
+  color: #FFFFFF !important;
+  font-weight: 700;
 }
 
 /* 3. Seção FAQ Acordeão */
