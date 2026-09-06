@@ -90,14 +90,146 @@ const server = http.createServer(async (req, res) => {
               RETURNING *;
             `, [company, niche || 'Outro', phone, goal || null, email || null, estimated_budget || null, source || 'form_contato', ip, userAgent]);
 
+            const createdLead = insertRes.rows[0];
+
+            // Webhook instant notification (Discord / Telegram / Slack / generic)
+            try {
+              const webhookRow = await query("SELECT value FROM site_settings WHERE key = 'notification_webhook';");
+              const webhookUrl = webhookRow.rows[0]?.value;
+              if (webhookUrl && webhookUrl.startsWith('http')) {
+                const cleanPhone = (createdLead.phone || '').replace(/\D/g, '');
+                const waLink = `https://wa.me/55${cleanPhone}`;
+
+                if (webhookUrl.includes('discord.com')) {
+                  fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      embeds: [{
+                        title: '🚀 Novo Lead Captado no Site!',
+                        color: 0x2563EB,
+                        fields: [
+                          { name: 'Empresa', value: createdLead.company_name || 'Não informado', inline: true },
+                          { name: 'Nicho', value: createdLead.niche || 'Geral', inline: true },
+                          { name: 'WhatsApp', value: `[${createdLead.phone}](${waLink})`, inline: false },
+                          { name: 'Objetivo', value: createdLead.goal || 'Site institucional', inline: false }
+                        ],
+                        footer: { text: 'LocalWeb Pro • Neon Cloud' },
+                        timestamp: new Date().toISOString()
+                      }]
+                    })
+                  }).catch(e => console.warn('Discord webhook warning:', e.message));
+                } else {
+                  fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ event: 'new_lead', lead: createdLead, whatsapp_link: waLink })
+                  }).catch(e => console.warn('Generic webhook warning:', e.message));
+                }
+              }
+            } catch (notifyErr) {
+              console.warn('Webhook notification error (non-blocking):', notifyErr.message);
+            }
+
             res.statusCode = 201;
             return res.end(JSON.stringify({
               success: true,
               message: 'Lead registrado com sucesso no Neon PostgreSQL!',
-              lead: insertRes.rows[0]
+              lead: createdLead
             }));
           } catch (err) {
             console.error('API Error /api/leads:', err);
+            res.statusCode = 500;
+            return res.end(JSON.stringify({ success: false, error: err.message }));
+          }
+        });
+        return;
+      }
+
+      if (pathname === '/api/settings' && req.method === 'GET') {
+        const authHeader = req.headers['authorization'] || '';
+        const rows = await query('SELECT key, value, description FROM site_settings;');
+        const settingsMap = {};
+        rows.rows.forEach(r => { settingsMap[r.key] = r.value; });
+
+        if (authHeader.startsWith('Bearer ')) {
+          const pin = authHeader.replace('Bearer ', '').trim();
+          const savedPin = settingsMap['admin_pin'] || 'admin123';
+          if (pin === savedPin) {
+            res.statusCode = 200;
+            return res.end(JSON.stringify({
+              success: true,
+              authenticated: true,
+              settings: settingsMap
+            }));
+          }
+        }
+
+        res.statusCode = 200;
+        return res.end(JSON.stringify({
+          success: true,
+          authenticated: false,
+          settings: {
+            whatsapp_number: settingsMap['whatsapp_number'] || '5511999999999',
+            company_name: settingsMap['company_name'] || 'LocalWeb Pro',
+            contact_email: settingsMap['contact_email'] || 'contato@localwebpro.com.br'
+          }
+        }));
+      }
+
+      if (pathname === '/api/settings' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', async () => {
+          try {
+            const data = JSON.parse(body || '{}');
+            const { pin, whatsapp_number, new_pin, notification_webhook, contact_email } = data;
+
+            const pinRow = await query("SELECT value FROM site_settings WHERE key = 'admin_pin';");
+            const currentPin = pinRow.rows[0]?.value || 'admin123';
+
+            if (pin !== currentPin) {
+              res.statusCode = 401;
+              return res.end(JSON.stringify({ success: false, error: 'PIN de administrador incorreto.' }));
+            }
+
+            if (whatsapp_number !== undefined) {
+              const cleanNumber = String(whatsapp_number).replace(/\D/g, '');
+              await query(`
+                INSERT INTO site_settings (key, value, description, updated_at)
+                VALUES ('whatsapp_number', $1, 'Número do WhatsApp para conversão de leads', CURRENT_TIMESTAMP)
+                ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = CURRENT_TIMESTAMP;
+              `, [cleanNumber]);
+            }
+
+            if (contact_email !== undefined) {
+              await query(`
+                INSERT INTO site_settings (key, value, description, updated_at)
+                VALUES ('contact_email', $1, 'E-mail corporativo', CURRENT_TIMESTAMP)
+                ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = CURRENT_TIMESTAMP;
+              `, [contact_email]);
+            }
+
+            if (notification_webhook !== undefined) {
+              await query(`
+                INSERT INTO site_settings (key, value, description, updated_at)
+                VALUES ('notification_webhook', $1, 'URL de Webhook (Discord/Telegram) para notificações de lead', CURRENT_TIMESTAMP)
+                ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = CURRENT_TIMESTAMP;
+              `, [notification_webhook.trim()]);
+            }
+
+            if (new_pin && new_pin.trim().length >= 4) {
+              await query(`
+                INSERT INTO site_settings (key, value, description, updated_at)
+                VALUES ('admin_pin', $1, 'PIN de segurança do painel administrativo', CURRENT_TIMESTAMP)
+                ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = CURRENT_TIMESTAMP;
+              `, [new_pin.trim()]);
+            }
+
+            res.statusCode = 200;
+            return res.end(JSON.stringify({ success: true, message: 'Configurações atualizadas com sucesso!' }));
+          } catch (err) {
+            console.error('API Error /api/settings:', err);
             res.statusCode = 500;
             return res.end(JSON.stringify({ success: false, error: err.message }));
           }

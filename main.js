@@ -33,6 +33,36 @@ document.addEventListener('DOMContentLoaded', () => {
   let carouselInstance = null;
   let currentModalVideoEngine = null;
 
+  // Dynamic WhatsApp Number Configuration (synced with Neon DB & Admin Settings)
+  let currentWhatsApp = localStorage.getItem('localweb_whatsapp') || '5511999999999';
+
+  function applyWhatsAppToLinks(number) {
+    if (!number) return;
+    currentWhatsApp = String(number).replace(/\D/g, '');
+    localStorage.setItem('localweb_whatsapp', currentWhatsApp);
+
+    document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (href) {
+        const updated = href.replace(/wa\.me\/\d+/, `wa.me/${currentWhatsApp}`);
+        link.setAttribute('href', updated);
+      }
+    });
+  }
+
+  // Initial apply from cache
+  applyWhatsAppToLinks(currentWhatsApp);
+
+  // Fetch updated WhatsApp configuration from Neon DB
+  fetch('/api/settings')
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.settings && data.settings.whatsapp_number) {
+        applyWhatsAppToLinks(data.settings.whatsapp_number);
+      }
+    })
+    .catch(() => {});
+
   // Theme Management (Dark / Light Mode)
   const themeToggleBtn = document.getElementById('theme-toggle-btn');
   const themeLabelText = document.getElementById('theme-label-text');
@@ -221,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (projectDemoViewport) {
       // Render the authentic high-resolution image and video showcase sent by user
       projectDemoViewport.innerHTML = proj.demoHtml;
+      applyWhatsAppToLinks(currentWhatsApp);
 
       // If project has video in modal, ensure it plays smoothly with VideoShowcaseEngine
       const modalVideo = projectDemoViewport.querySelector('.live-modal-video');
@@ -376,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   `Gostaria de agendar um orcamento para o meu negocio!`;
 
       const encodedMsg = encodeURIComponent(msg);
-      window.open(`https://wa.me/5511999999999?text=${encodedMsg}`, '_blank');
+      window.open(`https://wa.me/${currentWhatsApp}?text=${encodedMsg}`, '_blank');
     });
   }
 

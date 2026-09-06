@@ -47,10 +47,51 @@ export default async function handler(req, res) {
         RETURNING *;
       `, [company, niche || 'Outro', phone, goal || null, email || null, estimated_budget || null, source || 'form_contato', ip, userAgent]);
 
+      const createdLead = insertRes.rows[0];
+
+      // Disparar notificação em segundo plano (não bloqueia resposta)
+      try {
+        const webhookRow = await query("SELECT value FROM site_settings WHERE key = 'notification_webhook';");
+        const webhookUrl = webhookRow.rows[0]?.value;
+        if (webhookUrl && webhookUrl.startsWith('http')) {
+          const cleanPhone = (createdLead.phone || '').replace(/\D/g, '');
+          const waLink = `https://wa.me/55${cleanPhone}`;
+
+          if (webhookUrl.includes('discord.com')) {
+            fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                embeds: [{
+                  title: '🚀 Novo Lead Captado no Site!',
+                  color: 0x2563EB,
+                  fields: [
+                    { name: 'Empresa', value: createdLead.company_name || 'Não informado', inline: true },
+                    { name: 'Nicho', value: createdLead.niche || 'Geral', inline: true },
+                    { name: 'WhatsApp', value: `[${createdLead.phone}](${waLink})`, inline: false },
+                    { name: 'Objetivo', value: createdLead.goal || 'Site institucional', inline: false }
+                  ],
+                  footer: { text: 'LocalWeb Pro • Neon Cloud' },
+                  timestamp: new Date().toISOString()
+                }]
+              })
+            }).catch(e => console.warn('Discord webhook warning:', e.message));
+          } else {
+            fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ event: 'new_lead', lead: createdLead, whatsapp_link: waLink })
+            }).catch(e => console.warn('Generic webhook warning:', e.message));
+          }
+        }
+      } catch (notifyErr) {
+        console.warn('Notification webhook error (non-blocking):', notifyErr.message);
+      }
+
       return res.status(201).json({
         success: true,
         message: 'Lead registrado com sucesso no Neon PostgreSQL!',
-        lead: insertRes.rows[0]
+        lead: createdLead
       });
     } catch (err) {
       console.error('Vercel API Leads POST Error:', err);

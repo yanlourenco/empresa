@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/style.css">
   <style>
     /* ==========================================================================
-       DASHBOARD EXECUTIVO - ESPAÇAMENTO GENEROSO & DESIGN SYSTEM RESILIENTE
+       DASHBOARD EXECUTIVO - ESPAÇAMENTO GENEROSO & SEGURANÇA POR PIN
        ========================================================================== */
     body {
       background-color: var(--bg-main);
@@ -108,7 +108,7 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .theme-toggle-dash {
@@ -134,7 +134,7 @@
       background: var(--midnight-surface);
       color: #FFFFFF;
       border: 1px solid var(--midnight-border);
-      padding: 10px 20px;
+      padding: 10px 18px;
       border-radius: var(--radius-sm);
       font-weight: 600;
       cursor: pointer;
@@ -147,6 +147,24 @@
     .refresh-btn:hover {
       background: var(--midnight-navy);
       border-color: var(--midnight-vivid);
+    }
+
+    .lock-btn {
+      background: rgba(239, 68, 68, 0.12);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .lock-btn:hover {
+      background: rgba(239, 68, 68, 0.22);
     }
 
     /* Cards de Estatísticas com Espaçamento Amplo */
@@ -201,6 +219,7 @@
       margin-bottom: 24px;
       border-bottom: 1px solid var(--border-subtle);
       padding-bottom: 12px;
+      flex-wrap: wrap;
     }
 
     .dash-tab-btn {
@@ -323,6 +342,216 @@
       font-size: 0.95rem;
     }
 
+    /* Aba de Configurações */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 28px;
+    }
+
+    .settings-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .settings-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settings-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .settings-form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .settings-form-group label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .settings-input {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .settings-input:focus {
+      border-color: var(--midnight-accent);
+    }
+
+    .btn-save-settings {
+      background: var(--midnight-accent);
+      color: #FFFFFF;
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+    .btn-save-settings:hover {
+      opacity: 0.9;
+    }
+
+    .settings-status-msg {
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: none;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+    }
+    .settings-status-msg.success {
+      display: block;
+      background: rgba(16, 185, 129, 0.12);
+      color: #10B981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .settings-status-msg.error {
+      display: block;
+      background: rgba(239, 68, 68, 0.12);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Modal / Overlay de Bloqueio por PIN */
+    #auth-lock-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(5, 7, 11, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.3s ease;
+    }
+
+    .lock-box {
+      background: #0B1120;
+      border: 1px solid var(--midnight-border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .lock-icon-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+      color: #3B82F6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .lock-title {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .lock-sub {
+      font-size: 0.9rem;
+      color: #94A3B8;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .pin-input {
+      width: 100%;
+      background: #060910;
+      border: 1px solid #1E293B;
+      border-radius: var(--radius-sm);
+      color: #FFFFFF;
+      padding: 14px;
+      font-size: 1.3rem;
+      text-align: center;
+      letter-spacing: 4px;
+      font-family: monospace;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .pin-input:focus {
+      border-color: #3B82F6;
+    }
+
+    .btn-unlock {
+      width: 100%;
+      background: #2563EB;
+      color: #FFFFFF;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-unlock:hover {
+      background: #1D4ED8;
+    }
+
+    .lock-error {
+      color: #F87171;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .lock-default-hint {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #64748B;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(255, 255, 255, 0.08);
+    }
+
     /* Light Theme Adjustments */
     [data-theme="light"] body {
       background-color: #FFFFFF;
@@ -334,7 +563,8 @@
     [data-theme="light"] .admin-subtitle {
       color: #1E293B;
     }
-    [data-theme="light"] .stat-card {
+    [data-theme="light"] .stat-card,
+    [data-theme="light"] .settings-card {
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
       box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
@@ -342,11 +572,19 @@
     [data-theme="light"] .stat-val {
       color: #1D4ED8;
     }
-    [data-theme="light"] .stat-lbl {
+    [data-theme="light"] .stat-lbl,
+    [data-theme="light"] .settings-card h3,
+    [data-theme="light"] .settings-form-group label {
       color: #05070B;
     }
-    [data-theme="light"] .stat-hint {
-      color: #334155;
+    [data-theme="light"] .stat-hint,
+    [data-theme="light"] .settings-card p {
+      color: #1E293B;
+    }
+    [data-theme="light"] .settings-input {
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      color: #05070B;
     }
     [data-theme="light"] .leads-table-wrapper {
       background: #FFFFFF;
@@ -372,6 +610,30 @@
   </style>
 </head>
 <body>
+
+  <!-- Tela de Bloqueio por PIN -->
+  <div id="auth-lock-overlay">
+    <div class="lock-box">
+      <div class="lock-icon-circle">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h2 class="lock-title">Acesso Restrito</h2>
+      <p class="lock-sub">Digite seu PIN de administrador para acessar os leads e simulações do Neon.</p>
+
+      <form id="form-unlock" onsubmit="return false;">
+        <input type="password" id="input-pin" class="pin-input" placeholder="••••••" autocomplete="current-password" autofocus>
+        <button type="submit" id="btn-unlock-submit" class="btn-unlock">Acessar Painel</button>
+      </form>
+      <div id="lock-error-msg" class="lock-error">PIN incorreto. Tente novamente.</div>
+
+      <div class="lock-default-hint">
+        🔑 <strong>PIN inicial padrão:</strong> <code>admin123</code><br>
+        (Altere a qualquer momento na aba Configurações)
+      </div>
+    </div>
+  </div>
+
+  <!-- Container Principal do Dashboard -->
   <div class="admin-container">
     <header class="admin-header">
       <div class="admin-title-group">
@@ -396,6 +658,10 @@
         <button class="refresh-btn" id="btn-refresh">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
           Atualizar Dados
+        </button>
+        <button class="lock-btn" id="btn-lock-dash" title="Bloquear painel e sair">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Bloquear
         </button>
       </div>
     </header>
@@ -434,6 +700,9 @@
       </button>
       <button class="dash-tab-btn" data-tab="tab-analytics">
         📈 Telemetria de Eventos
+      </button>
+      <button class="dash-tab-btn" data-tab="tab-settings">
+        ⚙️ Configurações & WhatsApp
       </button>
     </nav>
 
@@ -507,10 +776,148 @@
         </table>
       </div>
     </section>
+
+    <!-- Seção 4: Configurações & WhatsApp -->
+    <section class="table-section" id="tab-settings">
+      <div class="settings-grid">
+        <!-- Card 1: WhatsApp Oficial -->
+        <div class="settings-card">
+          <h3>📱 WhatsApp Comercial Oficial</h3>
+          <p>Altere o número para onde todos os botões do site e formulários direcionam os clientes.</p>
+
+          <div class="settings-form-group">
+            <label for="cfg-whatsapp">Número com DDD (apenas números ou formatado):</label>
+            <input type="text" id="cfg-whatsapp" class="settings-input" placeholder="Ex: 11987654321">
+          </div>
+
+          <div class="settings-form-group">
+            <label for="cfg-email">E-mail de Contato da Empresa:</label>
+            <input type="email" id="cfg-email" class="settings-input" placeholder="contato@seusite.com.br">
+          </div>
+
+          <button class="btn-save-settings" id="btn-save-whatsapp">
+            <span>Salvar Contatos no Neon</span>
+          </button>
+          <div id="status-msg-contacts" class="settings-status-msg"></div>
+        </div>
+
+        <!-- Card 2: Notificações em Tempo Real (Webhook Discord / Telegram) -->
+        <div class="settings-card">
+          <h3>🔔 Notificação Instantânea de Leads</h3>
+          <p>Receba um alerta no seu celular assim que um novo lead solicitar orçamento no site.</p>
+
+          <div class="settings-form-group">
+            <label for="cfg-webhook">URL de Webhook (Discord / Slack / Telegram):</label>
+            <input type="url" id="cfg-webhook" class="settings-input" placeholder="https://discord.com/api/webhooks/...">
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-save-settings" id="btn-save-webhook" style="flex: 1;">
+              Salvar Webhook
+            </button>
+            <button class="refresh-btn" id="btn-test-webhook" style="padding: 12px;">
+              Testar Envio
+            </button>
+          </div>
+          <div id="status-msg-webhook" class="settings-status-msg"></div>
+
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            💡 <strong>Como criar no Discord:</strong> Em qualquer canal de texto do seu servidor > Editar Canal > Integrações > Webhooks > Criar Webhook > Copiar URL.
+          </p>
+        </div>
+
+        <!-- Card 3: Alteração do PIN do Painel -->
+        <div class="settings-card">
+          <h3>🔐 Segurança & PIN de Acesso</h3>
+          <p>Altere a senha que protege este painel administrativo contra acessos não autorizados.</p>
+
+          <div class="settings-form-group">
+            <label for="cfg-new-pin">Novo PIN de Acesso (mínimo 4 caracteres):</label>
+            <input type="password" id="cfg-new-pin" class="settings-input" placeholder="Digite o novo PIN">
+          </div>
+
+          <button class="btn-save-settings" id="btn-save-pin" style="background: #0F172A; border: 1px solid var(--border-subtle);">
+            Alterar PIN de Acesso
+          </button>
+          <div id="status-msg-pin" class="settings-status-msg"></div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
-    // Theme Management no Dashboard
+    // ==========================================================================
+    // SISTEMA DE AUTENTICAÇÃO POR PIN
+    // ==========================================================================
+    const lockOverlay = document.getElementById('auth-lock-overlay');
+    const inputPin = document.getElementById('input-pin');
+    const formUnlock = document.getElementById('form-unlock');
+    const lockErrorMsg = document.getElementById('lock-error-msg');
+    const btnLockDash = document.getElementById('btn-lock-dash');
+
+    let currentAuthPin = localStorage.getItem('localweb_admin_auth') || '';
+
+    async function checkAuth(pinToCheck) {
+      try {
+        const res = await fetch('/api/settings', {
+          headers: { 'Authorization': `Bearer ${pinToCheck}` }
+        });
+        const data = await res.json();
+        return data.authenticated === true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    async function tryUnlock(pin) {
+      if (!pin) return;
+      const isValid = await checkAuth(pin);
+      if (isValid) {
+        currentAuthPin = pin;
+        localStorage.setItem('localweb_admin_auth', pin);
+        lockOverlay.style.opacity = '0';
+        setTimeout(() => { lockOverlay.style.display = 'none'; }, 300);
+        loadDashboardData();
+        loadSettingsForm();
+      } else {
+        lockErrorMsg.style.display = 'block';
+        inputPin.value = '';
+        inputPin.focus();
+      }
+    }
+
+    formUnlock.addEventListener('submit', (e) => {
+      e.preventDefault();
+      tryUnlock(inputPin.value.trim());
+    });
+
+    if (btnLockDash) {
+      btnLockDash.addEventListener('click', () => {
+        localStorage.removeItem('localweb_admin_auth');
+        currentAuthPin = '';
+        lockOverlay.style.display = 'flex';
+        lockOverlay.style.opacity = '1';
+        inputPin.value = '';
+        inputPin.focus();
+      });
+    }
+
+    // Auto-login se já tiver autenticado
+    if (currentAuthPin) {
+      checkAuth(currentAuthPin).then(valid => {
+        if (valid) {
+          lockOverlay.style.display = 'none';
+          loadDashboardData();
+          loadSettingsForm();
+        } else {
+          localStorage.removeItem('localweb_admin_auth');
+        }
+      });
+    }
+
+    // ==========================================================================
+    // TEMA & ABAS DO DASHBOARD
+    // ==========================================================================
     const btnThemeDash = document.getElementById('btn-theme-dash');
     const themeDashText = document.getElementById('theme-dash-text');
 
@@ -547,7 +954,9 @@
       });
     });
 
-    // Data Fetching
+    // ==========================================================================
+    // CARREGAMENTO DE DADOS DO NEON
+    // ==========================================================================
     async function loadDashboardData() {
       await Promise.allSettled([loadLeads(), loadSimulations(), loadAnalytics()]);
     }
@@ -707,6 +1116,143 @@
       }
     }
 
+    // ==========================================================================
+    // CONFIGURAÇÕES DO SISTEMA (WHATSAPP, PIN, WEBHOOK)
+    // ==========================================================================
+    async function loadSettingsForm() {
+      try {
+        const res = await fetch('/api/settings', {
+          headers: { 'Authorization': `Bearer ${currentAuthPin}` }
+        });
+        const data = await res.json();
+        if (data.success && data.settings) {
+          const cfg = data.settings;
+          if (document.getElementById('cfg-whatsapp')) document.getElementById('cfg-whatsapp').value = cfg.whatsapp_number || '';
+          if (document.getElementById('cfg-email')) document.getElementById('cfg-email').value = cfg.contact_email || '';
+          if (document.getElementById('cfg-webhook')) document.getElementById('cfg-webhook').value = cfg.notification_webhook || '';
+        }
+      } catch (_) {}
+    }
+
+    function showStatus(elemId, msg, isSuccess) {
+      const el = document.getElementById(elemId);
+      if (!el) return;
+      el.textContent = msg;
+      el.className = `settings-status-msg ${isSuccess ? 'success' : 'error'}`;
+      setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    // Salvar Contatos
+    document.getElementById('btn-save-whatsapp')?.addEventListener('click', async () => {
+      const wa = document.getElementById('cfg-whatsapp').value.trim();
+      const email = document.getElementById('cfg-email').value.trim();
+
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pin: currentAuthPin,
+            whatsapp_number: wa,
+            contact_email: email
+          })
+        });
+        const data = await res.json();
+        showStatus('status-msg-contacts', data.message || data.error, data.success);
+      } catch (err) {
+        showStatus('status-msg-contacts', err.message, false);
+      }
+    });
+
+    // Salvar Webhook
+    document.getElementById('btn-save-webhook')?.addEventListener('click', async () => {
+      const wh = document.getElementById('cfg-webhook').value.trim();
+
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pin: currentAuthPin,
+            notification_webhook: wh
+          })
+        });
+        const data = await res.json();
+        showStatus('status-msg-webhook', data.message || data.error, data.success);
+      } catch (err) {
+        showStatus('status-msg-webhook', err.message, false);
+      }
+    });
+
+    // Testar Envio de Webhook
+    document.getElementById('btn-test-webhook')?.addEventListener('click', async () => {
+      const wh = document.getElementById('cfg-webhook').value.trim();
+      if (!wh) {
+        showStatus('status-msg-webhook', 'Insira uma URL de Webhook válida primeiro.', false);
+        return;
+      }
+
+      showStatus('status-msg-webhook', 'Disparando teste de notificação...', true);
+
+      try {
+        if (wh.includes('discord.com')) {
+          await fetch(wh, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              embeds: [{
+                title: '🧪 Teste de Notificação LocalWeb Pro',
+                description: 'Se você está vendo esta mensagem, sua integração de leads está 100% ativa!',
+                color: 0x10B981,
+                timestamp: new Date().toISOString()
+              }]
+            })
+          });
+          showStatus('status-msg-webhook', '✅ Notificação de teste enviada com sucesso ao Discord!', true);
+        } else {
+          await fetch(wh, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ test: true, time: new Date().toISOString() })
+          });
+          showStatus('status-msg-webhook', '✅ Notificação de teste disparada com sucesso!', true);
+        }
+      } catch (err) {
+        showStatus('status-msg-webhook', `Erro no teste: ${err.message}`, false);
+      }
+    });
+
+    // Alterar PIN
+    document.getElementById('btn-save-pin')?.addEventListener('click', async () => {
+      const newPin = document.getElementById('cfg-new-pin').value.trim();
+      if (!newPin || newPin.length < 4) {
+        showStatus('status-msg-pin', 'O novo PIN deve ter pelo menos 4 caracteres.', false);
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pin: currentAuthPin,
+            new_pin: newPin
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentAuthPin = newPin;
+          localStorage.setItem('localweb_admin_auth', newPin);
+          document.getElementById('cfg-new-pin').value = '';
+          showStatus('status-msg-pin', 'PIN alterado com sucesso!', true);
+        } else {
+          showStatus('status-msg-pin', data.error, false);
+        }
+      } catch (err) {
+        showStatus('status-msg-pin', err.message, false);
+      }
+    });
+
     function escapeHtml(str) {
       if (!str) return '';
       return String(str)
@@ -718,7 +1264,6 @@
     }
 
     document.getElementById('btn-refresh').addEventListener('click', loadDashboardData);
-    loadDashboardData();
   </script>
 </body>
 </html>
