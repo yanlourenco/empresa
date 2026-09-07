@@ -1527,11 +1527,13 @@
       const loader = showLoadingScreen({
         title: 'LOCALWEB PRO',
         message: 'Validando PIN e conectando ao Neon DB...',
-        baseColor: '#1E293B',
+        baseColor: '#334155',
         accentColor: '#38BDF8'
       });
 
-      const isValid = await checkAuth(pin);
+      const minTimePromise = new Promise(r => setTimeout(r, 1600));
+      const [isValid] = await Promise.all([checkAuth(pin), minTimePromise]);
+
       if (isValid) {
         currentAuthPin = pin;
         localStorage.setItem('localweb_admin_auth', pin);
@@ -1567,11 +1569,12 @@
       const initLoader = showLoadingScreen({
         title: 'LOCALWEB PRO',
         message: 'Sincronizando painel com o Neon DB...',
-        baseColor: '#1E293B',
+        baseColor: '#334155',
         accentColor: '#38BDF8'
       });
 
-      checkAuth(currentAuthPin).then(async valid => {
+      const minInitTime = new Promise(r => setTimeout(r, 1600));
+      Promise.all([checkAuth(currentAuthPin), minInitTime]).then(async ([valid]) => {
         if (valid) {
           lockOverlay.style.display = 'none';
           await loadAllData();

@@ -32,7 +32,15 @@ if (preloaderEl && preloaderCanvasBox) {
     }, 600);
   };
 
-  const minTimer = new Promise(res => setTimeout(res, 850));
+  const statusEl = document.getElementById('preloader-status-text');
+  setTimeout(() => {
+    if (statusEl) statusEl.textContent = 'Carregando componentes e alta performance...';
+  }, 1000);
+  setTimeout(() => {
+    if (statusEl) statusEl.textContent = 'Ambiente pronto.';
+  }, 2000);
+
+  const minTimer = new Promise(res => setTimeout(res, 2300));
   const docReady = new Promise(res => {
     if (document.readyState === 'complete') res();
     else window.addEventListener('load', res, { once: true });
@@ -657,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
           setTimeout(() => {
             window.print();
           }, 300);
-        }, 900);
+        }, 1600);
       });
     }
 
