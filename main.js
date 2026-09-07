@@ -538,82 +538,269 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================================================
-  // 1. CALCULADORA INTERATIVA DE ROI
+  // 1. CALCULADORA INTERATIVA DE ROI MULTI-MODO
   // ==========================================================================
   function initRoiCalculator() {
-    const clientsSlider = document.getElementById('roi-clients-slider');
-    const ticketSlider = document.getElementById('roi-ticket-slider');
-    const clientsDisplay = document.getElementById('roi-clients-display');
-    const ticketDisplay = document.getElementById('roi-ticket-display');
+    // Mode tabs
+    const modeTabs = document.querySelectorAll('.sim-mode-tab');
+    const panels = {
+      funnel: document.getElementById('sim-panel-funnel'),
+      direct: document.getElementById('sim-panel-direct'),
+      opportunity: document.getElementById('sim-panel-opportunity')
+    };
+
+    // Mode 1: Funil elements
+    const funnelVisitsSlider = document.getElementById('funnel-visits-slider');
+    const funnelVisitsInput = document.getElementById('funnel-visits-input');
+    const funnelConvSlider = document.getElementById('funnel-conv-slider');
+    const funnelConvInput = document.getElementById('funnel-conv-input');
+    const funnelCloseSlider = document.getElementById('funnel-close-slider');
+    const funnelCloseInput = document.getElementById('funnel-close-input');
+    const funnelTicketSlider = document.getElementById('funnel-ticket-slider');
+    const funnelTicketInput = document.getElementById('funnel-ticket-input');
+
+    // Funnel pipeline badges
+    const pipVisits = document.getElementById('pip-visits');
+    const pipLeads = document.getElementById('pip-leads');
+    const pipSales = document.getElementById('pip-sales');
+    const pipRevenue = document.getElementById('pip-revenue');
+
+    // Mode 2: Direct elements
+    const directClientsSlider = document.getElementById('roi-clients-slider');
+    const directClientsInput = document.getElementById('roi-clients-input');
+    const directTicketSlider = document.getElementById('roi-ticket-slider');
+    const directTicketInput = document.getElementById('roi-ticket-input');
+    const nichePills = document.querySelectorAll('.niche-pill');
+
+    // Mode 3: Opportunity elements
+    const oppLostSlider = document.getElementById('opp-lost-slider');
+    const oppLostInput = document.getElementById('opp-lost-input');
+    const oppTicketSlider = document.getElementById('opp-ticket-slider');
+    const oppTicketInput = document.getElementById('opp-ticket-input');
+    const oppMarginSlider = document.getElementById('opp-margin-slider');
+    const oppMarginInput = document.getElementById('opp-margin-input');
+
+    // Result card elements
+    const resultsBadge = document.getElementById('roi-results-badge');
+    const paybackPill = document.getElementById('roi-payback-pill');
+    const highlightLabel = document.getElementById('roi-highlight-label');
     const monthlyResult = document.getElementById('roi-monthly-result');
     const annualResult = document.getElementById('roi-annual-result');
+    const kpi1Lbl = document.getElementById('kpi-1-lbl');
+    const kpi1Val = document.getElementById('kpi-1-val');
+    const kpi2Lbl = document.getElementById('kpi-2-lbl');
+    const kpi2Val = document.getElementById('kpi-2-val');
+    const kpi3Lbl = document.getElementById('kpi-3-lbl');
+    const kpi3Val = document.getElementById('kpi-3-val');
+    const compRow1Lbl = document.getElementById('comp-row-1-lbl');
+    const compRow1Val = document.getElementById('comp-row-1-val');
+    const compRow2Lbl = document.getElementById('comp-row-2-lbl');
     const netReturn = document.getElementById('roi-net-return');
-    const paybackPill = document.getElementById('roi-payback-pill');
-    const nichePills = document.querySelectorAll('.niche-pill');
     const btnRoiCta = document.getElementById('btn-roi-cta');
+    const btnRoiCtaText = document.getElementById('btn-roi-cta-text');
+    const btnExportProposal = document.getElementById('btn-export-proposal');
 
-    if (!clientsSlider || !ticketSlider) return;
+    if (!funnelVisitsSlider && !directClientsSlider) return;
+
+    let currentMode = 'funnel';
+
+    // Helper: sync slider <-> number input bidirectionally
+    function bindSync(slider, input, onUpdate) {
+      if (!slider || !input) return;
+      slider.addEventListener('input', () => {
+        input.value = slider.value;
+        onUpdate();
+      });
+      input.addEventListener('input', () => {
+        let val = parseFloat(input.value);
+        if (isNaN(val)) val = 0;
+        slider.value = Math.min(Math.max(val, parseFloat(slider.min)), parseFloat(slider.max));
+        onUpdate();
+      });
+    }
 
     let roiSaveTimeout = null;
-    function persistSimulation() {
+    function persistSimulation(simData) {
       if (roiSaveTimeout) clearTimeout(roiSaveTimeout);
       roiSaveTimeout = setTimeout(() => {
-        const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
-        const clients = parseInt(clientsSlider.value, 10);
-        const ticket = parseInt(ticketSlider.value, 10);
-        const monthly = clients * ticket;
-        const annual = monthly * 12;
-        const paybackDays = paybackPill ? paybackPill.textContent : '30 dias';
-
         fetch('/api/simulations', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            niche: activeNiche,
-            clients,
-            ticket,
-            monthly,
-            annual,
-            paybackDays
-          })
+          body: JSON.stringify(simData)
         }).catch(() => {});
       }, 1800);
     }
 
     function calculate() {
-      const clients = parseInt(clientsSlider.value, 10);
-      const ticket = parseInt(ticketSlider.value, 10);
+      let simPayload = {};
 
-      clientsDisplay.textContent = `${clients} clientes/mês`;
-      ticketDisplay.textContent = `R$ ${ticket.toLocaleString('pt-BR')},00`;
+      if (currentMode === 'funnel') {
+        const visits = Math.max(1, parseInt(funnelVisitsInput ? funnelVisitsInput.value : funnelVisitsSlider.value, 10) || 1000);
+        const convRate = Math.max(0.1, parseFloat(funnelConvInput ? funnelConvInput.value : funnelConvSlider.value) || 6.0);
+        const closeRate = Math.max(1, parseInt(funnelCloseInput ? funnelCloseInput.value : funnelCloseSlider.value, 10) || 25);
+        const ticket = Math.max(1, parseInt(funnelTicketInput ? funnelTicketInput.value : funnelTicketSlider.value, 10) || 200);
 
-      const monthly = clients * ticket;
-      const annual = monthly * 12;
-      const net = annual - 1200; // Deduct setup cost
-      const dailyIncome = monthly / 30;
-      const paybackDays = dailyIncome > 0 ? Math.max(1, Math.round(1200 / dailyIncome)) : 90;
+        const leads = Math.max(1, Math.round(visits * (convRate / 100)));
+        const sales = Math.max(1, Math.round(leads * (closeRate / 100)));
+        const monthly = sales * ticket;
+        const annual = monthly * 12;
+        const net = annual - 1200;
+        const daily = monthly / 30;
+        const paybackDays = daily > 0 ? Math.max(1, Math.round(1200 / daily)) : 30;
+        const multiplier = (annual / 1200).toFixed(1);
 
-      if (monthlyResult) {
-        monthlyResult.innerHTML = `R$ ${monthly.toLocaleString('pt-BR')}<small>/mês</small>`;
-      }
-      if (annualResult) {
-        annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> extras por ano`;
-      }
-      if (netReturn) {
-        netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
-      }
-      if (paybackPill) {
-        paybackPill.textContent = `Se paga em ${paybackDays} dias`;
+        // Atualiza display do pipeline visual
+        if (pipVisits) pipVisits.textContent = visits.toLocaleString('pt-BR');
+        if (pipLeads) pipLeads.textContent = leads.toLocaleString('pt-BR');
+        if (pipSales) pipSales.textContent = sales.toLocaleString('pt-BR');
+        if (pipRevenue) pipRevenue.textContent = `R$ ${monthly.toLocaleString('pt-BR')}`;
+
+        // Atualiza card de resultados
+        if (resultsBadge) resultsBadge.textContent = 'Projeção por Funil de Atração';
+        if (paybackPill) paybackPill.textContent = `Se paga em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Faturamento Mensal Adicional:';
+        if (monthlyResult) monthlyResult.innerHTML = `R$ ${monthly.toLocaleString('pt-BR')}<small>/mês</small>`;
+        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> extras por ano`;
+
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Leads WhatsApp';
+        if (kpi1Val) kpi1Val.textContent = `${leads.toLocaleString('pt-BR')} /mês`;
+        if (kpi2Lbl) kpi2Lbl.textContent = 'Vendas Novas';
+        if (kpi2Val) kpi2Val.textContent = `${sales.toLocaleString('pt-BR')} clientes`;
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Multiplicador ROI';
+        if (kpi3Val) kpi3Val.textContent = `${multiplier}x ao ano`;
+
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Investimento Único no Site:';
+        if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido no 1º Ano:';
+        if (netReturn) netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Estruturar Esse Funil de Vendas';
+
+        simPayload = {
+          niche: `Funil (${visits} visitas, ${leads} leads, ${sales} vendas)`,
+          clients: sales,
+          ticket,
+          monthly,
+          annual,
+          paybackDays: `${paybackDays} dias`
+        };
+
+      } else if (currentMode === 'direct') {
+        const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
+        const clients = Math.max(1, parseInt(directClientsInput ? directClientsInput.value : directClientsSlider.value, 10) || 14);
+        const ticket = Math.max(1, parseInt(directTicketInput ? directTicketInput.value : directTicketSlider.value, 10) || 90);
+
+        const monthly = clients * ticket;
+        const annual = monthly * 12;
+        const net = annual - 1200;
+        const daily = monthly / 30;
+        const paybackDays = daily > 0 ? Math.max(1, Math.round(1200 / daily)) : 30;
+        const multiplier = (annual / 1200).toFixed(1);
+
+        if (resultsBadge) resultsBadge.textContent = 'Projeção de Retorno Estimada';
+        if (paybackPill) paybackPill.textContent = `Se paga em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Faturamento Mensal Adicional:';
+        if (monthlyResult) monthlyResult.innerHTML = `R$ ${monthly.toLocaleString('pt-BR')}<small>/mês</small>`;
+        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> extras por ano`;
+
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Clientes / Mês';
+        if (kpi1Val) kpi1Val.textContent = `${clients.toLocaleString('pt-BR')} novos`;
+        if (kpi2Lbl) kpi2Lbl.textContent = 'Ticket Médio';
+        if (kpi2Val) kpi2Val.textContent = `R$ ${ticket.toLocaleString('pt-BR')}`;
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Multiplicador ROI';
+        if (kpi3Val) kpi3Val.textContent = `${multiplier}x ao ano`;
+
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Investimento Único no Site:';
+        if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido no 1º Ano:';
+        if (netReturn) netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Gerar Esse Faturamento';
+
+        simPayload = {
+          niche: activeNiche,
+          clients,
+          ticket,
+          monthly,
+          annual,
+          paybackDays: `${paybackDays} dias`
+        };
+
+      } else if (currentMode === 'opportunity') {
+        const lost = Math.max(1, parseInt(oppLostInput ? oppLostInput.value : oppLostSlider.value, 10) || 12);
+        const ticket = Math.max(1, parseInt(oppTicketInput ? oppTicketInput.value : oppTicketSlider.value, 10) || 250);
+        const margin = Math.max(5, parseInt(oppMarginInput ? oppMarginInput.value : oppMarginSlider.value, 10) || 45);
+
+        const monthlyLost = lost * ticket;
+        const annualLost = monthlyLost * 12;
+        const monthlyProfitLost = monthlyLost * (margin / 100);
+        const annualProfitLost = monthlyProfitLost * 12;
+        const netRecovery = annualProfitLost - 1200;
+        const dailyProfit = monthlyProfitLost / 30;
+        const paybackDays = dailyProfit > 0 ? Math.max(1, Math.round(1200 / dailyProfit)) : 15;
+        const multiplier = (annualProfitLost / 1200).toFixed(1);
+
+        if (resultsBadge) resultsBadge.textContent = 'Vendas Perdidas para Concorrentes';
+        if (paybackPill) paybackPill.textContent = `Estanca prejuízo em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Faturamento Deixado na Mesa:';
+        if (monthlyResult) monthlyResult.innerHTML = `R$ ${monthlyLost.toLocaleString('pt-BR')}<small>/mês</small>`;
+        if (annualResult) annualResult.innerHTML = `Prejuízo anual invisível de <strong>R$ ${annualLost.toLocaleString('pt-BR')},00</strong>`;
+
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Vendas Perdidas';
+        if (kpi1Val) kpi1Val.textContent = `${lost.toLocaleString('pt-BR')} /mês`;
+        if (kpi2Lbl) kpi2Lbl.textContent = `Lucro Perdido (${margin}%)`;
+        if (kpi2Val) kpi2Val.textContent = `R$ ${Math.round(monthlyProfitLost).toLocaleString('pt-BR')}/mês`;
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Potencial Protegido';
+        if (kpi3Val) kpi3Val.textContent = `${multiplier}x o site`;
+
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Custo do Site (Setup Único):';
+        if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Lucro Recuperado no 1º Ano:';
+        if (netReturn) netReturn.textContent = `+ R$ ${Math.round(netRecovery).toLocaleString('pt-BR')},00`;
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Estancar Essa Perda no Google';
+
+        simPayload = {
+          niche: `Custo Oportunidade (${lost} perdidos, margem ${margin}%)`,
+          clients: lost,
+          ticket,
+          monthly: monthlyLost,
+          annual: annualLost,
+          paybackDays: `${paybackDays} dias`
+        };
       }
 
-      persistSimulation();
+      persistSimulation(simPayload);
     }
 
-    // Slider inputs
-    clientsSlider.addEventListener('input', calculate);
-    ticketSlider.addEventListener('input', calculate);
+    // Vincula sincronização slider <-> número
+    bindSync(funnelVisitsSlider, funnelVisitsInput, calculate);
+    bindSync(funnelConvSlider, funnelConvInput, calculate);
+    bindSync(funnelCloseSlider, funnelCloseInput, calculate);
+    bindSync(funnelTicketSlider, funnelTicketInput, calculate);
 
-    // Niche preset pills
+    bindSync(directClientsSlider, directClientsInput, calculate);
+    bindSync(directTicketSlider, directTicketInput, calculate);
+
+    bindSync(oppLostSlider, oppLostInput, calculate);
+    bindSync(oppTicketSlider, oppTicketInput, calculate);
+    bindSync(oppMarginSlider, oppMarginInput, calculate);
+
+    // Navegação de abas
+    modeTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        modeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        currentMode = tab.dataset.mode;
+        Object.keys(panels).forEach(key => {
+          if (panels[key]) {
+            panels[key].classList.toggle('active', key === currentMode);
+          }
+        });
+
+        calculate();
+      });
+    });
+
+    // Pílulas de nicho (Modo Direto)
     nichePills.forEach(pill => {
       pill.addEventListener('click', () => {
         nichePills.forEach(p => p.classList.remove('active'));
@@ -622,43 +809,101 @@ document.addEventListener('DOMContentLoaded', () => {
         const ticket = parseInt(pill.dataset.ticket, 10);
         const clients = parseInt(pill.dataset.clients, 10);
 
-        if (ticketSlider) ticketSlider.value = ticket;
-        if (clientsSlider) clientsSlider.value = clients;
+        if (directTicketSlider) directTicketSlider.value = ticket;
+        if (directTicketInput) directTicketInput.value = ticket;
+        if (directClientsSlider) directClientsSlider.value = clients;
+        if (directClientsInput) directClientsInput.value = clients;
 
         calculate();
       });
     });
 
-    // Gerador de Proposta Executiva em PDF (Impressão com 3D Loader)
-    const btnExportProposal = document.getElementById('btn-export-proposal');
+    // Gerador de Proposta Executiva em PDF (Impressão com 3D Plate Stack Loader)
     if (btnExportProposal) {
       btnExportProposal.addEventListener('click', () => {
         const loader = showLoadingScreen({
           title: 'LOCALWEB PRO',
-          message: 'Processando proposta executiva em PDF...',
+          message: 'Processando proposta comercial personalizada...',
           baseColor: '#1E293B',
           accentColor: '#38BDF8'
         });
 
-        const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
-        const clients = clientsSlider ? clientsSlider.value : '12';
-        const ticket = ticketSlider ? parseInt(ticketSlider.value, 10).toLocaleString('pt-BR') : '90';
-        const monthly = clientsSlider && ticketSlider ? (parseInt(clientsSlider.value, 10) * parseInt(ticketSlider.value, 10)).toLocaleString('pt-BR') : '1.080';
-        const annual = clientsSlider && ticketSlider ? (parseInt(clientsSlider.value, 10) * parseInt(ticketSlider.value, 10) * 12).toLocaleString('pt-BR') : '12.960';
-
         const elDate = document.getElementById('prop-date');
+        const elModeName = document.getElementById('prop-mode-name');
         const elNiche = document.getElementById('prop-niche');
+        const elDetailsVal = document.getElementById('prop-details-val');
+        const elClientsLabel = document.getElementById('prop-clients-label');
         const elClients = document.getElementById('prop-clients');
+        const elTicketLabel = document.getElementById('prop-ticket-label');
         const elTicket = document.getElementById('prop-ticket');
+        const elMonthlyLabel = document.getElementById('prop-monthly-label');
         const elMonthly = document.getElementById('prop-monthly');
+        const elAnnualLabel = document.getElementById('prop-annual-label');
         const elAnnual = document.getElementById('prop-annual');
 
         if (elDate) elDate.textContent = new Date().toLocaleDateString('pt-BR');
-        if (elNiche) elNiche.textContent = activeNiche;
-        if (elClients) elClients.textContent = `${clients} novos clientes/mês`;
-        if (elTicket) elTicket.textContent = `R$ ${ticket},00`;
-        if (elMonthly) elMonthly.textContent = `R$ ${monthly},00`;
-        if (elAnnual) elAnnual.textContent = `R$ ${annual},00`;
+
+        if (currentMode === 'funnel') {
+          const visits = parseInt(funnelVisitsInput ? funnelVisitsInput.value : '1000', 10);
+          const convRate = parseFloat(funnelConvInput ? funnelConvInput.value : '6');
+          const closeRate = parseInt(funnelCloseInput ? funnelCloseInput.value : '25', 10);
+          const ticket = parseInt(funnelTicketInput ? funnelTicketInput.value : '200', 10);
+          const leads = Math.max(1, Math.round(visits * (convRate / 100)));
+          const sales = Math.max(1, Math.round(leads * (closeRate / 100)));
+          const monthly = sales * ticket;
+          const annual = monthly * 12;
+
+          if (elModeName) elModeName.textContent = 'Funil de Conversão (Tráfego ao WhatsApp)';
+          if (elNiche) elNiche.textContent = 'Digital / Tráfego Local Otimizado';
+          if (elDetailsVal) elDetailsVal.textContent = `${visits.toLocaleString('pt-BR')} visitas • ${convRate}% conv. WhatsApp (${leads} leads) • ${closeRate}% fechamento (${sales} vendas)`;
+          if (elClientsLabel) elClientsLabel.textContent = 'Conversão Efetiva Projetada/Mês:';
+          if (elClients) elClients.textContent = `${leads} contatos WhatsApp → ${sales} novos clientes`;
+          if (elTicketLabel) elTicketLabel.textContent = 'Ticket Médio de Venda:';
+          if (elTicket) elTicket.textContent = `R$ ${ticket.toLocaleString('pt-BR')},00`;
+          if (elMonthlyLabel) elMonthlyLabel.textContent = 'Faturamento Mensal Adicional:';
+          if (elMonthly) elMonthly.textContent = `R$ ${monthly.toLocaleString('pt-BR')},00`;
+          if (elAnnualLabel) elAnnualLabel.textContent = 'Equivalente Anual em Retorno Bruto:';
+          if (elAnnual) elAnnual.textContent = `R$ ${annual.toLocaleString('pt-BR')},00`;
+
+        } else if (currentMode === 'direct') {
+          const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
+          const clients = parseInt(directClientsInput ? directClientsInput.value : '14', 10);
+          const ticket = parseInt(directTicketInput ? directTicketInput.value : '90', 10);
+          const monthly = clients * ticket;
+          const annual = monthly * 12;
+
+          if (elModeName) elModeName.textContent = 'Estimativa Direta por Vendas & Ticket';
+          if (elNiche) elNiche.textContent = activeNiche;
+          if (elDetailsVal) elDetailsVal.textContent = `Volume projetado de ${clients} clientes/mês com ticket médio de R$ ${ticket.toLocaleString('pt-BR')},00`;
+          if (elClientsLabel) elClientsLabel.textContent = 'Novos Clientes Projetados/Mês:';
+          if (elClients) elClients.textContent = `${clients} clientes`;
+          if (elTicketLabel) elTicketLabel.textContent = 'Ticket Médio por Cliente:';
+          if (elTicket) elTicket.textContent = `R$ ${ticket.toLocaleString('pt-BR')},00`;
+          if (elMonthlyLabel) elMonthlyLabel.textContent = 'Faturamento Extra Estimado/Mês:';
+          if (elMonthly) elMonthly.textContent = `R$ ${monthly.toLocaleString('pt-BR')},00`;
+          if (elAnnualLabel) elAnnualLabel.textContent = 'Equivalente Anual em Retorno Bruto:';
+          if (elAnnual) elAnnual.textContent = `R$ ${annual.toLocaleString('pt-BR')},00`;
+
+        } else if (currentMode === 'opportunity') {
+          const lost = parseInt(oppLostInput ? oppLostInput.value : '12', 10);
+          const ticket = parseInt(oppTicketInput ? oppTicketInput.value : '250', 10);
+          const margin = parseInt(oppMarginInput ? oppMarginInput.value : '45', 10);
+          const monthlyLost = lost * ticket;
+          const annualLost = monthlyLost * 12;
+          const annualProfitLost = Math.round(annualLost * (margin / 100));
+
+          if (elModeName) elModeName.textContent = 'Custo de Oportunidade (Vendas Perdidas)';
+          if (elNiche) elNiche.textContent = 'Diagnóstico de Perda de Mercado no Google';
+          if (elDetailsVal) elDetailsVal.textContent = `Recuperação de ${lost} clientes/mês absorvidos por concorrentes (${margin}% margem líquida)`;
+          if (elClientsLabel) elClientsLabel.textContent = 'Clientes Perdidos para Concorrentes:';
+          if (elClients) elClients.textContent = `${lost} potenciais clientes/mês`;
+          if (elTicketLabel) elTicketLabel.textContent = 'Ticket Médio Deixado na Mesa:';
+          if (elTicket) elTicket.textContent = `R$ ${ticket.toLocaleString('pt-BR')},00`;
+          if (elMonthlyLabel) elMonthlyLabel.textContent = 'Faturamento Deixado na Mesa/Mês:';
+          if (elMonthly) elMonthly.textContent = `R$ ${monthlyLost.toLocaleString('pt-BR')},00`;
+          if (elAnnualLabel) elAnnualLabel.textContent = `Lucro Líquido Anual Recuperável (${margin}%):`;
+          if (elAnnual) elAnnual.textContent = `R$ ${annualProfitLost.toLocaleString('pt-BR')},00`;
+        }
 
         setTimeout(() => {
           loader.hide(250);
@@ -669,16 +914,35 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // ROI CTA Click -> Pre-fill Goal in Contact Form
+    // Clique do CTA do Simulador -> Preenche objetivo no formulário de contato
     if (btnRoiCta) {
       btnRoiCta.addEventListener('click', () => {
         const goalInput = document.getElementById('goal');
-        const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'meu negócio';
-        const monthly = parseInt(clientsSlider.value, 10) * parseInt(ticketSlider.value, 10);
-        if (goalInput) {
-          goalInput.value = `Gostaria de estruturar o site para ${activeNiche} com meta de retorno de aprox. R$ ${monthly.toLocaleString('pt-BR')}/mês em novos clientes.`;
-          goalInput.focus();
+        if (!goalInput) return;
+
+        if (currentMode === 'funnel') {
+          const visits = parseInt(funnelVisitsInput ? funnelVisitsInput.value : '1000', 10);
+          const convRate = parseFloat(funnelConvInput ? funnelConvInput.value : '6');
+          const closeRate = parseInt(funnelCloseInput ? funnelCloseInput.value : '25', 10);
+          const ticket = parseInt(funnelTicketInput ? funnelTicketInput.value : '200', 10);
+          const leads = Math.max(1, Math.round(visits * (convRate / 100)));
+          const sales = Math.max(1, Math.round(leads * (closeRate / 100)));
+          const monthly = sales * ticket;
+          goalInput.value = `Gostaria de estruturar um site focado em conversão para gerar aprox. ${leads} leads no WhatsApp e R$ ${monthly.toLocaleString('pt-BR')}/mês em novos clientes (${sales} vendas com ticket R$ ${ticket}).`;
+        } else if (currentMode === 'direct') {
+          const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'meu segmento';
+          const clients = parseInt(directClientsInput ? directClientsInput.value : '14', 10);
+          const ticket = parseInt(directTicketInput ? directTicketInput.value : '90', 10);
+          const monthly = clients * ticket;
+          goalInput.value = `Gostaria de estruturar o site para ${activeNiche} com meta de retorno de aprox. R$ ${monthly.toLocaleString('pt-BR')}/mês (${clients} clientes novos a R$ ${ticket}).`;
+        } else if (currentMode === 'opportunity') {
+          const lost = parseInt(oppLostInput ? oppLostInput.value : '12', 10);
+          const ticket = parseInt(oppTicketInput ? oppTicketInput.value : '250', 10);
+          const monthlyLost = lost * ticket;
+          goalInput.value = `Gostaria de posicionar minha empresa no topo do Google para estancar uma perda estimada de R$ ${monthlyLost.toLocaleString('pt-BR')}/mês em clientes que estão indo para concorrentes.`;
         }
+
+        goalInput.focus();
       });
     }
 

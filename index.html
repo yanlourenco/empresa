@@ -376,80 +376,327 @@
       <div class="section-header text-center">
         <span class="section-tag">Calculadora Interativa</span>
         <h2 class="section-title" data-stagger-text="Simulador de Retorno do Investimento" data-stagger-ms="28">Simulador de Retorno do Investimento</h2>
-        <p class="section-subtitle">Um site sob medida não é um gasto; é um canal ativo de vendas todos os dias. Simule o potencial de retorno para o seu negócio:</p>
+        <p class="section-subtitle">Um site profissional não é custo — é um ativo gerador de clientes todos os dias. Escolha o modelo que melhor se adapta à sua realidade comercial:</p>
+      </div>
+
+      <!-- Navegação de Modos de Simulação -->
+      <div class="sim-mode-nav" role="tablist" aria-label="Modos de Simulação">
+        <button type="button" class="sim-mode-tab active" data-mode="funnel" id="tab-mode-funnel">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+          <span>Funil de Conversão (Tráfego ao WhatsApp)</span>
+        </button>
+        <button type="button" class="sim-mode-tab" data-mode="direct" id="tab-mode-direct">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>Vendas & Ticket Direto</span>
+        </button>
+        <button type="button" class="sim-mode-tab" data-mode="opportunity" id="tab-mode-opportunity">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+          <span>Custo de Oportunidade (Vendas Perdidas)</span>
+        </button>
       </div>
 
       <div class="roi-calculator-container">
-        <!-- Controles da Calculadora -->
+        <!-- Controles da Calculadora (3 Painéis Alternáveis) -->
         <div class="roi-controls-card">
-          <div class="roi-control-group">
-            <label class="roi-label">1. Selecione o nicho do seu negócio:</label>
-            <div class="niche-selector-pills" id="roi-niche-pills">
-              <button type="button" class="niche-pill active" data-niche="barber" data-ticket="90" data-clients="12">Barbearia / Estética</button>
-              <button type="button" class="niche-pill" data-niche="clinic" data-ticket="250" data-clients="8">Clínica / Saúde</button>
-              <button type="button" class="niche-pill" data-niche="fitness" data-ticket="160" data-clients="15">Academia / Studio</button>
-              <button type="button" class="niche-pill" data-niche="store" data-ticket="180" data-clients="10">Loja de Roupas</button>
-              <button type="button" class="niche-pill" data-niche="service" data-ticket="350" data-clients="6">Prestador de Serviços</button>
+
+          <!-- PAINEL 1: FUNIL DE ATRAÇÃO (Tráfego -> WhatsApp -> Venda) -->
+          <div class="sim-panel active" id="sim-panel-funnel">
+            <div class="sim-panel-header">
+              <span class="sim-panel-badge">Modelo Consultivo Baseado em Funil Real</span>
+              <p class="sim-panel-desc">Calcula o fluxo completo: buscas locais no Google, cliques para o WhatsApp e taxa de fechamento no atendimento.</p>
+            </div>
+
+            <!-- Pipeline Visual Dinâmico -->
+            <div class="sim-pipeline">
+              <div class="pipeline-step">
+                <span class="step-label">Visitas no Site</span>
+                <strong class="step-val" id="pip-visits">1.000</strong>
+              </div>
+              <div class="pipeline-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+              <div class="pipeline-step">
+                <span class="step-label">WhatsApp</span>
+                <strong class="step-val" id="pip-leads">60</strong>
+              </div>
+              <div class="pipeline-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+              <div class="pipeline-step">
+                <span class="step-label">Vendas Fechadas</span>
+                <strong class="step-val highlight" id="pip-sales">15</strong>
+              </div>
+              <div class="pipeline-arrow">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+              <div class="pipeline-step">
+                <span class="step-label">Receita Estimada</span>
+                <strong class="step-val success" id="pip-revenue">R$ 3.000</strong>
+              </div>
+            </div>
+
+            <!-- 1. Visitas Mensais -->
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="funnel-visits-slider" class="roi-label">1. Visitantes estimados no site / mês:</label>
+                  <span class="roi-hint">Pessoas da sua região buscando seus serviços no Google</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <input type="number" id="funnel-visits-input" class="roi-number-input" value="1000" min="100" max="25000" step="50">
+                  <span class="roi-unit">visitas</span>
+                </div>
+              </div>
+              <input type="range" id="funnel-visits-slider" min="100" max="5000" value="1000" step="50" class="roi-slider">
+              <div class="slider-ticks">
+                <span>100</span>
+                <span>1.000</span>
+                <span>2.500</span>
+                <span>5.000+</span>
+              </div>
+            </div>
+
+            <!-- 2. Conversão WhatsApp -->
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="funnel-conv-slider" class="roi-label">2. Taxa de conversão para WhatsApp:</label>
+                  <span class="roi-hint">Média de mercado para páginas sob medida: 4% a 10%</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <input type="number" id="funnel-conv-input" class="roi-number-input" value="6.0" min="1" max="25" step="0.5">
+                  <span class="roi-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="funnel-conv-slider" min="1" max="20" value="6" step="0.5" class="roi-slider">
+              <div class="slider-ticks">
+                <span>1% (básico)</span>
+                <span>5% (médio)</span>
+                <span>10% (ótimo)</span>
+                <span>20%</span>
+              </div>
+            </div>
+
+            <!-- 3. Fechamento no Atendimento -->
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="funnel-close-slider" class="roi-label">3. Taxa de fechamento no atendimento:</label>
+                  <span class="roi-hint">De cada 10 pessoas que chamam no WhatsApp, quantas compram</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <input type="number" id="funnel-close-input" class="roi-number-input" value="25" min="5" max="80" step="1">
+                  <span class="roi-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="funnel-close-slider" min="5" max="60" value="25" step="1" class="roi-slider">
+              <div class="slider-ticks">
+                <span>5%</span>
+                <span>25% (1 a cada 4)</span>
+                <span>40%</span>
+                <span>60%</span>
+              </div>
+            </div>
+
+            <!-- 4. Ticket Médio -->
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="funnel-ticket-slider" class="roi-label">4. Ticket médio de venda / serviço:</label>
+                  <span class="roi-hint">Valor médio recebido por cada cliente fechado</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <span class="roi-currency">R$</span>
+                  <input type="number" id="funnel-ticket-input" class="roi-number-input" value="200" min="20" max="100000" step="10">
+                </div>
+              </div>
+              <input type="range" id="funnel-ticket-slider" min="30" max="3000" value="200" step="10" class="roi-slider">
+              <div class="slider-ticks">
+                <span>R$ 30</span>
+                <span>R$ 500</span>
+                <span>R$ 1.500</span>
+                <span>R$ 3.000+</span>
+              </div>
             </div>
           </div>
 
-          <div class="roi-control-group">
-            <div class="roi-slider-header">
-              <label for="roi-clients-slider" class="roi-label">2. Novos clientes mensais vindos pelo site:</label>
-              <span class="roi-slider-val" id="roi-clients-display">12 clientes/mês</span>
+          <!-- PAINEL 2: VENDAS & TICKET DIRETO (Com Presets de Alto Impacto) -->
+          <div class="sim-panel" id="sim-panel-direct">
+            <div class="sim-panel-header">
+              <span class="sim-panel-badge">Projeção Rápida por Volume & Ticket Médio</span>
+              <p class="sim-panel-desc">Selecione um nicho como referência ou digite os valores exatos de novos clientes e ticket médio do seu negócio.</p>
             </div>
-            <input type="range" id="roi-clients-slider" min="2" max="40" value="12" step="1" class="roi-slider">
-            <div class="slider-ticks">
-              <span>2</span>
-              <span>10</span>
-              <span>20</span>
-              <span>30</span>
-              <span>40</span>
+
+            <div class="roi-control-group">
+              <label class="roi-label">1. Escolha um nicho para carregar referências de mercado:</label>
+              <div class="niche-selector-pills" id="roi-niche-pills">
+                <button type="button" class="niche-pill active" data-niche="barber" data-ticket="90" data-clients="14">Barbearia / Estética</button>
+                <button type="button" class="niche-pill" data-niche="clinic" data-ticket="350" data-clients="10">Clínica / Saúde</button>
+                <button type="button" class="niche-pill" data-niche="fitness" data-ticket="180" data-clients="18">Academia / Studio</button>
+                <button type="button" class="niche-pill" data-niche="lawyer" data-ticket="1800" data-clients="4">Advocacia / Consultoria</button>
+                <button type="button" class="niche-pill" data-niche="reforms" data-ticket="850" data-clients="8">Reformas / Serviços</button>
+                <button type="button" class="niche-pill" data-niche="store" data-ticket="220" data-clients="22">Comércio / Varejo</button>
+                <button type="button" class="niche-pill" data-niche="realestate" data-ticket="3500" data-clients="2">Imobiliária / Alto Ticket</button>
+              </div>
+            </div>
+
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="roi-clients-slider" class="roi-label">2. Novos clientes mensais vindos pelo site:</label>
+                  <span class="roi-hint">Arraste a barra ou digite diretamente</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <input type="number" id="roi-clients-input" class="roi-number-input" value="14" min="1" max="500" step="1">
+                  <span class="roi-unit">clientes</span>
+                </div>
+              </div>
+              <input type="range" id="roi-clients-slider" min="1" max="60" value="14" step="1" class="roi-slider">
+              <div class="slider-ticks">
+                <span>1</span>
+                <span>15</span>
+                <span>30</span>
+                <span>45</span>
+                <span>60+</span>
+              </div>
+            </div>
+
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="roi-ticket-slider" class="roi-label">3. Ticket médio de cada cliente/serviço:</label>
+                  <span class="roi-hint">Arraste a barra ou digite qualquer valor</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <span class="roi-currency">R$</span>
+                  <input type="number" id="roi-ticket-input" class="roi-number-input" value="90" min="20" max="100000" step="10">
+                </div>
+              </div>
+              <input type="range" id="roi-ticket-slider" min="30" max="5000" value="90" step="10" class="roi-slider">
+              <div class="slider-ticks">
+                <span>R$ 30</span>
+                <span>R$ 500</span>
+                <span>R$ 1.500</span>
+                <span>R$ 3.000</span>
+                <span>R$ 5.000+</span>
+              </div>
             </div>
           </div>
 
-          <div class="roi-control-group">
-            <div class="roi-slider-header">
-              <label for="roi-ticket-slider" class="roi-label">3. Ticket médio de cada cliente/serviço:</label>
-              <span class="roi-slider-val" id="roi-ticket-display">R$ 90,00</span>
+          <!-- PAINEL 3: CUSTO DE OPORTUNIDADE (Vendas Perdidas para a Concorrência) -->
+          <div class="sim-panel" id="sim-panel-opportunity">
+            <div class="sim-panel-header">
+              <span class="sim-panel-badge badge-warning">Diagnóstico de Vendas Deixadas na Mesa</span>
+              <p class="sim-panel-desc">Descubra quanto dinheiro sua empresa deixa para os concorrentes todo mês quando clientes pesquisam no Google e encontram quem tem site profissional.</p>
             </div>
-            <input type="range" id="roi-ticket-slider" min="30" max="1000" value="90" step="10" class="roi-slider">
-            <div class="slider-ticks">
-              <span>R$ 30</span>
-              <span>R$ 250</span>
-              <span>R$ 500</span>
-              <span>R$ 750</span>
-              <span>R$ 1.000</span>
+
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="opp-lost-slider" class="roi-label">1. Clientes perdidos para a concorrência / mês:</label>
+                  <span class="roi-hint">Buscas locais que não te acham ou escolhem quem tem site</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <input type="number" id="opp-lost-input" class="roi-number-input" value="12" min="1" max="250" step="1">
+                  <span class="roi-unit">clientes</span>
+                </div>
+              </div>
+              <input type="range" id="opp-lost-slider" min="1" max="50" value="12" step="1" class="roi-slider">
+              <div class="slider-ticks">
+                <span>1</span>
+                <span>10</span>
+                <span>25</span>
+                <span>40</span>
+                <span>50+</span>
+              </div>
+            </div>
+
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="opp-ticket-slider" class="roi-label">2. Ticket médio deixado na mesa:</label>
+                  <span class="roi-hint">Valor médio de cada venda ou orçamento perdido</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <span class="roi-currency">R$</span>
+                  <input type="number" id="opp-ticket-input" class="roi-number-input" value="250" min="20" max="100000" step="10">
+                </div>
+              </div>
+              <input type="range" id="opp-ticket-slider" min="30" max="3000" value="250" step="10" class="roi-slider">
+              <div class="slider-ticks">
+                <span>R$ 30</span>
+                <span>R$ 500</span>
+                <span>R$ 1.500</span>
+                <span>R$ 3.000+</span>
+              </div>
+            </div>
+
+            <div class="roi-control-group">
+              <div class="roi-slider-header">
+                <div>
+                  <label for="opp-margin-slider" class="roi-label">3. Margem líquida estimada do seu negócio:</label>
+                  <span class="roi-hint">Percentual que sobra líquido após os custos operacionais</span>
+                </div>
+                <div class="roi-input-field-wrap">
+                  <input type="number" id="opp-margin-input" class="roi-number-input" value="45" min="10" max="95" step="5">
+                  <span class="roi-unit">%</span>
+                </div>
+              </div>
+              <input type="range" id="opp-margin-slider" min="10" max="90" value="45" step="5" class="roi-slider">
+              <div class="slider-ticks">
+                <span>10%</span>
+                <span>30%</span>
+                <span>50%</span>
+                <span>70%</span>
+                <span>90%</span>
+              </div>
             </div>
           </div>
+
         </div>
 
         <!-- Painel de Resultados do ROI -->
         <div class="roi-results-card">
           <div class="results-top">
-            <span class="results-badge">Projeção de Faturamento Estimada</span>
-            <div class="payback-pill" id="roi-payback-pill">Se paga em 34 dias</div>
+            <span class="results-badge" id="roi-results-badge">Projeção de Retorno Estimada</span>
+            <div class="payback-pill" id="roi-payback-pill">Se paga em 12 dias</div>
           </div>
 
           <div class="roi-metric-highlight">
-            <span class="roi-highlight-label">Faturamento Mensal Adicional:</span>
-            <div class="roi-highlight-value" id="roi-monthly-result">R$ 1.080<small>/mês</small></div>
-            <p class="roi-highlight-sub" id="roi-annual-result">Equivalente a <strong>R$ 12.960,00</strong> extras por ano</p>
+            <span class="roi-highlight-label" id="roi-highlight-label">Faturamento Mensal Adicional:</span>
+            <div class="roi-highlight-value" id="roi-monthly-result">R$ 3.000<small>/mês</small></div>
+            <p class="roi-highlight-sub" id="roi-annual-result">Equivalente a <strong>R$ 36.000,00</strong> extras por ano</p>
+          </div>
+
+          <!-- Micro KPI Highlights Grid -->
+          <div class="roi-kpi-grid" id="roi-kpi-grid">
+            <div class="roi-kpi-item">
+              <span class="roi-kpi-lbl" id="kpi-1-lbl">Leads WhatsApp</span>
+              <strong class="roi-kpi-val" id="kpi-1-val">60 /mês</strong>
+            </div>
+            <div class="roi-kpi-item">
+              <span class="roi-kpi-lbl" id="kpi-2-lbl">Vendas Novas</span>
+              <strong class="roi-kpi-val" id="kpi-2-val">15 clientes</strong>
+            </div>
+            <div class="roi-kpi-item">
+              <span class="roi-kpi-lbl" id="kpi-3-lbl">Multiplicador ROI</span>
+              <strong class="roi-kpi-val highlight" id="kpi-3-val">30x ao ano</strong>
+            </div>
           </div>
 
           <div class="roi-comparison-mini">
             <div class="comparison-row">
-              <span>Investimento Único no Site:</span>
-              <strong style="color: #94A3B8;">R$ 1.200</strong>
+              <span id="comp-row-1-lbl">Investimento Único no Site:</span>
+              <strong style="color: #94A3B8;" id="comp-row-1-val">R$ 1.200</strong>
             </div>
             <div class="comparison-row">
-              <span>Retorno Líquido no 1º Ano:</span>
-              <strong style="color: #10B981;" id="roi-net-return">+ R$ 11.760,00</strong>
+              <span id="comp-row-2-lbl">Retorno Líquido no 1º Ano:</span>
+              <strong style="color: #10B981;" id="roi-net-return">+ R$ 34.800,00</strong>
             </div>
           </div>
 
           <a href="#contato" class="btn-primary-lg full-width" id="btn-roi-cta">
-            <span>Quero Gerar Esse Faturamento</span>
+            <span id="btn-roi-cta-text">Quero Estruturar Esse Funil de Vendas</span>
           </a>
           <button type="button" class="btn-secondary-lg full-width" id="btn-export-proposal" style="margin-top: 10px; justify-content: center;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
@@ -687,24 +934,32 @@
       <h3 style="margin-top: 0; color: #1E293B; font-size: 16px;">1. Diagnóstico e Projeção Estimada do Projeto</h3>
       <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px;">
         <tr>
+          <td style="padding: 8px 0; color: #475569;">Modelo de Simulação:</td>
+          <td style="padding: 8px 0; font-weight: bold; text-align: right;" id="prop-mode-name">Funil de Conversão (Tráfego ao WhatsApp)</td>
+        </tr>
+        <tr>
           <td style="padding: 8px 0; color: #475569;">Segmento / Nicho Analisado:</td>
           <td style="padding: 8px 0; font-weight: bold; text-align: right;" id="prop-niche">Geral</td>
         </tr>
-        <tr>
-          <td style="padding: 8px 0; color: #475569;">Novos Clientes Projetados/Mês:</td>
-          <td style="padding: 8px 0; font-weight: bold; text-align: right;" id="prop-clients">12 clientes</td>
+        <tr id="prop-details-row">
+          <td style="padding: 8px 0; color: #475569;" id="prop-details-label">Parâmetros Estimados:</td>
+          <td style="padding: 8px 0; font-weight: 500; text-align: right; color: #334155;" id="prop-details-val">1.000 visitas • 6% conv. WhatsApp • 25% fechamento</td>
         </tr>
         <tr>
-          <td style="padding: 8px 0; color: #475569;">Ticket Médio por Cliente:</td>
-          <td style="padding: 8px 0; font-weight: bold; text-align: right;" id="prop-ticket">R$ 90,00</td>
+          <td style="padding: 8px 0; color: #475569;" id="prop-clients-label">Novos Clientes Projetados/Mês:</td>
+          <td style="padding: 8px 0; font-weight: bold; text-align: right;" id="prop-clients">15 clientes</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #475569;" id="prop-ticket-label">Ticket Médio por Cliente:</td>
+          <td style="padding: 8px 0; font-weight: bold; text-align: right;" id="prop-ticket">R$ 200,00</td>
         </tr>
         <tr style="border-top: 2px solid #CBD5E1;">
-          <td style="padding: 10px 0; font-weight: bold; color: #0F172A;">Faturamento Extra Estimado/Mês:</td>
-          <td style="padding: 10px 0; font-weight: bold; text-align: right; color: #10B981; font-size: 18px;" id="prop-monthly">R$ 1.080,00</td>
+          <td style="padding: 10px 0; font-weight: bold; color: #0F172A;" id="prop-monthly-label">Faturamento Extra Estimado/Mês:</td>
+          <td style="padding: 10px 0; font-weight: bold; text-align: right; color: #10B981; font-size: 18px;" id="prop-monthly">R$ 3.000,00</td>
         </tr>
         <tr>
-          <td style="padding: 8px 0; font-weight: bold; color: #0F172A;">Equivalente Anual em Retorno Bruto:</td>
-          <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #2563EB; font-size: 16px;" id="prop-annual">R$ 12.960,00</td>
+          <td style="padding: 8px 0; font-weight: bold; color: #0F172A;" id="prop-annual-label">Equivalente Anual em Retorno Bruto:</td>
+          <td style="padding: 8px 0; font-weight: bold; text-align: right; color: #2563EB; font-size: 16px;" id="prop-annual">R$ 36.000,00</td>
         </tr>
       </table>
     </div>
