@@ -1693,6 +1693,7 @@ img, video, iframe {
 
 .form-group {
   margin-bottom: 20px;
+  position: relative;
 }
 
 .form-group label {
@@ -1713,12 +1714,109 @@ img, video, iframe {
   font-size: 0.92rem;
   font-family: var(--font-body);
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-field:focus {
   border-color: var(--midnight-vivid);
   box-shadow: 0 0 10px rgba(37, 99, 235, 0.25);
+}
+
+/* Estado de Erro no Input */
+.input-field.input-error,
+.form-input.input-error {
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important;
+  animation: inputShake 0.35s ease;
+}
+
+/* Balão Customizado de Validação (Substitui Tooltip Nativo do Navegador) */
+.custom-validation-bubble {
+  position: absolute;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.55);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.65), 0 0 18px rgba(245, 158, 11, 0.22);
+  border-radius: 8px;
+  padding: 8px 14px 8px 10px;
+  color: #F8FAFC;
+  font-size: 0.84rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  pointer-events: none;
+  animation: bubblePop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  white-space: nowrap;
+}
+
+.custom-validation-bubble::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 18px;
+  width: 9px;
+  height: 9px;
+  background: #0F172A;
+  border-left: 1px solid rgba(245, 158, 11, 0.55);
+  border-top: 1px solid rgba(245, 158, 11, 0.55);
+  transform: rotate(45deg);
+}
+
+.custom-validation-bubble .bubble-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.45);
+}
+
+.custom-validation-bubble .bubble-icon svg {
+  color: #FFFFFF;
+}
+
+.custom-validation-bubble .bubble-text {
+  color: #F1F5F9;
+  letter-spacing: 0.2px;
+}
+
+[data-theme="light"] .custom-validation-bubble {
+  background: #FFFFFF;
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.15), 0 0 16px rgba(245, 158, 11, 0.25);
+}
+
+[data-theme="light"] .custom-validation-bubble::before {
+  background: #FFFFFF;
+  border-color: rgba(245, 158, 11, 0.7);
+}
+
+[data-theme="light"] .custom-validation-bubble .bubble-text {
+  color: #0F172A;
+}
+
+@keyframes bubblePop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes inputShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
 }
 
 .full-width {

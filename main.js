@@ -477,22 +477,114 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
+  // ==========================================================================
+  // BALÃO CUSTOMIZADO DE VALIDAÇÃO (Substitui o Tooltip Nativo do Navegador)
+  // ==========================================================================
+  function showCustomValidation(input, customMessage) {
+    if (!input) return;
+
+    clearValidationBubble();
+
+    const msg = customMessage || input.dataset.errorMsg || input.validationMessage || 'Preencha este campo.';
+
+    input.classList.add('input-error');
+
+    const bubble = document.createElement('div');
+    bubble.className = 'custom-validation-bubble';
+    bubble.id = 'active-validation-bubble';
+    bubble.setAttribute('role', 'alert');
+    bubble.innerHTML = `
+      <div class="bubble-icon">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="14"></line>
+          <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+      </div>
+      <span class="bubble-text">${msg}</span>
+    `;
+
+    const parentGroup = input.closest('.form-group') || input.parentElement;
+    if (parentGroup) {
+      parentGroup.style.position = 'relative';
+      parentGroup.appendChild(bubble);
+
+      const topPos = input.offsetTop + input.offsetHeight + 6;
+      const leftPos = Math.max(0, input.offsetLeft + 4);
+      bubble.style.top = `${topPos}px`;
+      bubble.style.left = `${leftPos}px`;
+    } else {
+      document.body.appendChild(bubble);
+      const rect = input.getBoundingClientRect();
+      bubble.style.position = 'fixed';
+      bubble.style.top = `${rect.bottom + 6}px`;
+      bubble.style.left = `${rect.left + 4}px`;
+    }
+
+    input.focus();
+
+    function onInputClear() {
+      input.classList.remove('input-error');
+      clearValidationBubble();
+      input.removeEventListener('input', onInputClear);
+      input.removeEventListener('change', onInputClear);
+    }
+    input.addEventListener('input', onInputClear);
+    input.addEventListener('change', onInputClear);
+  }
+
+  function clearValidationBubble() {
+    const existing = document.getElementById('active-validation-bubble');
+    if (existing) existing.remove();
+    document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+  }
+
+  // Intercepta evento nativo HTML5 'invalid' em modo capture para evitar o tooltip padrão do sistema
+  document.addEventListener('invalid', (e) => {
+    e.preventDefault();
+    showCustomValidation(e.target);
+  }, true);
+
+  // Fecha o balão se o usuário clicar fora
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#active-validation-bubble') && !e.target.classList.contains('input-error')) {
+      clearValidationBubble();
+    }
+  });
+
   // Contact Form Submission Handler with Neon DB Persistence & WhatsApp
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const company = document.getElementById('company')?.value.trim();
-      const niche = document.getElementById('niche')?.value;
-      const phone = document.getElementById('phone')?.value.trim();
-      const goal = document.getElementById('goal')?.value.trim();
+      const companyInput = document.getElementById('company');
+      const nicheInput = document.getElementById('niche');
+      const phoneInput = document.getElementById('phone');
+      const goalInput = document.getElementById('goal');
+
+      const company = companyInput?.value.trim();
+      const niche = nicheInput?.value;
+      const phone = phoneInput?.value.trim();
+      const goal = goalInput?.value.trim();
       const submitBtn = contactForm.querySelector('button[type="submit"]');
 
-      if (!company || !phone) {
-        alert('Por favor, preencha o Nome da Empresa e o WhatsApp.');
+      if (!company) {
+        showCustomValidation(companyInput, 'Preencha este campo.');
         return;
       }
+
+      if (!phone) {
+        showCustomValidation(phoneInput, 'Preencha este campo.');
+        return;
+      }
+
+      const rawDigits = phone.replace(/\D/g, '');
+      if (rawDigits.length < 10) {
+        showCustomValidation(phoneInput, 'Insira um número de WhatsApp válido com DDD.');
+        return;
+      }
+
+      clearValidationBubble();
 
       const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
       if (submitBtn) {
