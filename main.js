@@ -303,6 +303,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       })
       .catch(() => {});
+
+    // Niche Filter Pills for Projects Showcase
+    const nicheFilterBtns = document.querySelectorAll('.niche-filter-pill');
+    nicheFilterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        nicheFilterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const selectedNiche = btn.dataset.niche;
+        if (selectedNiche === 'all') {
+          carouselInstance.selectIndex(0);
+          return;
+        }
+
+        const foundIndex = carouselInstance.projects.findIndex(p => 
+          (p.niche && p.niche.toLowerCase().includes(selectedNiche.toLowerCase())) ||
+          (p.title && p.title.toLowerCase().includes(selectedNiche.toLowerCase()))
+        );
+
+        if (foundIndex !== -1) {
+          carouselInstance.selectIndex(foundIndex);
+        }
+      });
+    });
+  }
+
+  // Modal Fullscreen Toggle
+  const btnModalFullscreen = document.getElementById('btn-modal-fullscreen');
+  if (btnModalFullscreen && projectModal) {
+    btnModalFullscreen.addEventListener('click', () => {
+      const isFull = projectModal.classList.toggle('modal-fullscreen');
+      const span = btnModalFullscreen.querySelector('span');
+      if (span) span.textContent = isFull ? 'Restaurar' : 'Tela Cheia';
+    });
   }
 
   // Open Project Modal Button
@@ -512,6 +546,34 @@ document.addEventListener('DOMContentLoaded', () => {
         calculate();
       });
     });
+
+    // Gerador de Proposta Executiva em PDF (Impressão)
+    const btnExportProposal = document.getElementById('btn-export-proposal');
+    if (btnExportProposal) {
+      btnExportProposal.addEventListener('click', () => {
+        const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
+        const clients = clientsSlider ? clientsSlider.value : '12';
+        const ticket = ticketSlider ? parseInt(ticketSlider.value, 10).toLocaleString('pt-BR') : '90';
+        const monthly = clientsSlider && ticketSlider ? (parseInt(clientsSlider.value, 10) * parseInt(ticketSlider.value, 10)).toLocaleString('pt-BR') : '1.080';
+        const annual = clientsSlider && ticketSlider ? (parseInt(clientsSlider.value, 10) * parseInt(ticketSlider.value, 10) * 12).toLocaleString('pt-BR') : '12.960';
+
+        const elDate = document.getElementById('prop-date');
+        const elNiche = document.getElementById('prop-niche');
+        const elClients = document.getElementById('prop-clients');
+        const elTicket = document.getElementById('prop-ticket');
+        const elMonthly = document.getElementById('prop-monthly');
+        const elAnnual = document.getElementById('prop-annual');
+
+        if (elDate) elDate.textContent = new Date().toLocaleDateString('pt-BR');
+        if (elNiche) elNiche.textContent = activeNiche;
+        if (elClients) elClients.textContent = `${clients} novos clientes/mês`;
+        if (elTicket) elTicket.textContent = `R$ ${ticket},00`;
+        if (elMonthly) elMonthly.textContent = `R$ ${monthly},00`;
+        if (elAnnual) elAnnual.textContent = `R$ ${annual},00`;
+
+        window.print();
+      });
+    }
 
     // ROI CTA Click -> Pre-fill Goal in Contact Form
     if (btnRoiCta) {
