@@ -293,6 +293,16 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     updateFeedbackDisplay(PROJECTS_DATA[0]);
+
+    // Dynamic Projects Sync with Neon PostgreSQL Database
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(resData => {
+        if (resData && resData.success && resData.data && resData.data.length > 0) {
+          carouselInstance.updateProjects(resData.data);
+        }
+      })
+      .catch(() => {});
   }
 
   // Open Project Modal Button

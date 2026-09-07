@@ -300,4 +300,41 @@ export class ModernPortfolioCarousel {
       }
     });
   }
+
+  updateProjects(newProjects) {
+    if (!newProjects || newProjects.length === 0) return;
+    this.projects = newProjects.map(p => ({
+      id: p.id,
+      title: p.title,
+      clientName: p.client_name || p.clientName,
+      clientRole: p.client_role || p.clientRole || 'Cliente Satisfeito',
+      avatarInitials: p.avatar_initials || p.avatarInitials || 'CL',
+      niche: p.niche || 'Geral',
+      primaryColor: p.primary_color || p.primaryColor || '#2563EB',
+      bgTint: p.bg_tint || p.bgTint || 'rgba(37, 99, 235, 0.2)',
+      bgSection: p.bg_section || p.bgSection || '#090E17',
+      bgSectionLight: p.bg_section_light || p.bgSectionLight || '#F1F5F9',
+      bgTintLight: p.bg_tint_light || p.bgTintLight || 'rgba(37, 99, 235, 0.12)',
+      mediaType: p.media_type || p.mediaType || 'image',
+      mediaUrl: p.media_url || p.mediaUrl || p.full_mockup_url || '/projects/dovena-medical.jpg',
+      fullMockupUrl: p.full_mockup_url || p.fullMockupUrl || p.media_url || '/projects/dovena-medical.jpg',
+      liveUrl: p.live_url || p.liveUrl || 'https://localwebpro.com.br',
+      deliveryTime: p.delivery_time || p.deliveryTime || '5 Dias Úteis',
+      resultsMetric: p.results_metric || p.resultsMetric || '+200% Conversões',
+      description: p.description || '',
+      feedback: p.feedback || '',
+      rating: p.rating || 5,
+      tags: typeof p.tags === 'string' ? JSON.parse(p.tags || '[]') : (p.tags || []),
+      stats: typeof p.stats === 'string' ? JSON.parse(p.stats || '[]') : (p.stats || []),
+      demoHtml: p.demo_html || p.demoHtml || ''
+    }));
+    this.activeIndex = 0;
+    this.render();
+    this.bindEvents();
+    this.setupVideoCards();
+    this.updateCarousel(0);
+    if (this.onSelectCallback && this.projects[0]) {
+      this.onSelectCallback(this.projects[0]);
+    }
+  }
 }

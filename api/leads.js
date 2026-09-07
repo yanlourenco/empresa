@@ -99,5 +99,60 @@ export default async function handler(req, res) {
     }
   }
 
+  // PATCH / PUT: Atualizar status e observações de lead
+  if (req.method === 'PATCH' || req.method === 'PUT') {
+    try {
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+      const { id, status, notes } = body;
+
+      if (!id) {
+        return res.status(400).json({ success: false, error: 'ID do lead é obrigatório.' });
+      }
+
+      const updateRes = await query(`
+        UPDATE leads
+        SET 
+          status = COALESCE($1, status),
+          notes = COALESCE($2, notes),
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = $3
+        RETURNING *;
+      `, [status || null, notes !== undefined ? notes : null, id]);
+
+      if (updateRes.rowCount === 0) {
+        return res.status(404).json({ success: false, error: 'Lead não encontrado.' });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: 'Lead atualizado com sucesso!',
+        lead: updateRes.rows[0]
+      });
+    } catch (err) {
+      console.error('Vercel API Leads PATCH Error:', err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  // DELETE: Remover lead
+  if (req.method === 'DELETE') {
+    try {
+      const url = new URL(req.url, 'http://localhost');
+      const queryId = url.searchParams.get('id');
+      const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {};
+      const id = queryId || body.id;
+
+      if (!id) {
+        return res.status(400).json({ success: false, error: 'ID do lead é obrigatório.' });
+      }
+
+      await query('DELETE FROM leads WHERE id = $1;', [id]);
+      return res.status(200).json({ success: true, message: 'Lead removido com sucesso!' });
+    } catch (err) {
+      console.error('Vercel API Leads DELETE Error:', err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
   return res.status(405).json({ error: 'Método não permitido' });
 }

@@ -54,15 +54,153 @@ const server = http.createServer(async (req, res) => {
       }
 
       if (pathname === '/api/projects' && req.method === 'GET') {
-        const result = await query('SELECT * FROM projects WHERE is_active = true ORDER BY display_order ASC;');
+        const showAll = parsedUrl.searchParams.get('all') === 'true';
+        const sql = showAll
+          ? 'SELECT * FROM projects ORDER BY display_order ASC, created_at DESC;'
+          : 'SELECT * FROM projects WHERE is_active = true ORDER BY display_order ASC;';
+        const result = await query(sql);
         res.statusCode = 200;
         return res.end(JSON.stringify({ success: true, count: result.rowCount, data: result.rows }));
+      }
+
+      if (pathname === '/api/projects' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', async () => {
+          try {
+            const data = JSON.parse(body || '{}');
+            const { id, title, client_name, client_role, niche, primary_color, live_url, full_mockup_url, results_metric, feedback, description, is_active } = data;
+
+            if (!title || !client_name) {
+              res.statusCode = 400;
+              return res.end(JSON.stringify({ success: false, error: 'Título e Nome do Cliente são obrigatórios.' }));
+            }
+
+            const projId = id || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            const initials = client_name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            const color = primary_color || '#2563EB';
+            const media = full_mockup_url || '/projects/dovena-medical.jpg';
+
+            const defaultDemoHtml = `
+              <div class="live-mockup-wrapper">
+                <div class="live-mockup-top-banner" style="border-left-color: ${color};">
+                  <div class="live-mockup-meta">
+                    <span class="live-status-badge" style="background: ${color}26; color: ${color}; border-color: ${color}4d;">PROJETO AO VIVO ENTREGUE</span>
+                    <h3 class="live-mockup-title">${title}</h3>
+                    <p class="live-mockup-sub">Interface oficial desenvolvida pela LocalWeb Pro.</p>
+                  </div>
+                  <div class="live-mockup-actions">
+                    <a href="${media}" target="_blank" rel="noopener noreferrer" class="btn-view-fullscreen"><span>Ver Imagem Completa</span></a>
+                    <a href="${live_url || '#'}" target="_blank" rel="noopener noreferrer" class="btn-live-contact" style="background: ${color};"><span>Visitar Site Oficial</span></a>
+                  </div>
+                </div>
+                <div class="live-mockup-viewport-scroll">
+                  <img src="${media}" alt="${title}" class="live-mockup-full-image" loading="lazy" />
+                </div>
+              </div>
+            `;
+
+            const insertRes = await query(`
+              INSERT INTO projects (
+                id, title, client_name, client_role, avatar_initials, niche,
+                primary_color, bg_tint, bg_section, bg_section_light, bg_tint_light,
+                media_type, media_url, full_mockup_url, live_url, delivery_time,
+                results_metric, description, feedback, rating, tags, stats, demo_html,
+                display_order, is_active, updated_at
+              ) VALUES (
+                $1, $2, $3, $4, $5, $6,
+                $7, $8, $9, $10, $11,
+                'image', $12, $13, $14, '5 Dias Úteis',
+                $15, $16, $17, 5, '[]'::jsonb, '[]'::jsonb, $18,
+                (SELECT COALESCE(MAX(display_order), 0) + 1 FROM projects), $19, CURRENT_TIMESTAMP
+              )
+              ON CONFLICT (id) DO UPDATE SET
+                title = EXCLUDED.title,
+                client_name = EXCLUDED.client_name,
+                client_role = EXCLUDED.client_role,
+                avatar_initials = EXCLUDED.avatar_initials,
+                niche = EXCLUDED.niche,
+                primary_color = EXCLUDED.primary_color,
+                media_url = EXCLUDED.media_url,
+                full_mockup_url = EXCLUDED.full_mockup_url,
+                live_url = EXCLUDED.live_url,
+                results_metric = EXCLUDED.results_metric,
+                description = EXCLUDED.description,
+                feedback = EXCLUDED.feedback,
+                demo_html = EXCLUDED.demo_html,
+                is_active = EXCLUDED.is_active,
+                updated_at = CURRENT_TIMESTAMP
+              RETURNING *;
+            `, [
+              projId, title, client_name, client_role || 'Proprietário', initials, niche || 'Geral',
+              color, `${color}33`, '#090E17', '#F1F5F9', `${color}1a`,
+              media, media, live_url || 'https://localwebpro.com.br',
+              results_metric || '+200% Conversões', description || 'Site corporativo de alta performance.',
+              feedback || 'Excelente trabalho e retorno garantido.', defaultDemoHtml, is_active !== undefined ? Boolean(is_active) : true
+            ]);
+
+            res.statusCode = 201;
+            return res.end(JSON.stringify({ success: true, message: 'Projeto salvo no Neon DB!', project: insertRes.rows[0] }));
+          } catch (err) {
+            res.statusCode = 500;
+            return res.end(JSON.stringify({ success: false, error: err.message }));
+          }
+        });
+        return;
+      }
+
+      if (pathname === '/api/projects' && req.method === 'DELETE') {
+        const queryId = parsedUrl.searchParams.get('id');
+        if (!queryId) {
+          res.statusCode = 400;
+          return res.end(JSON.stringify({ success: false, error: 'ID do projeto é obrigatório.' }));
+        }
+        await query('DELETE FROM projects WHERE id = $1;', [queryId]);
+        res.statusCode = 200;
+        return res.end(JSON.stringify({ success: true, message: 'Projeto removido com sucesso!' }));
       }
 
       if (pathname === '/api/leads' && req.method === 'GET') {
         const result = await query('SELECT * FROM leads ORDER BY created_at DESC;');
         res.statusCode = 200;
         return res.end(JSON.stringify({ success: true, count: result.rowCount, data: result.rows }));
+      }
+
+      if (pathname === '/api/leads' && (req.method === 'PATCH' || req.method === 'PUT')) {
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', async () => {
+          try {
+            const data = JSON.parse(body || '{}');
+            const { id, status, notes } = data;
+            if (!id) {
+              res.statusCode = 400;
+              return res.end(JSON.stringify({ success: false, error: 'ID do lead é obrigatório.' }));
+            }
+            const updateRes = await query(`
+              UPDATE leads 
+              SET status = COALESCE($1, status), notes = COALESCE($2, notes), updated_at = CURRENT_TIMESTAMP
+              WHERE id = $3 RETURNING *;
+            `, [status || null, notes !== undefined ? notes : null, id]);
+            res.statusCode = 200;
+            return res.end(JSON.stringify({ success: true, lead: updateRes.rows[0] }));
+          } catch (err) {
+            res.statusCode = 500;
+            return res.end(JSON.stringify({ success: false, error: err.message }));
+          }
+        });
+        return;
+      }
+
+      if (pathname === '/api/leads' && req.method === 'DELETE') {
+        const queryId = parsedUrl.searchParams.get('id');
+        if (!queryId) {
+          res.statusCode = 400;
+          return res.end(JSON.stringify({ success: false, error: 'ID do lead é obrigatório.' }));
+        }
+        await query('DELETE FROM leads WHERE id = $1;', [queryId]);
+        res.statusCode = 200;
+        return res.end(JSON.stringify({ success: true }));
       }
 
       if (pathname === '/api/leads' && req.method === 'POST') {
