@@ -1293,6 +1293,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 4000);
   }
 
+  // Atalho de Administrador: Ctrl + Shift + A (ou Cmd + Shift + A)
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+      e.preventDefault();
+      window.location.href = '/admin-leads.html';
+    }
+  });
+
   // Initialize new features
   initRoiCalculator();
   initFaqAccordion();

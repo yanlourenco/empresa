@@ -4377,3 +4377,29 @@ img, video, iframe {
   50% { opacity: 1; }
 }
 
+/* Link de Acesso Administrativo no Rodapé */
+.footer-admin-link {
+  color: var(--text-muted, #94A3B8);
+  text-decoration: none;
+  font-size: 0.76rem;
+  opacity: 0.65;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+}
+
+.footer-admin-link:hover {
+  opacity: 1;
+  color: #38BDF8;
+}
+
+[data-theme="light"] .footer-admin-link {
+  color: #64748B;
+}
+
+[data-theme="light"] .footer-admin-link:hover {
+  color: #2563EB;
+}
+
+
