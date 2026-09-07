@@ -636,10 +636,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mode tabs
     const modeTabs = document.querySelectorAll('.sim-mode-tab');
     const panels = {
-      funnel: document.getElementById('sim-panel-funnel'),
+      goal: document.getElementById('sim-panel-goal'),
       direct: document.getElementById('sim-panel-direct'),
+      funnel: document.getElementById('sim-panel-funnel'),
       opportunity: document.getElementById('sim-panel-opportunity')
     };
+
+    // Mode 0: Goal elements (Engenharia Reversa por Meta)
+    const goalTargetSlider = document.getElementById('goal-target-slider');
+    const goalTargetInput = document.getElementById('goal-target-input');
+    const goalTicketSlider = document.getElementById('goal-ticket-slider');
+    const goalTicketInput = document.getElementById('goal-ticket-input');
+    const bpGoalVal = document.getElementById('bp-goal-val');
+    const bpClientsNeeded = document.getElementById('bp-clients-needed');
+    const bpDailyRate = document.getElementById('bp-daily-rate');
 
     // Mode 1: Funil elements
     const funnelVisitsSlider = document.getElementById('funnel-visits-slider');
@@ -692,24 +702,74 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRoiCtaText = document.getElementById('btn-roi-cta-text');
     const btnExportProposal = document.getElementById('btn-export-proposal');
 
-    if (!funnelVisitsSlider && !directClientsSlider) return;
+    if (!funnelVisitsSlider && !directClientsSlider && !goalTargetSlider) return;
 
-    let currentMode = 'funnel';
+    let currentMode = document.querySelector('.sim-mode-tab.active')?.dataset.mode || 'goal';
+
+    // Helper: sync active chip state for a given input
+    function syncChipsForInput(input) {
+      if (!input) return;
+      const targetId = input.id;
+      const chips = document.querySelectorAll(`.quick-chip[data-target="${targetId}"]`);
+      chips.forEach(chip => {
+        if (parseFloat(chip.dataset.val) === parseFloat(input.value)) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+    }
 
     // Helper: sync slider <-> number input bidirectionally
     function bindSync(slider, input, onUpdate) {
       if (!slider || !input) return;
       slider.addEventListener('input', () => {
         input.value = slider.value;
+        syncChipsForInput(input);
         onUpdate();
       });
       input.addEventListener('input', () => {
         let val = parseFloat(input.value);
         if (isNaN(val)) val = 0;
         slider.value = Math.min(Math.max(val, parseFloat(slider.min)), parseFloat(slider.max));
+        syncChipsForInput(input);
         onUpdate();
       });
     }
+
+    // Steppers (+ / -)
+    document.querySelectorAll('.stepper-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const step = parseFloat(btn.dataset.step) || 1;
+        const targetInput = document.getElementById(targetId);
+        if (!targetInput) return;
+
+        let currentVal = parseFloat(targetInput.value) || 0;
+        let newVal = currentVal + step;
+        const minVal = parseFloat(targetInput.min);
+        const maxVal = parseFloat(targetInput.max);
+
+        if (!isNaN(minVal) && newVal < minVal) newVal = minVal;
+        if (!isNaN(maxVal) && newVal > maxVal) newVal = maxVal;
+
+        targetInput.value = newVal;
+        targetInput.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    });
+
+    // Quick Preset Chips
+    document.querySelectorAll('.quick-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const targetId = chip.dataset.target;
+        const val = chip.dataset.val;
+        const targetInput = document.getElementById(targetId);
+        if (!targetInput) return;
+
+        targetInput.value = val;
+        targetInput.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    });
 
     let roiSaveTimeout = null;
     function persistSimulation(simData) {
@@ -726,7 +786,60 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculate() {
       let simPayload = {};
 
-      if (currentMode === 'funnel') {
+      if (currentMode === 'goal') {
+        const target = Math.max(500, parseInt(goalTargetInput ? goalTargetInput.value : (goalTargetSlider ? goalTargetSlider.value : '10000'), 10) || 10000);
+        const ticket = Math.max(10, parseInt(goalTicketInput ? goalTicketInput.value : (goalTicketSlider ? goalTicketSlider.value : '250'), 10) || 250);
+
+        const clients = Math.max(1, Math.round(target / ticket));
+        const dailyRate = clients / 30;
+        const weeklyRate = clients / 4.33;
+        const annual = target * 12;
+        const net = annual - 1200;
+        const dailyRevenue = target / 30;
+        const paybackDays = dailyRevenue > 0 ? Math.max(1, Math.round(1200 / dailyRevenue)) : 30;
+        const multiplier = (annual / 1200).toFixed(1);
+
+        // Blueprint card real-time display
+        if (bpGoalVal) bpGoalVal.textContent = `R$ ${target.toLocaleString('pt-BR')}/mês`;
+        if (bpClientsNeeded) bpClientsNeeded.textContent = `${clients} ${clients === 1 ? 'venda/mês' : 'vendas/mês'}`;
+        if (bpDailyRate) {
+          if (dailyRate >= 1) {
+            bpDailyRate.textContent = `~${dailyRate.toFixed(1)} venda/dia`;
+          } else {
+            bpDailyRate.textContent = `~${Math.max(1, Math.round(weeklyRate))} vendas/sem`;
+          }
+        }
+
+        // Result card
+        if (resultsBadge) resultsBadge.textContent = 'Engenharia Reversa por Meta';
+        if (paybackPill) paybackPill.textContent = `Investimento pago em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Meta Mensal Projetada:';
+        if (monthlyResult) monthlyResult.innerHTML = `R$ ${target.toLocaleString('pt-BR')}<small>/mês</small>`;
+        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> faturados ao ano`;
+
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Clientes Necessários';
+        if (kpi1Val) kpi1Val.textContent = `${clients} vendas/mês`;
+        if (kpi2Lbl) kpi2Lbl.textContent = 'Ritmo de Conversão';
+        if (kpi2Val) kpi2Val.textContent = dailyRate >= 1 ? `~${dailyRate.toFixed(1)} /dia` : `~${Math.max(1, Math.round(weeklyRate))} /sem`;
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Multiplicador ROI';
+        if (kpi3Val) kpi3Val.textContent = `${multiplier}x ao ano`;
+
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Investimento Único no Site:';
+        if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido no 1º Ano:';
+        if (netReturn) netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Atingir Essa Meta com Meu Site';
+
+        simPayload = {
+          niche: `Meta Reversa (R$ ${target}/mês, ${clients} clientes a R$ ${ticket})`,
+          clients,
+          ticket,
+          monthly: target,
+          annual,
+          paybackDays: `${paybackDays} dias`
+        };
+
+      } else if (currentMode === 'funnel') {
         const visits = Math.max(1, parseInt(funnelVisitsInput ? funnelVisitsInput.value : funnelVisitsSlider.value, 10) || 1000);
         const convRate = Math.max(0.1, parseFloat(funnelConvInput ? funnelConvInput.value : funnelConvSlider.value) || 6.0);
         const closeRate = Math.max(1, parseInt(funnelCloseInput ? funnelCloseInput.value : funnelCloseSlider.value, 10) || 25);
@@ -778,8 +891,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       } else if (currentMode === 'direct') {
         const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
-        const clients = Math.max(1, parseInt(directClientsInput ? directClientsInput.value : directClientsSlider.value, 10) || 14);
-        const ticket = Math.max(1, parseInt(directTicketInput ? directTicketInput.value : directTicketSlider.value, 10) || 90);
+        const clients = Math.max(1, parseInt(directClientsInput ? directClientsInput.value : directClientsSlider.value, 10) || 15);
+        const ticket = Math.max(1, parseInt(directTicketInput ? directTicketInput.value : directTicketSlider.value, 10) || 250);
 
         const monthly = clients * ticket;
         const annual = monthly * 12;
@@ -863,6 +976,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Vincula sincronização slider <-> número
+    bindSync(goalTargetSlider, goalTargetInput, calculate);
+    bindSync(goalTicketSlider, goalTicketInput, calculate);
+
     bindSync(funnelVisitsSlider, funnelVisitsInput, calculate);
     bindSync(funnelConvSlider, funnelConvInput, calculate);
     bindSync(funnelCloseSlider, funnelCloseInput, calculate);
@@ -935,7 +1051,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (elDate) elDate.textContent = new Date().toLocaleDateString('pt-BR');
 
-        if (currentMode === 'funnel') {
+        if (currentMode === 'goal') {
+          const target = parseInt(goalTargetInput ? goalTargetInput.value : '10000', 10);
+          const ticket = parseInt(goalTicketInput ? goalTicketInput.value : '250', 10);
+          const clients = Math.max(1, Math.round(target / ticket));
+          const dailyRate = (clients / 30).toFixed(1);
+          const annual = target * 12;
+
+          if (elModeName) elModeName.textContent = 'Engenharia Reversa por Meta de Faturamento';
+          if (elNiche) elNiche.textContent = 'Planejamento Estratégico de Crescimento';
+          if (elDetailsVal) elDetailsVal.textContent = `Meta mensal de R$ ${target.toLocaleString('pt-BR')},00 requer apenas ${clients} vendas/mês (~${dailyRate} venda/dia com ticket R$ ${ticket.toLocaleString('pt-BR')},00)`;
+          if (elClientsLabel) elClientsLabel.textContent = 'Vendas/Clientes Necessários:';
+          if (elClients) elClients.textContent = `${clients} clientes/mês (~${dailyRate}/dia)`;
+          if (elTicketLabel) elTicketLabel.textContent = 'Ticket Médio de Referência:';
+          if (elTicket) elTicket.textContent = `R$ ${ticket.toLocaleString('pt-BR')},00`;
+          if (elMonthlyLabel) elMonthlyLabel.textContent = 'Meta de Faturamento Mensal:';
+          if (elMonthly) elMonthly.textContent = `R$ ${target.toLocaleString('pt-BR')},00`;
+          if (elAnnualLabel) elAnnualLabel.textContent = 'Volume Projetado em 12 Meses:';
+          if (elAnnual) elAnnual.textContent = `R$ ${annual.toLocaleString('pt-BR')},00`;
+
+        } else if (currentMode === 'funnel') {
           const visits = parseInt(funnelVisitsInput ? funnelVisitsInput.value : '1000', 10);
           const convRate = parseFloat(funnelConvInput ? funnelConvInput.value : '6');
           const closeRate = parseInt(funnelCloseInput ? funnelCloseInput.value : '25', 10);
@@ -959,8 +1094,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } else if (currentMode === 'direct') {
           const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
-          const clients = parseInt(directClientsInput ? directClientsInput.value : '14', 10);
-          const ticket = parseInt(directTicketInput ? directTicketInput.value : '90', 10);
+          const clients = parseInt(directClientsInput ? directClientsInput.value : '15', 10);
+          const ticket = parseInt(directTicketInput ? directTicketInput.value : '250', 10);
           const monthly = clients * ticket;
           const annual = monthly * 12;
 
@@ -1012,7 +1147,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const goalInput = document.getElementById('goal');
         if (!goalInput) return;
 
-        if (currentMode === 'funnel') {
+        if (currentMode === 'goal') {
+          const target = parseInt(goalTargetInput ? goalTargetInput.value : '10000', 10);
+          const ticket = parseInt(goalTicketInput ? goalTicketInput.value : '250', 10);
+          const clients = Math.max(1, Math.round(target / ticket));
+          goalInput.value = `Gostaria de estruturar um site profissional focado em alcançar minha meta de R$ ${target.toLocaleString('pt-BR')}/mês em vendas (preciso de aprox. ${clients} clientes/mês com ticket médio de R$ ${ticket}).`;
+        } else if (currentMode === 'funnel') {
           const visits = parseInt(funnelVisitsInput ? funnelVisitsInput.value : '1000', 10);
           const convRate = parseFloat(funnelConvInput ? funnelConvInput.value : '6');
           const closeRate = parseInt(funnelCloseInput ? funnelCloseInput.value : '25', 10);
@@ -1023,8 +1163,8 @@ document.addEventListener('DOMContentLoaded', () => {
           goalInput.value = `Gostaria de estruturar um site focado em conversão para gerar aprox. ${leads} leads no WhatsApp e R$ ${monthly.toLocaleString('pt-BR')}/mês em novos clientes (${sales} vendas com ticket R$ ${ticket}).`;
         } else if (currentMode === 'direct') {
           const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'meu segmento';
-          const clients = parseInt(directClientsInput ? directClientsInput.value : '14', 10);
-          const ticket = parseInt(directTicketInput ? directTicketInput.value : '90', 10);
+          const clients = parseInt(directClientsInput ? directClientsInput.value : '15', 10);
+          const ticket = parseInt(directTicketInput ? directTicketInput.value : '250', 10);
           const monthly = clients * ticket;
           goalInput.value = `Gostaria de estruturar o site para ${activeNiche} com meta de retorno de aprox. R$ ${monthly.toLocaleString('pt-BR')}/mês (${clients} clientes novos a R$ ${ticket}).`;
         } else if (currentMode === 'opportunity') {
