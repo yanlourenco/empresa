@@ -1,50 +1,52 @@
 # LocalWeb Pro 🌐
-> **Plataforma Corporativa de Alta Performance & Conversão para Negócios Locais**
+> **Plataforma Corporativa de Alta Performance, Gestão de Portfólio & CRM para Negócios Locais**
 
-Desenvolvimento web sob medida, sóbrio e eficiente para pequenas empresas. O projeto entrega presença digital executiva com carregamento ultra-rápido, otimização de SEO local, integração direta ao WhatsApp e experiência interativa de portfólio.
+Desenvolvimento web sob medida, executivo e de alta conversão para micro e pequenas empresas. A plataforma combina uma vitrine interativa para demonstração dos sites desenvolvidos aos clientes, cálculo de ROI em tempo real, gerador de propostas executivas em PDF e um **Painel de Controle Administrativo (CRM & CMS)** conectado a banco de dados serverless **Neon PostgreSQL**, com deploy contínuo na **Vercel**.
 
 ---
 
 ## 🚀 Tecnologias Utilizadas
 
-- **HTML5 Semântico**: Estrutura acessível com marcação voltada a SEO e WCAG.
-- **CSS3 Vanilla**: Design System moderno baseado em variáveis CSS (Custom Properties), glassmorphism, sombras volumétricas e iluminação radial sem dependência de frameworks pesados.
-- **JavaScript Moderno (ES6+ Modules)**: Componentes modulares, manipulação de streams de animação, drag/swipe gestures e reatividade limpa.
-- **Vite**: Bundler de última geração com inicialização instantânea e compilação ultra-rápida.
-- **SVGs Vetoriais Puros**: Ícones nítidos e escaláveis em qualquer resolução, sem fontes de ícones externas ou emojis genéricos.
+- **Frontend Core**: HTML5 Semântico, CSS3 Moderno (Vanilla CSS com Design Tokens e variáveis customizadas), JavaScript ES6+ Modular.
+- **Bundler & Build Tool**: [Vite](https://vitejs.dev/) para compilação instantânea, minificação e geração de bundles ultraleves.
+- **Banco de Dados Serverless**: [Neon PostgreSQL](https://neon.tech/) com driver `@neondatabase/serverless` e pool de conexões de alta performance.
+- **APIs Serverless**: Endpoints compatíveis com Vercel Serverless Functions (`/api/leads`, `/api/projects`, `/api/settings`, `/api/health`).
+- **Design System & Estilo**: Glassmorphism, aceleração por GPU, tipografia corporativa via Google Fonts (*Inter* e *Outfit*), sistema de temas Dark/Light sem cintilação.
+- **Visualização & Mockups**: Carrossel 3D Coverflow com gestos touch/swipe, visualizador com simulação de dispositivos (Desktop, Tablet, Mobile) e modo tela cheia.
+- **PWA & Identidade Visual**: Favicons vetoriais e rasterizados de alta resolução (`.svg`, `.ico`, 16x16, 32x32, 180x180) e `site.webmanifest`.
 
 ---
 
 ## ✨ Principais Funcionalidades
 
 ### 🌓 1. Sistema Completo de Tema Claro / Escuro (Dark & Light Mode)
-- **Alternador na Barra de Navegação**: Botão com ícones vetoriais de Sol e Lua e indicador de estado.
-- **Paleta Dark**: Base em Preto Profundo (`#05070B`) e Azul Meia-Noite (`#0F172A`, `#1E3A8A`, `#2563EB`) com tipografia branca nítida.
-- **Paleta Light**: Fundo limpo em tom ardósia (`#F8FAFC`), superfícies brancas (`#FFFFFF`) e tipografia de alto contraste em azul petróleo e obsidian (`#0F172A`).
-- **Persistência Inteligente**: Salva a preferência do usuário no `localStorage` (`localweb_theme`) e detecta automaticamente o `prefers-color-scheme` do sistema operacional no primeiro acesso.
-- **Transição Suave**: Troca de iluminação fluida em `0.35s` sem cintilação na tela.
+- **Paleta Dark**: Base em Preto Profundo (`#05070B`) e Azul Meia-Noite (`#0B1120`, `#1E3A8A`, `#2563EB`) com contraste otimizado.
+- **Paleta Light**: Fundo limpo ardósia (`#F8FAFC`), superfícies brancas com relevo e tipografia de alto contraste em azul petróleo e obsidian (`#0F172A`).
+- **Persistência Automática**: Preferência memorizada no `localStorage` (`localweb_theme`) e detecção nativa do `prefers-color-scheme` do sistema.
 
-### 🎠 2. Carrossel 3D Coverflow de Alta Conversão
-- **Navegação 3D Hardware-Accelerated**: Renderização com perspectiva profunda e cálculo de profundidade Z para cards laterais.
-- **Suporte Multi-Input**: Navegação por cliques, setas direcionais do teclado e **gestos de arrastar/deslizar (Pointer/Touch swipe)** em dispositivos móveis.
-- **Transição Dinâmica de Cores por Marca**: A seção `#projetos` e o card de feedback mudam suavemente de fundo (`cubic-bezier(0.16, 1, 0.3, 1)`) para celebrar a paleta visual do cliente em destaque.
-- **Pills de Paginação Interativas**: Indicadores dinâmicos que expandem e adotam o brilho da cor da marca ativa.
+### 🎠 2. Carrossel 3D Coverflow & Filtros por Nicho
+- **Filtros Rápidos de Segmento**: Pílulas interativas no topo da vitrine (*Todos*, *Saúde & Clínicas*, *Barbearia & Beleza*, *Moda & Varejo*, *Fitness & Academias*, *Design & Tech*, *Hardware & Som*) para foco instantâneo.
+- **Navegação Multicanal**: Cliques, setas direcionais do teclado e **gestos de arrastar/deslizar (Pointer/Touch Swipe)** em smartphones e tablets.
+- **Troca Dinâmica de Atmosfera**: A seção de portfólio adapta a iluminação e as cores de fundo em tempo real para celebrar a identidade visual da marca em destaque.
+- **Modal Interativo com Tela Cheia**: Demonstração do site do cliente com alternador de dispositivos (*Desktop*, *Tablet*, *Mobile*) e botão de **Tela Cheia** para imersão completa.
 
-### 🔍 3. Modal de Demonstração com Mockups Reais & Viewport Switcher
-- **Exibição Autêntica**: Ao clicar em qualquer projeto ou no botão *"Explorar Projeto Ao Vivo"*, o modal abre exibindo com máxima nitidez a **imagem real entregue ao cliente**.
-- **Rolagem Suave Contínua**: Contêiner com scrollbar customizada para inspecionar a interface entregue de ponta a ponta.
-- **Simulador de Dispositivos (Device Switcher)**:
-  - 🖥️ **Desktop** (100% largura)
-  - 📱 **Tablet** (768px centralizado com moldura)
-  - 📲 **Mobile** (375px centralizado com moldura)
-- **Ação em Tela Cheia**: Botão *"Ver Imagem Completa"* para abrir o mockup original em alta definição em uma nova aba.
+### 📊 3. Calculadora de Retorno (ROI) & Gerador de Proposta em PDF
+- **Simulador Financeiro Interativo**: Sliders em tempo real para clientes adicionais e ticket médio, calculando faturamento extra mensal e anual.
+- **Exportação de Proposta Executiva em PDF**: Botão integrado que gera uma folha timbrada A4 completa com diagnóstico, metas de faturamento, condições de investimento e termos de garantia, pronta para salvar em PDF (`Ctrl + P`) ou imprimir para reuniões comerciais.
 
-### ✍️ 4. Efeito Stagger Text Rise
-- Sistema tipográfico que anima os títulos caractere por caractere com aceleração por GPU, criando uma entrada marcante e executiva.
+### 🔒 4. Painel Executivo & CRM de Gestão Restrito (Admin Suite)
+Acesso seguro e desacoplado da vitrine pública pela URL `/admin-leads.html`:
+- **Barreira de Segurança por PIN**: Protegido por código de 4+ dígitos (PIN inicial padrão: `admin123`, customizável nas configurações).
+- **Sigilo Comercial & SEO**: Blindado contra indexação de motores de busca (`noindex, nofollow, noarchive, nosnippet`).
+- **Dashboard de Métricas**: Indicadores de Faturamento Estimado, Volume de Leads, Taxa de Conversão e Sites Ativos.
+- **CRM Kanban de Oportunidades**: Gestão de leads em colunas (*Novo Contato*, *Em Negociação*, *Proposta Enviada*, *Fechado*, *Perdido*) com botão de contato direto via WhatsApp em 1 clique e histórico de interações.
+- **CMS de Projetos no Neon DB**: Cadastro, edição e exclusão de sites dos clientes diretamente no banco de dados, refletindo instantaneamente na vitrine principal.
+- **Central de Configurações**: Gerenciamento de canais de notificação (WhatsApp comercial, E-mail, Webhooks) e atualização do PIN de acesso.
 
-### 📲 5. Formulário de Diagnóstico & Conversão WhatsApp
-- Captação de dados essenciais (Nome da Empresa, Nicho, WhatsApp e Necessidade Principal).
-- Formatação automática de mensagem pré-configurada pronta para envio no WhatsApp do atendimento.
+### 🛡️ 5. Selos de Credibilidade & Conversão
+- **Garantia Incondicional de 7 Dias**: Risco zero para o cliente final.
+- **Entrega Expressa de 5 a 7 Dias Úteis**: Agilidade no lançamento.
+- **Nuvem & Segurança SSL**: Infraestrutura certificada e de alta velocidade.
 
 ---
 
@@ -56,34 +58,43 @@ Desenvolvimento web sob medida, sóbrio e eficiente para pequenas empresas. O pr
 | **Dark Beard** | Barbearia & Grooming VIP | `#C59B27` (Ouro Âmbar) | `#2B2006` / `#FAF5E8` | **100%** da agenda preenchida |
 | **FRZN™** | Moda Urbana & E-commerce | `#5D8AA8` (Azul Ártico) | `#132130` / `#EDF4F9` | **R$ 42.000** em vendas na 1ª semana |
 | **Be Greater** | Fitness & Crossfit Studio | `#E50914` (Vermelho Intenso) | `#380407` / `#FDF1F1` | **85 novas** matrículas no 1º mês |
-| **Jacket Masters** | Loja de Roupa & E-commerce *(Vídeo Showcase)* | `#FF6B00` (Laranja Radiante) | `#381700` / `#FFF2EB` | **+4.8x** retenção e **14.2%** conversão |
-| **Cloud9 Studio** | Design 3D & Branding *(Vídeo Showcase)* | `#E11D48` (Carmim Vibrante) | `#3E0713` / `#FDF2F4` | **+5.2x** em leads qualificados |
-| **Soundar** | Hardware & Fones Hi-Fi *(Vídeo Showcase)* | `#84CC16` (Neon Lime) | `#0D1704` / `#F7FEE7` | **R$ 78.000** em pré-vendas |
+| **Jacket Masters** | Loja de Roupa & E-commerce | `#FF6B00` (Laranja Radiante) | `#381700` / `#FFF2EB` | **+4.8x** retenção e **14.2%** conversão |
+| **Cloud9 Studio** | Design 3D & Branding | `#E11D48` (Carmim Vibrante) | `#3E0713` / `#FDF2F4` | **+5.2x** em leads qualificados |
+| **Soundar** | Hardware & Fones Hi-Fi | `#84CC16` (Neon Lime) | `#0D1704` / `#F7FEE7` | **R$ 78.000** em pré-vendas |
 
 ---
 
-## 📁 Estrutura de Pastas e Arquivos
+## 📁 Estrutura do Repositório
 
 ```text
 empresa/
-├── public/
-│   └── projects/                  # Mockups em alta resolução e assets dos projetos
-│       ├── dovena-medical.jpg
-│       ├── dark-beard-barber.jpg
-│       ├── frzn-winterwear.jpg
-│       ├── be-greater-fitness.jpg
-│       ├── jacket-masters.png
-│       ├── cloud9-studio.png
-│       └── soundar-headphones.png
-├── index.html                     # Estrutura HTML5 semântica e acessível
-├── style.css                      # Design System completo (Dark + Light Mode, Carrossel 3D, Modal)
-├── main.js                        # Lógica da aplicação, tema claro/escuro, modais e formulário
-├── modern-carousel.js             # Componente do Carrossel 3D Coverflow e controles de swipe
-├── video-showcase-engine.js       # Motor de animação e streaming de vídeo 4K 60fps para cards e modais
-├── projectsData.js                # Base de dados dos clientes, cores, métricas e mockups reais
-├── stagger-text.js                # Efeito tipográfico Stagger Text Rise
-├── package.json                   # Dependências e scripts de desenvolvimento
-└── vite.config.js                 # Configurações do servidor e build Vite
+├── api/                           # Serverless Functions (Vercel & Neon DB)
+│   ├── health.js                  # Status de conexão com banco de dados
+│   ├── leads.js                   # API CRUD para captação e gestão de leads
+│   ├── projects.js                # API para gerenciamento dos sites no portfólio
+│   └── settings.js                # API de autenticação por PIN e configurações
+├── db/                            # Camada de Banco de Dados
+│   ├── index.js                   # Conexão e pool Neon Serverless
+│   ├── migrate.js                 # Script de criação de tabelas e schema
+│   └── seed.js                    # Carga inicial com projetos e configurações
+├── public/                        # Arquivos estáticos servidos na raiz
+│   ├── favicon.ico                # Ícone clássico para navegadores
+│   ├── favicon.svg                # Ícone vetorial moderno
+│   ├── favicon-16x16.png          # Ícone 16px
+│   ├── favicon-32x32.png          # Ícone 32px
+│   ├── apple-touch-icon.png       # Ícone para dispositivos Apple (180px)
+│   ├── site.webmanifest           # Manifesto PWA com tema corporativo
+│   └── projects/                  # Mockups e imagens de alta resolução
+├── admin-leads.html               # Painel Administrativo, CRM e CMS (Protegido por PIN)
+├── index.html                     # Vitrine Principal de Conversão e Portfólio
+├── style.css                      # Design System completo (Dark/Light, 3D, Impressão PDF)
+├── main.js                        # Lógica da vitrine, calculadora de ROI e formulários
+├── modern-carousel.js             # Motor do carrossel 3D Coverflow e suporte a gestos
+├── video-showcase-engine.js       # Gerenciador de streaming de mídia dos projetos
+├── projectsData.js                # Catálogo local de fallback dos projetos
+├── package.json                   # Dependências e scripts de execução
+├── vercel.json                    # Configuração de rotas e Serverless Functions
+└── vite.config.js                 # Configurações do Vite para múltiplas páginas
 ```
 
 ---
@@ -91,92 +102,56 @@ empresa/
 ## 🛠️ Como Executar o Projeto Localmente
 
 ### Pré-requisitos
-- [Node.js](https://nodejs.org/) (versão 18 ou superior recomendada)
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
 - Gerenciador de pacotes `npm`
 
-### 1. Clonar ou Acessar a Pasta do Repositório
-```bash
-cd caminho/para/empresa
-```
-
-### 2. Instalar Dependências
+### 1. Instalar as Dependências
 ```bash
 npm install
 ```
 
-### 3. Configurar Banco de Dados (Neon PostgreSQL)
-Copie o arquivo de exemplo e configure sua string de conexão:
-```bash
-cp .env.example .env
+### 2. Configurar o Banco de Dados (Neon PostgreSQL)
+Crie um arquivo `.env` na raiz do projeto (baseado em `.env.example`):
+```env
+DATABASE_URL=postgresql://neondb_owner:SENHA@ep-exemplo.us-east-2.aws.neon.tech/neondb?sslmode=require
+ADMIN_PIN=admin123
+PORT=3000
 ```
-Execute as migrações e o seed inicial (cria as tabelas `leads`, `projects`, `services_pricing`, `site_settings` e popula os projetos):
+
+Execute as migrações automáticas para criar as tabelas e povoar a base:
 ```bash
 npm run db:migrate
 ```
 
-### 4. Iniciar o Servidor de Desenvolvimento
+### 3. Iniciar o Servidor de Desenvolvimento
 ```bash
 npm run dev
 ```
-O projeto estará disponível no seu navegador em:
-```text
-http://localhost:3000
-```
-- **Painel de Leads & Orçamentos**: `http://localhost:3000/admin-leads.html`
-- **Health Check da API / Neon**: `http://localhost:3000/api/health`
 
-### 5. Gerar a Build de Produção
+Acesse no navegador:
+- **Vitrine Principal**: [`http://localhost:3000/`](http://localhost:3000/)
+- **Painel Administrativo Restrito**: [`http://localhost:3000/admin-leads.html`](http://localhost:3000/admin-leads.html)
+  - *(PIN inicial padrão: `admin123`)*
+
+### 4. Gerar Build de Produção
 ```bash
 npm run build
 ```
-Os arquivos otimizados e minificados serão gerados na pasta `dist/`.
+Os arquivos minificados e otimizados serão gerados no diretório `dist/`.
 
-### 6. Executar em Produção com Node.js + Neon DB
-```bash
-npm start
-```
 ---
 
-## 🎨 Como Adicionar um Novo Projeto ao Portfólio
+## 🚀 Deploy Contínuo na Vercel
 
-Abra o arquivo [`projectsData.js`](projectsData.js) e adicione um novo objeto ao array `PROJECTS_DATA`:
-
-```javascript
-{
-  id: 'nome-do-cliente',
-  title: 'Nome da Empresa - Ramo de Atuação',
-  clientName: 'Nome do Proprietário',
-  clientRole: 'Cargo • Especialidade',
-  avatarInitials: 'NC',
-  niche: 'Segmento de Atuação',
-  primaryColor: '#HEX_COR_PRIMARIA',
-  bgTint: 'rgba(R, G, B, 0.28)',          // Halo escuro
-  bgSection: '#HEX_FUNDO_DARK',           // Fundo no modo escuro
-  bgSectionLight: '#HEX_FUNDO_LIGHT',     // Fundo no modo claro
-  bgTintLight: 'rgba(R, G, B, 0.15)',     // Halo claro
-  mediaType: 'image',
-  mediaUrl: '/projects/mockup-capa.jpg',
-  fullMockupUrl: '/projects/mockup-completo.jpg',
-  liveUrl: 'https://cliente.localwebpro.com.br',
-  deliveryTime: '5 Dias Úteis',
-  resultsMetric: '+250% em agendamentos',
-  description: 'Descrição do resultado gerado.',
-  feedback: 'Depoimento real do cliente.',
-  rating: 5,
-  tags: ['Tag 1', 'Tag 2', 'Tag 3'],
-  stats: [
-    { label: 'Métrica 1', val: '+500' },
-    { label: 'Métrica 2', val: '99%' }
-  ],
-  demoHtml: `
-    <!-- HTML com o mockup e botão de contato -->
-  `
-}
-```
+O projeto está configurado para deploy contínuo automático:
+1. Ao realizar `git push` para a branch `main`, a Vercel detecta a alteração e inicia o build automaticamente.
+2. No painel da Vercel, defina a variável de ambiente:
+   - `DATABASE_URL`: String de conexão do seu banco de dados no Neon.
+   - `ADMIN_PIN`: PIN inicial de acesso (opcional, padrão `admin123`).
 
 ---
 
 ## 📄 Licença e Direitos
 
 Desenvolvido para **LocalWeb Pro** © 2026. Todos os direitos reservados.  
-Construído com foco em design minimalista, identidade corporativa limpa e máxima taxa de conversão.
+Construído com foco em design minimalista, alta conversão de clientes e autonomia máxima de gestão.
