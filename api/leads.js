@@ -63,7 +63,7 @@ export default async function handler(req, res) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 embeds: [{
-                  title: '🚀 Novo Lead Captado no Site!',
+                  title: 'Novo Lead Captado no Site',
                   color: 0x2563EB,
                   fields: [
                     { name: 'Empresa', value: createdLead.company_name || 'Não informado', inline: true },

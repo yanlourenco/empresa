@@ -1,9 +1,10 @@
 /**
  * Modern High-Conversion 3D Portfolio Carousel
  * Supports HD Images, Native Video Player (Elementor Reel), Touch/Swipe, and Dynamic Brand Theming
+ * Optimized for 60fps silky smooth scrolling and low memory usage
  */
 
-import { PROJECTS_DATA, getBrandContrastMode } from './projectsData.js';
+import { PROJECTS_DATA } from './projectsData.js';
 import { VideoShowcaseEngine } from './video-showcase-engine.js';
 
 export class ModernPortfolioCarousel {
@@ -14,6 +15,8 @@ export class ModernPortfolioCarousel {
     this.projects = PROJECTS_DATA;
     this.activeIndex = 0;
     this.videoEngines = new Map();
+    this.isStageVisible = true;
+    this.globalEventsBound = false;
     
     // Drag/Swipe state
     this.isDragging = false;
@@ -69,7 +72,7 @@ export class ModernPortfolioCarousel {
       <article class="carousel-card-item ${index === 0 ? 'active' : ''}" data-index="${index}" style="--brand-accent: ${project.primaryColor}">
         <div class="card-glass-wrapper">
           
-          <!-- Card Header Bar (Design Profissional & Minimalista) -->
+          <!-- Card Header Bar -->
           <div class="card-browser-bar">
             <div class="card-url-pill">
               <svg class="lock-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
@@ -82,9 +85,7 @@ export class ModernPortfolioCarousel {
           <div class="card-media-viewport">
             ${isVideo ? `
               <div class="card-video-container" id="video-box-${project.id}">
-                <video class="card-html5-video" data-video-id="${project.id}" playsinline muted loop autoplay poster="${project.posterUrl}">
-                  <source src="${project.mediaUrl}" type="video/webm">
-                </video>
+                <canvas class="card-html5-video card-showcase-canvas" data-video-id="${project.id}" width="800" height="500"></canvas>
                 <div class="video-overlay-controls">
                   <button class="video-play-toggle-btn" data-video-toggle="${project.id}" title="Pausar / Reproduzir Vídeo">
                     <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
@@ -122,7 +123,6 @@ export class ModernPortfolioCarousel {
             
             <button class="card-explore-btn" data-action="open-modal" title="Abrir Demonstração Ao Vivo">
               <span>Explorar</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </div>
 
@@ -132,23 +132,61 @@ export class ModernPortfolioCarousel {
   }
 
   setupVideoCards() {
-    this.videoEngines = new Map();
+    // Clean up any previously created engines to avoid memory/canvas leaks
+    if (this.videoEngines) {
+      this.videoEngines.forEach(engine => engine.destroy());
+      this.videoEngines.clear();
+    } else {
+      this.videoEngines = new Map();
+    }
 
     const videoContainers = this.container.querySelectorAll('.card-video-container');
     videoContainers.forEach(container => {
-      const videoElem = container.querySelector('.card-html5-video');
+      const mediaElem = container.querySelector('.card-showcase-canvas') || container.querySelector('.card-html5-video');
       const toggleBtn = container.querySelector('.video-play-toggle-btn');
       const progressFill = container.querySelector('.video-timeline-progress');
-      const projectId = videoElem ? videoElem.dataset.videoId : null;
+      const projectId = mediaElem ? (mediaElem.dataset.videoId || mediaElem.dataset.project) : null;
 
-      if (projectId && videoElem) {
-        const engine = new VideoShowcaseEngine(projectId, videoElem, {
+      if (projectId && mediaElem) {
+        const engine = new VideoShowcaseEngine(projectId, mediaElem, {
           progressFill,
-          playToggleBtn: toggleBtn
+          playToggleBtn: toggleBtn,
+          autoPlay: false // Started explicitly based on active index & viewport
         });
         this.videoEngines.set(projectId, engine);
       }
     });
+  }
+
+  syncActiveVideoPlayback() {
+    const activeProject = this.projects[this.activeIndex];
+    const isVisible = this.isStageVisible !== false;
+
+    this.videoEngines.forEach((engine, projectId) => {
+      if (projectId === activeProject.id && isVisible) {
+        engine.play();
+      } else {
+        engine.pause();
+      }
+    });
+  }
+
+  setupIntersectionObserver() {
+    const stage = this.container.querySelector('#carousel-3d-stage');
+    if (!stage || !('IntersectionObserver' in window)) return;
+
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        this.isStageVisible = entry.isIntersecting;
+        this.syncActiveVideoPlayback();
+      });
+    }, { threshold: 0.15 });
+
+    this.observer.observe(stage);
   }
 
   updateCarousel(newIndex) {
@@ -156,11 +194,13 @@ export class ModernPortfolioCarousel {
     this.activeIndex = Math.max(0, Math.min(total - 1, newIndex));
     const activeProject = this.projects[this.activeIndex];
 
-    // Apply CSS 3D Transforms to each card
+    // Detect viewport size for optimal responsive positioning
+    const isMobile = window.innerWidth <= 640;
+    const isTablet = window.innerWidth <= 900;
+
+    // Apply CSS 3D Transforms to each card (using pure transforms and brightness, avoiding expensive GPU blur shaders)
     this.cards.forEach((card, i) => {
       const offset = i - this.activeIndex;
-      const absOffset = Math.abs(offset);
-
       card.classList.remove('active', 'prev', 'next', 'far-prev', 'far-next');
 
       if (offset === 0) {
@@ -169,30 +209,45 @@ export class ModernPortfolioCarousel {
         card.style.opacity = '1';
         card.style.zIndex = '10';
         card.style.filter = 'none';
+        card.style.pointerEvents = 'auto';
       } else if (offset === -1) {
         card.classList.add('prev');
-        card.style.transform = `translateX(-65%) scale(0.86) rotateY(18deg) translateZ(-80px)`;
-        card.style.opacity = '0.65';
+        const tx = isMobile ? '-50%' : (isTablet ? '-58%' : '-65%');
+        const sc = '0.86';
+        const rot = isMobile ? '12deg' : '18deg';
+        const tz = isMobile ? '-40px' : '-80px';
+        card.style.transform = `translateX(${tx}) scale(${sc}) rotateY(${rot}) translateZ(${tz})`;
+        card.style.opacity = isMobile ? '0.35' : '0.65';
         card.style.zIndex = '5';
-        card.style.filter = 'brightness(0.75) blur(0.5px)';
+        card.style.filter = 'brightness(0.8)';
+        card.style.pointerEvents = 'auto';
       } else if (offset === 1) {
         card.classList.add('next');
-        card.style.transform = `translateX(65%) scale(0.86) rotateY(-18deg) translateZ(-80px)`;
-        card.style.opacity = '0.65';
+        const tx = isMobile ? '50%' : (isTablet ? '58%' : '65%');
+        const sc = '0.86';
+        const rot = isMobile ? '-12deg' : '-18deg';
+        const tz = isMobile ? '-40px' : '-80px';
+        card.style.transform = `translateX(${tx}) scale(${sc}) rotateY(${rot}) translateZ(${tz})`;
+        card.style.opacity = isMobile ? '0.35' : '0.65';
         card.style.zIndex = '5';
-        card.style.filter = 'brightness(0.75) blur(0.5px)';
+        card.style.filter = 'brightness(0.8)';
+        card.style.pointerEvents = 'auto';
       } else if (offset < -1) {
         card.classList.add('far-prev');
-        card.style.transform = `translateX(-120%) scale(0.72) rotateY(28deg) translateZ(-160px)`;
-        card.style.opacity = '0.2';
+        const tx = isMobile ? '-90%' : '-120%';
+        card.style.transform = `translateX(${tx}) scale(0.72) rotateY(24deg) translateZ(-140px)`;
+        card.style.opacity = isMobile ? '0' : '0.2';
         card.style.zIndex = '1';
-        card.style.filter = 'brightness(0.5) blur(2px)';
+        card.style.filter = 'brightness(0.5)';
+        card.style.pointerEvents = 'none';
       } else if (offset > 1) {
         card.classList.add('far-next');
-        card.style.transform = `translateX(120%) scale(0.72) rotateY(-28deg) translateZ(-160px)`;
-        card.style.opacity = '0.2';
+        const tx = isMobile ? '90%' : '120%';
+        card.style.transform = `translateX(${tx}) scale(0.72) rotateY(-24deg) translateZ(-140px)`;
+        card.style.opacity = isMobile ? '0' : '0.2';
         card.style.zIndex = '1';
-        card.style.filter = 'brightness(0.5) blur(2px)';
+        card.style.filter = 'brightness(0.5)';
+        card.style.pointerEvents = 'none';
       }
     });
 
@@ -200,6 +255,9 @@ export class ModernPortfolioCarousel {
     this.dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === this.activeIndex);
     });
+
+    // Run active animation only on the currently focused card
+    this.syncActiveVideoPlayback();
 
     // Notify listeners (Background transition & Feedback panel)
     if (this.onSelectCallback) {
@@ -224,60 +282,60 @@ export class ModernPortfolioCarousel {
   bindEvents() {
     // Navigation buttons
     if (this.btnPrev) {
-      this.btnPrev.addEventListener('click', () => this.prev());
+      this.btnPrev.onclick = () => this.prev();
     }
     if (this.btnNext) {
-      this.btnNext.addEventListener('click', () => this.next());
+      this.btnNext.onclick = () => this.next();
     }
 
     // Pagination pill clicks
     this.dots.forEach((pill) => {
-      pill.addEventListener('click', () => {
+      pill.onclick = () => {
         const idx = parseInt(pill.dataset.index, 10);
         this.selectIndex(idx);
-      });
+      };
     });
 
     // Card interactions
     this.cards.forEach((card, idx) => {
-      card.addEventListener('click', (e) => {
+      card.onclick = (e) => {
         const isExploreBtn = e.target.closest('[data-action="open-modal"]');
         if (idx === this.activeIndex || isExploreBtn) {
-          // If already active or clicked explore button, open Live Preview Modal
           if (this.onOpenProjectCallback) {
             this.onOpenProjectCallback(this.projects[idx]);
           }
         } else {
-          // If clicked a side card, bring it to focus
           this.selectIndex(idx);
         }
-      });
+      };
     });
 
     // Touch & Pointer Drag Gestures
     const stage = this.container.querySelector('#carousel-3d-stage');
-    if (!stage) return;
+    if (stage) {
+      stage.onpointerdown = (e) => {
+        if (e.target.closest('button') || e.target.closest('select')) return;
+        this.isDragging = true;
+        this.startX = e.clientX;
+        stage.style.cursor = 'grabbing';
+      };
+    }
 
-    stage.addEventListener('pointerdown', (e) => {
-      // Don't drag if clicking buttons or controls
-      if (e.target.closest('button') || e.target.closest('select')) return;
-      this.isDragging = true;
-      this.startX = e.clientX;
-      stage.style.cursor = 'grabbing';
-    });
+    this.setupIntersectionObserver();
+
+    // Attach global window listeners only once to prevent memory leaks across updates
+    if (this.globalEventsBound) return;
+    this.globalEventsBound = true;
 
     window.addEventListener('pointermove', (e) => {
       if (!this.isDragging) return;
-      const diffX = e.clientX - this.startX;
-      if (Math.abs(diffX) > 10) {
-        // user is swiping
-      }
-    });
+    }, { passive: true });
 
     window.addEventListener('pointerup', (e) => {
       if (!this.isDragging) return;
       this.isDragging = false;
-      stage.style.cursor = '';
+      const stageEl = this.container.querySelector('#carousel-3d-stage');
+      if (stageEl) stageEl.style.cursor = '';
       const diffX = e.clientX - this.startX;
 
       if (diffX > this.threshold) {
@@ -289,7 +347,6 @@ export class ModernPortfolioCarousel {
 
     // Keyboard support
     window.addEventListener('keydown', (e) => {
-      // Only navigate carousel if modal is not open
       const modal = document.getElementById('project-modal');
       if (modal && modal.classList.contains('open')) return;
 
@@ -299,6 +356,15 @@ export class ModernPortfolioCarousel {
         this.next();
       }
     });
+
+    // Window resize / orientation change listener
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        this.updateCarousel(this.activeIndex);
+      }, 100);
+    }, { passive: true });
   }
 
   updateProjects(newProjects) {

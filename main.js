@@ -2,6 +2,44 @@ import { ModernPortfolioCarousel } from './modern-carousel.js';
 import { PROJECTS_DATA, getBrandContrastMode } from './projectsData.js';
 import { initStaggerText } from './stagger-text.js';
 import { VideoShowcaseEngine } from './video-showcase-engine.js';
+import { initPlateStack, showLoadingScreen } from './plate-stack-loader.js';
+
+// ==========================================================================
+// 3D PLATE STACK PRELOADER LIFECYCLE (ORIGINKIT 3D WEBGL)
+// ==========================================================================
+const preloaderEl = document.getElementById('site-preloader');
+const preloaderCanvasBox = document.getElementById('preloader-canvas-container');
+
+if (preloaderEl && preloaderCanvasBox) {
+  const plateStackInstance = initPlateStack(preloaderCanvasBox, {
+    baseColor: '#334155',
+    accentColor: '#38BDF8',
+    speed: 71,
+    distance: 11,
+    stack: {
+      count: 5,
+      rounded: 26,
+      stagger: 250
+    }
+  });
+
+  const dismissPreloader = () => {
+    if (!preloaderEl || preloaderEl.classList.contains('preloader-hidden')) return;
+    preloaderEl.classList.add('preloader-hidden');
+    setTimeout(() => {
+      plateStackInstance.destroy();
+      preloaderEl.remove();
+    }, 600);
+  };
+
+  const minTimer = new Promise(res => setTimeout(res, 850));
+  const docReady = new Promise(res => {
+    if (document.readyState === 'complete') res();
+    else window.addEventListener('load', res, { once: true });
+  });
+
+  Promise.all([minTimer, docReady]).then(dismissPreloader);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Stagger Text Rise Animation System
@@ -105,7 +143,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinksContainer = document.getElementById('nav-links');
 
   if (mobileMenuBtn && navLinksContainer) {
-    mobileMenuBtn.addEventListener('click', () => {
+    function closeMobileMenu() {
+      navLinksContainer.classList.remove('open');
+      mobileMenuBtn.classList.remove('open');
+      mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const isOpen = navLinksContainer.classList.toggle('open');
       mobileMenuBtn.classList.toggle('open', isOpen);
       mobileMenuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -113,10 +158,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navLinksContainer.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', () => {
-        navLinksContainer.classList.remove('open');
-        mobileMenuBtn.classList.remove('open');
-        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        closeMobileMenu();
       });
+    });
+
+    // Close when clicking anywhere outside
+    document.addEventListener('click', (e) => {
+      if (navLinksContainer.classList.contains('open')) {
+        if (!navLinksContainer.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          closeMobileMenu();
+        }
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinksContainer.classList.contains('open')) {
+        closeMobileMenu();
+      }
     });
   }
 
@@ -240,12 +299,14 @@ document.addEventListener('DOMContentLoaded', () => {
       modalExternalLinkBtn.href = proj.fullMockupUrl || proj.mediaUrl;
     }
 
-    // Reset viewport to desktop default
+    // Set viewport: default to mobile if user is on a mobile screen, otherwise desktop
+    const isMobileUser = window.innerWidth <= 768;
+    const defaultViewport = isMobileUser ? 'mobile' : 'desktop';
     if (modalViewportFrame) {
-      modalViewportFrame.className = 'modal-viewport-frame viewport-desktop';
+      modalViewportFrame.className = `modal-viewport-frame viewport-${defaultViewport}`;
     }
     deviceBtns.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.viewport === 'desktop');
+      btn.classList.toggle('active', btn.dataset.viewport === defaultViewport);
     });
 
     if (projectDemoViewport) {
@@ -259,13 +320,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentModalVideoEngine) {
           currentModalVideoEngine.destroy();
         }
-        currentModalVideoEngine = new VideoShowcaseEngine(proj.id, modalVideo);
+        currentModalVideoEngine = new VideoShowcaseEngine(proj.id, modalVideo, { autoPlay: true });
       }
     }
 
     if (projectModal) {
       projectModal.classList.add('open');
       document.body.style.overflow = 'hidden';
+      // Pause background carousel video while modal is active
+      if (carouselInstance && carouselInstance.videoEngines) {
+        carouselInstance.videoEngines.forEach(engine => engine.pause());
+      }
     }
   }
 
@@ -277,6 +342,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (projectModal) {
       projectModal.classList.remove('open');
       document.body.style.overflow = '';
+      // Resume background carousel video for active card
+      if (carouselInstance && typeof carouselInstance.syncActiveVideoPlayback === 'function') {
+        carouselInstance.syncActiveVideoPlayback();
+      }
     }
   }
 
@@ -371,29 +440,34 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeProjectModal();
   });
 
-  // Active Navigation Link Scroll Tracking
+  // Active Navigation Link Scroll Tracking (rAF throttled + passive to prevent layout thrashing)
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
+  let isNavScrollTicking = false;
 
   window.addEventListener('scroll', () => {
-    let current = '';
-    const scrollPosition = window.scrollY + 200;
+    if (!isNavScrollTicking) {
+      window.requestAnimationFrame(() => {
+        let current = '';
+        const scrollPosition = window.scrollY + 200;
 
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-        current = section.getAttribute('id');
-      }
-    });
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+          }
+        });
 
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
-  });
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+        });
+
+        isNavScrollTicking = false;
+      });
+      isNavScrollTicking = true;
+    }
+  }, { passive: true });
 
   // Contact Form Submission Handler with Neon DB Persistence & WhatsApp
   const contactForm = document.getElementById('contact-form');
@@ -435,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('Neon DB lead persistence notice:', err);
       } finally {
         if (submitBtn) {
-          submitBtn.innerHTML = `✓ Solicitação salva com sucesso!`;
+          submitBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: -2px; margin-right: 6px;"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Solicitação enviada com sucesso!</span>`;
           setTimeout(() => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
@@ -547,10 +621,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // Gerador de Proposta Executiva em PDF (Impressão)
+    // Gerador de Proposta Executiva em PDF (Impressão com 3D Loader)
     const btnExportProposal = document.getElementById('btn-export-proposal');
     if (btnExportProposal) {
       btnExportProposal.addEventListener('click', () => {
+        const loader = showLoadingScreen({
+          title: 'LOCALWEB PRO',
+          message: 'Processando proposta executiva em PDF...',
+          baseColor: '#1E293B',
+          accentColor: '#38BDF8'
+        });
+
         const activeNiche = document.querySelector('.niche-pill.active')?.textContent.trim() || 'Geral';
         const clients = clientsSlider ? clientsSlider.value : '12';
         const ticket = ticketSlider ? parseInt(ticketSlider.value, 10).toLocaleString('pt-BR') : '90';
@@ -571,7 +652,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (elMonthly) elMonthly.textContent = `R$ ${monthly},00`;
         if (elAnnual) elAnnual.textContent = `R$ ${annual},00`;
 
-        window.print();
+        setTimeout(() => {
+          loader.hide(250);
+          setTimeout(() => {
+            window.print();
+          }, 300);
+        }, 900);
       });
     }
 

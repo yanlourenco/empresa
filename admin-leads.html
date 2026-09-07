@@ -1017,7 +1017,7 @@
         PIN incorreto. Tente novamente.
       </div>
       <div style="margin-top: 20px; font-size: 0.8rem; color: #64748B; padding: 8px 12px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; border: 1px dashed rgba(255, 255, 255, 0.08);">
-        🔑 <strong>PIN inicial padrão:</strong> admin123<br>
+        <strong>PIN inicial padrão:</strong> admin123<br>
         (Altere quando quiser na aba Configurações)
       </div>
     </div>
@@ -1116,7 +1116,7 @@
       <div class="topbar-actions">
         <!-- Alternar Tema -->
         <button class="btn-topbar-action" id="btn-theme-toggle" title="Alternar Tema Claro / Escuro">
-          <span id="theme-toggle-icon">🌙</span>
+          <span id="theme-toggle-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
         </button>
 
         <!-- Exportar Leads CSV -->
@@ -1206,7 +1206,7 @@
               <h2>Solicitações Recentes de Orçamento</h2>
               <p>Últimos clientes que preencheram o diagnóstico no site oficial.</p>
             </div>
-            <button class="btn-topbar-action" id="btn-jump-leads">Ver Todos no CRM →</button>
+            <button class="btn-topbar-action" id="btn-jump-leads">Ver Todos no CRM</button>
           </div>
           <div class="table-scrollable">
             <table>
@@ -1361,7 +1361,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
           <!-- Card 1: WhatsApp -->
           <div class="table-container-card" style="padding: 24px;">
-            <h3 style="font-family: var(--font-heading); margin-bottom: 8px;">📱 WhatsApp Comercial Oficial</h3>
+            <h3 style="font-family: var(--font-heading); margin-bottom: 8px;">WhatsApp Comercial Oficial</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
               Altere o número para onde todos os botões e formulários do site direcionam os clientes.
             </p>
@@ -1381,7 +1381,7 @@
 
           <!-- Card 2: Webhook Notificações -->
           <div class="table-container-card" style="padding: 24px;">
-            <h3 style="font-family: var(--font-heading); margin-bottom: 8px;">🔔 Notificação Instantânea de Leads</h3>
+            <h3 style="font-family: var(--font-heading); margin-bottom: 8px;">Notificação Instantânea de Leads</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
               Receba um alerta no seu celular assim que um visitante solicitar orçamento.
             </p>
@@ -1402,7 +1402,7 @@
 
           <!-- Card 3: PIN de Segurança -->
           <div class="table-container-card" style="padding: 24px;">
-            <h3 style="font-family: var(--font-heading); margin-bottom: 8px;">🔒 Segurança & PIN de Acesso</h3>
+            <h3 style="font-family: var(--font-heading); margin-bottom: 8px;">Segurança & PIN de Acesso</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
               Altere a senha que protege este painel contra acessos não autorizados.
             </p>
@@ -1428,7 +1428,9 @@
     <div class="modal-box">
       <div class="modal-header">
         <h3>+ Cadastrar Site de Cliente</h3>
-        <button class="btn-icon-square" id="btn-close-project-modal">✕</button>
+        <button class="btn-icon-square" id="btn-close-project-modal" title="Fechar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
       <form class="modal-form" id="form-new-project">
         <div class="form-group-row">
@@ -1490,7 +1492,9 @@
   <!-- ========================================================================
        JAVASCRIPT DO PAINEL ADMINISTRATIVO
        ======================================================================== -->
-  <script>
+  <script type="module">
+    import { showLoadingScreen } from './plate-stack-loader.js';
+
     let currentAuthPin = localStorage.getItem('localweb_admin_auth') || '';
     let globalLeads = [];
     let globalProjects = [];
@@ -1520,14 +1524,23 @@
 
     async function tryUnlock(pin) {
       if (!pin) return;
+      const loader = showLoadingScreen({
+        title: 'LOCALWEB PRO',
+        message: 'Validando PIN e conectando ao Neon DB...',
+        baseColor: '#1E293B',
+        accentColor: '#38BDF8'
+      });
+
       const isValid = await checkAuth(pin);
       if (isValid) {
         currentAuthPin = pin;
         localStorage.setItem('localweb_admin_auth', pin);
+        await loadAllData();
+        loader.hide(250);
         lockOverlay.style.opacity = '0';
-        setTimeout(() => { lockOverlay.style.display = 'none'; }, 300);
-        loadAllData();
+        setTimeout(() => { lockOverlay.style.display = 'none'; }, 250);
       } else {
+        loader.hide(200);
         lockErrorMsg.style.display = 'block';
         inputPin.value = '';
         inputPin.focus();
@@ -1551,13 +1564,25 @@
     }
 
     if (currentAuthPin) {
-      checkAuth(currentAuthPin).then(valid => {
+      const initLoader = showLoadingScreen({
+        title: 'LOCALWEB PRO',
+        message: 'Sincronizando painel com o Neon DB...',
+        baseColor: '#1E293B',
+        accentColor: '#38BDF8'
+      });
+
+      checkAuth(currentAuthPin).then(async valid => {
         if (valid) {
           lockOverlay.style.display = 'none';
-          loadAllData();
+          await loadAllData();
+          initLoader.hide(250);
         } else {
+          initLoader.hide(200);
           localStorage.removeItem('localweb_admin_auth');
+          currentAuthPin = '';
         }
+      }).catch(() => {
+        initLoader.hide(200);
       });
     }
 
@@ -1662,7 +1687,9 @@
                 <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn-wa-direct">
                   <span>WhatsApp</span>
                 </a>
-                <button class="btn-row-del" onclick="deleteLead(${l.id})" title="Excluir Lead">🗑️</button>
+                <button class="btn-row-del" onclick="deleteLead(${l.id})" title="Excluir Lead">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
               </div>
             </td>
           </tr>
@@ -1866,7 +1893,7 @@
           modalProject.classList.remove('open');
           formNewProject.reset();
           loadProjects();
-          alert('✅ Novo site de cliente cadastrado e publicado com sucesso!');
+          alert('Novo site de cliente cadastrado e publicado com sucesso!');
         } else {
           alert('Erro ao cadastrar: ' + (data.error || 'Falha no servidor.'));
         }
@@ -2031,8 +2058,8 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               embeds: [{
-                title: '🧪 Teste de Notificação LocalWeb Pro',
-                description: 'Webhook verificado com sucesso pelo Painel de Gestão!',
+                title: 'Teste de Notificação LocalWeb Pro',
+                description: 'Webhook verificado com sucesso pelo Painel de Gestão.',
                 color: 0x10B981,
                 timestamp: new Date().toISOString()
               }]
@@ -2046,7 +2073,7 @@
           });
         }
         msg.style.color = '#10B981';
-        msg.textContent = '✅ Notificação de teste enviada com sucesso!';
+        msg.textContent = 'Notificação de teste enviada com sucesso.';
       } catch (e) {
         msg.style.color = '#F87171';
         msg.textContent = 'Erro no teste: ' + e.message;
@@ -2074,7 +2101,7 @@
           document.getElementById('cfg-new-pin').value = '';
           msg.style.display = 'block';
           msg.style.color = '#10B981';
-          msg.textContent = '✅ PIN alterado com sucesso!';
+          msg.textContent = 'PIN alterado com sucesso.';
         } else {
           msg.style.display = 'block';
           msg.style.color = '#F87171';
@@ -2095,7 +2122,9 @@
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('localweb_theme', theme);
       if (themeIcon) {
-        themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
+        themeIcon.innerHTML = theme === 'light'
+          ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+          : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
       }
     }
     applyTheme(localStorage.getItem('localweb_theme') || 'dark');

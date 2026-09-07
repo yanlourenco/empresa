@@ -462,8 +462,9 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
-  // Static File Serving (from dist if exists, else from root)
-  const baseDir = fs.existsSync(path.join(__dirname, 'dist')) ? path.join(__dirname, 'dist') : __dirname;
+  // Static File Serving (serve from root in development so changes reflect immediately, or dist if production)
+  const isProd = process.env.NODE_ENV === 'production';
+  const baseDir = (isProd && fs.existsSync(path.join(__dirname, 'dist'))) ? path.join(__dirname, 'dist') : __dirname;
   let filePath = path.join(baseDir, pathname === '/' ? 'index.html' : pathname);
 
   if (!fs.existsSync(filePath) && fs.existsSync(path.join(__dirname, 'public', pathname))) {

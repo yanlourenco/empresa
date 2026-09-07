@@ -24,6 +24,17 @@
 </head>
 <body>
 
+  <!-- 3D Plate Stack Preloader Oficial (Originkit WebGL) -->
+  <div id="site-preloader" class="site-preloader" aria-label="Carregando">
+    <div class="preloader-content">
+      <div class="plate-stack-canvas-wrapper" id="preloader-canvas-container"></div>
+      <div class="preloader-text-group">
+        <span class="preloader-brand">LOCALWEB<span style="color: #38BDF8;">PRO</span></span>
+        <span class="preloader-status" id="preloader-status-text">Iniciando ambiente de alta performance...</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Header Fixo de Navegação -->
   <header class="navbar" id="navbar">
     <div class="nav-container">
@@ -41,6 +52,12 @@
         <a href="#precos" class="nav-link">Valores</a>
         <a href="#faq" class="nav-link">Dúvidas</a>
         <a href="#contato" class="nav-link">Contato</a>
+        <div class="nav-mobile-cta">
+          <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20para%20o%20meu%20neg%C3%B3cio." target="_blank" rel="noopener noreferrer" class="btn-primary-lg full-width">
+            <span>Falar no WhatsApp</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.14 4.162 4.148-1.088z"/></svg>
+          </a>
+        </div>
       </nav>
 
       <div class="nav-actions">
@@ -88,7 +105,6 @@
       <div class="hero-cta-group">
         <a href="#projetos" class="btn-primary-lg">
           <span>Ver Projetos Entregues</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
         <a href="#contato" class="btn-secondary-lg">
           <span>Solicitar Orçamento</span>
@@ -434,7 +450,6 @@
 
           <a href="#contato" class="btn-primary-lg full-width" id="btn-roi-cta">
             <span>Quero Gerar Esse Faturamento</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
           <button type="button" class="btn-secondary-lg full-width" id="btn-export-proposal" style="margin-top: 10px; justify-content: center;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
@@ -617,16 +632,22 @@
             <!-- Selos de Confiança e Garantia -->
             <div class="trust-badges-container">
               <div class="trust-badge-item">
-                <div class="trust-badge-icon">🛡️</div>
+                <div class="trust-badge-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                </div>
                 <span>7 Dias de Garantia Incondicional</span>
               </div>
               <div class="trust-badge-item">
-                <div class="trust-badge-icon">⚡</div>
-                <span>Entrega Recorde em 5 a 7 Dias</span>
+                <div class="trust-badge-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <span>Entrega em 5 a 7 Dias</span>
               </div>
               <div class="trust-badge-item">
-                <div class="trust-badge-icon">🔒</div>
-                <span>SSL Seguro & Nuvem Alta Velocidade</span>
+                <div class="trust-badge-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <span>Certificado SSL & Nuvem Segura</span>
               </div>
             </div>
           </form>
