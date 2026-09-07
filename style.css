@@ -4402,4 +4402,68 @@ img, video, iframe {
   color: #2563EB;
 }
 
+/* ==========================================================================
+   LIQUID CARVE EFFECT (ORIGINKIT PORT)
+   ========================================================================== */
+.liquid-carve-host {
+  position: relative !important;
+  background: transparent !important;
+  overflow: visible !important;
+  border-color: transparent !important;
+  user-select: none;
+}
+
+.liquid-carve-host > *:not(.liquid-carve-svg) {
+  position: relative;
+  z-index: 2;
+}
+
+.liquid-carve-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Container de Campo de Preenchimento / Requerimento Líquido */
+.liquid-carve-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  overflow: visible;
+}
+
+.liquid-carve-field .input-field {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none !important;
+  width: 100%;
+  pointer-events: auto !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.liquid-carve-field .input-field:focus {
+  border-color: #38BDF8 !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-theme="light"] .liquid-carve-field .input-field {
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  color: #05070B !important;
+}
+
+[data-theme="light"] .liquid-carve-field .input-field:focus {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.25) !important;
+}
+
+
 

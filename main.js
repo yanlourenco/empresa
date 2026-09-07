@@ -3,6 +3,7 @@ import { PROJECTS_DATA, getBrandContrastMode } from './projectsData.js';
 import { initStaggerText } from './stagger-text.js';
 import { VideoShowcaseEngine } from './video-showcase-engine.js';
 import { initPlateStack, showLoadingScreen } from './plate-stack-loader.js';
+import { initAllLiquidCarve } from './liquid-carve.js';
 
 // ==========================================================================
 // 3D PLATE STACK PRELOADER LIFECYCLE (ORIGINKIT 3D WEBGL)
@@ -1305,5 +1306,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initRoiCalculator();
   initFaqAccordion();
   initSocialProofToasts();
+  initAllLiquidCarve();
 });
 
