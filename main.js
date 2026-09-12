@@ -4,6 +4,7 @@ import { initStaggerText } from './stagger-text.js';
 import { VideoShowcaseEngine } from './video-showcase-engine.js';
 import { showLoadingScreen } from './plate-stack-loader.js';
 import { initAllLiquidCarve } from './liquid-carve.js';
+import { initAwwwardsEffects } from './awwwards-interactions.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Stagger Text Rise Animation System
@@ -1382,5 +1383,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initSocialProofToasts();
   initAllLiquidCarve();
+  initAwwwardsEffects();
 });
 

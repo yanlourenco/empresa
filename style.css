@@ -479,32 +479,55 @@ img, video, iframe {
 .hero-section {
   padding-top: calc(var(--nav-height) + 85px);
   padding-bottom: 90px;
-  background: radial-gradient(ellipse 75% 50% at 50% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 70%), var(--bg-main);
+  background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 255, 255, 0.06) 0%, transparent 70%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  background-position: center top, center center, center center;
   text-align: center;
   position: relative;
+  overflow: hidden;
 }
 
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: var(--secondary-carbon);
+  gap: 10px;
+  background: rgba(10, 10, 12, 0.85);
   border: 1px solid var(--gray-700);
-  padding: 6px 16px;
-  border-radius: 20px;
+  padding: 6px 18px;
+  border-radius: 999px;
   font-size: 0.85rem;
   color: var(--gray-200);
   margin-bottom: 26px;
   white-space: nowrap;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .badge-dot {
   width: 8px;
   height: 8px;
-  background: var(--gray-300);
+  background: #FFFFFF;
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  position: relative;
+}
+
+.badge-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  animation: badgeRadar 2.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+@keyframes badgeRadar {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
 }
 
 .hero-title {
@@ -5008,6 +5031,126 @@ img, video, iframe {
   border-color: #000000 !important;
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.15) !important;
 }
+
+/* ==========================================================================
+   AWWWARDS DESIGN SYSTEM & KINETIC MICRO-INTERACTIONS
+   ========================================================================== */
+
+/* 1. Hairline Scroll Progress Bar (Top of Screen) */
+.awwwards-scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2.5px;
+  width: 0%;
+  background: linear-gradient(90deg, #52525B, #D4D4D8, #FFFFFF);
+  z-index: 999999;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.45);
+  transition: width 0.05s linear;
+}
+
+[data-theme="light"] .awwwards-scroll-progress-bar {
+  background: linear-gradient(90deg, #71717A, #27272A, #000000);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+}
+
+/* 2. Cursor Spotlight Cards (Border & Surface Glow tracking mouse) */
+.awwwards-spotlight {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.awwwards-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px),
+    rgba(255, 255, 255, 0.06),
+    transparent 65%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.awwwards-spotlight:hover::before {
+  opacity: 1;
+}
+
+[data-theme="light"] .awwwards-spotlight::before {
+  background: radial-gradient(
+    420px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px),
+    rgba(0, 0, 0, 0.04),
+    transparent 65%
+  );
+}
+
+/* 3. Magnetic Interactive Buttons */
+.awwwards-magnetic {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, box-shadow 0.25s ease !important;
+  will-change: transform;
+}
+
+/* 4. Awwwards Scroll Reveal */
+.awwwards-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.awwwards-reveal.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 5. Luxury Analog Film Grain Texture (Overlay) */
+.awwwards-grain-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* 6. Border Beam Animation on Featured Pricing Card */
+@keyframes borderBeamMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.price-card.featured {
+  position: relative;
+  background-clip: padding-box;
+}
+
+.price-card.featured::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #27272A, #71717A, #FFFFFF, #71717A, #27272A);
+  background-size: 300% 300%;
+  animation: borderBeamMove 6s infinite ease-in-out;
+  z-index: -1;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.price-card.featured:hover::after {
+  opacity: 1;
+}
+
 
 
 
