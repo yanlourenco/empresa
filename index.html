@@ -18,22 +18,12 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="shortcut icon" href="/favicon.ico">
-  <meta name="theme-color" content="#0B1120">
+  <meta name="theme-color" content="#000000">
   
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-  <!-- 3D Plate Stack Preloader Oficial (Originkit WebGL) -->
-  <div id="site-preloader" class="site-preloader" aria-label="Carregando">
-    <div class="preloader-content">
-      <div class="plate-stack-canvas-wrapper" id="preloader-canvas-container"></div>
-      <div class="preloader-text-group">
-        <span class="preloader-brand">LOCALWEB<span style="color: #38BDF8;">PRO</span></span>
-        <span class="preloader-status" id="preloader-status-text">Iniciando ambiente de alta performance...</span>
-      </div>
-    </div>
-  </div>
 
   <!-- Header Fixo de Navegação -->
   <header class="navbar" id="navbar">
@@ -399,259 +389,396 @@
         </button>
       </div>
 
-      <div class="roi-calculator-container">
-        <!-- Controles da Calculadora (4 Painéis Alternáveis) -->
-        <div class="roi-controls-card">
+      <div class="roi-wizard-container">
+        <!-- Stepper Indicator dos Passos -->
+        <div class="roi-wizard-stepper" id="roi-stepper">
+          <button type="button" class="roi-wizard-step active" data-step="1" id="step-btn-1">
+            <span class="step-num">01</span>
+            <span class="step-label">Segmento</span>
+          </button>
+          <div class="step-line" id="step-line-1"></div>
+          <button type="button" class="roi-wizard-step" data-step="2" id="step-btn-2">
+            <span class="step-num">02</span>
+            <span class="step-label" id="step-label-2">Meta Alvo</span>
+          </button>
+          <div class="step-line" id="step-line-2"></div>
+          <button type="button" class="roi-wizard-step" data-step="3" id="step-btn-3">
+            <span class="step-num">03</span>
+            <span class="step-label" id="step-label-3">Ticket Médio</span>
+          </button>
+          <div class="step-line" id="step-line-3"></div>
+          <button type="button" class="roi-wizard-step" data-step="4" id="step-btn-4">
+            <span class="step-num">04</span>
+            <span class="step-label">Projeção</span>
+          </button>
+        </div>
 
-          <!-- PAINEL 1: META DE FATURAMENTO (Engenharia Reversa) -->
+        <!-- Card Principal do Wizard -->
+        <div class="roi-wizard-card">
+
+          <!-- Hidden Sync Badges para Compatibilidade -->
+          <div style="display: none;" aria-hidden="true">
+            <span id="bp-goal-val">R$ 10.000/mês</span>
+            <span id="bp-clients-needed">40 vendas/mês</span>
+            <span id="bp-daily-rate">~1,3 venda/dia</span>
+            <span id="pip-visits">1.000</span>
+            <span id="pip-leads">60</span>
+            <span id="pip-sales">15</span>
+            <span id="pip-revenue">R$ 3.000</span>
+          </div>
+
+          <!-- MODO 1: META DE FATURAMENTO (Engenharia Reversa) -->
           <div class="sim-panel active" id="sim-panel-goal">
-            <div class="sim-panel-header">
-              <span class="sim-panel-badge">Engenharia Reversa por Meta Financeira</span>
-              <p class="sim-panel-desc">Defina quanto você deseja colocar a mais no bolso todos os meses e veja exatamente quantos clientes seu site precisa atrair para bater a meta.</p>
-            </div>
+            <!-- Passo 1: Nicho -->
+            <div class="roi-step-pane active" data-step="1">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Passo 01 • Perfil Comercial & Segmento</span>
+                <h3 class="roi-step-title">Qual é o nicho ou área de atuação da sua empresa?</h3>
+                <p class="roi-step-desc">Selecione seu segmento comercial para calibrarmos as referências de mercado e métricas de conversão:</p>
+              </div>
 
-            <!-- Blueprint Card em Tempo Real -->
-            <div class="goal-blueprint-card">
-              <div class="goal-blueprint-item">
-                <span class="blueprint-lbl">Meta Alvo Mensal</span>
-                <strong class="blueprint-val" id="bp-goal-val">R$ 10.000/mês</strong>
-              </div>
-              <div class="goal-blueprint-item">
-                <span class="blueprint-lbl">Clientes Necessários</span>
-                <strong class="blueprint-val highlight" id="bp-clients-needed">40 vendas/mês</strong>
-              </div>
-              <div class="goal-blueprint-item">
-                <span class="blueprint-lbl">Ritmo Necessário</span>
-                <strong class="blueprint-val success" id="bp-daily-rate">~1,3 venda/dia</strong>
-              </div>
-            </div>
-
-            <!-- 1. Meta de Faturamento Mensal -->
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="goal-target-input" class="roi-label">1. Quanto você deseja faturar a mais por mês?</label>
-                  <span class="roi-hint">Clique nos atalhos, use os botões ou digite sua meta</span>
+              <div class="niche-grid-modern">
+                <div class="niche-card-modern active" data-niche="barber" data-ticket="90" data-target="5000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <strong class="niche-name">Estética & Cuidados</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 90</span>
                 </div>
-                <div class="roi-stepper-wrap">
+                <div class="niche-card-modern" data-niche="clinic" data-ticket="350" data-target="15000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                  </div>
+                  <strong class="niche-name">Clínicas & Saúde</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 350</span>
+                </div>
+                <div class="niche-card-modern" data-niche="lawyer" data-ticket="1800" data-target="25000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <strong class="niche-name">Consultoria & Advocacia</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 1.800</span>
+                </div>
+                <div class="niche-card-modern" data-niche="reforms" data-ticket="650" data-target="10000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                  </div>
+                  <strong class="niche-name">Engenharia & Reformas</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 650</span>
+                </div>
+                <div class="niche-card-modern" data-niche="store" data-ticket="220" data-target="8000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  </div>
+                  <strong class="niche-name">Varejo & Franquias</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 220</span>
+                </div>
+                <div class="niche-card-modern" data-niche="realestate" data-ticket="3500" data-target="35000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-3"></path><path d="M9 9v.01"></path><path d="M9 12v.01"></path><path d="M9 15v.01"></path><path d="M9 18v.01"></path></svg>
+                  </div>
+                  <strong class="niche-name">Imobiliário & Alto Padrão</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 3.500</span>
+                </div>
+              </div>
+
+              <div class="roi-step-actions end-only">
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="2">
+                  <span>Avançar para a Meta de Faturamento</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Passo 2: Meta de Faturamento -->
+            <div class="roi-step-pane" data-step="2">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Passo 02 • Meta Financeira Mensal</span>
+                <h3 class="roi-step-title">Quanto você deseja faturar a mais por mês?</h3>
+                <p class="roi-step-desc">Defina o objetivo financeiro adicional que a presença digital estruturada deve gerar para o seu negócio:</p>
+              </div>
+
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="goal-target-input" data-step="-1000" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <span class="roi-currency">R$</span>
                     <input type="number" id="goal-target-input" class="roi-number-input" value="10000" min="500" max="500000" step="500">
+                    <span class="roi-unit">/mês</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="goal-target-input" data-step="1000" aria-label="Aumentar">+</button>
                 </div>
+
+                <div class="roi-quick-chips centered-chips">
+                  <button type="button" class="quick-chip" data-target="goal-target-input" data-val="3000">R$ 3.000</button>
+                  <button type="button" class="quick-chip" data-target="goal-target-input" data-val="5000">R$ 5.000</button>
+                  <button type="button" class="quick-chip active" data-target="goal-target-input" data-val="10000">R$ 10.000</button>
+                  <button type="button" class="quick-chip" data-target="goal-target-input" data-val="25000">R$ 25.000</button>
+                  <button type="button" class="quick-chip" data-target="goal-target-input" data-val="50000">R$ 50.000</button>
+                </div>
+
+                <input type="range" id="goal-target-slider" min="1000" max="50000" value="10000" step="500" class="roi-slider">
+                <div class="slider-ticks">
+                  <span>R$ 1.000</span>
+                  <span>R$ 10.000</span>
+                  <span>R$ 25.000</span>
+                  <span>R$ 50.000+</span>
+                </div>
               </div>
-              <div class="roi-quick-chips">
-                <button type="button" class="quick-chip" data-target="goal-target-input" data-val="3000">R$ 3.000/mês</button>
-                <button type="button" class="quick-chip" data-target="goal-target-input" data-val="5000">R$ 5.000/mês</button>
-                <button type="button" class="quick-chip active" data-target="goal-target-input" data-val="10000">R$ 10.000/mês</button>
-                <button type="button" class="quick-chip" data-target="goal-target-input" data-val="25000">R$ 25.000/mês</button>
-                <button type="button" class="quick-chip" data-target="goal-target-input" data-val="50000">R$ 50.000/mês</button>
-              </div>
-              <input type="range" id="goal-target-slider" min="1000" max="50000" value="10000" step="500" class="roi-slider">
-              <div class="slider-ticks">
-                <span>R$ 1.000</span>
-                <span>R$ 10.000</span>
-                <span>R$ 25.000</span>
-                <span>R$ 50.000+</span>
+
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="1">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="3">
+                  <span>Avançar para o Ticket Médio</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
               </div>
             </div>
 
-            <!-- 2. Ticket Médio -->
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="goal-ticket-input" class="roi-label">2. Ticket médio aproximado por venda / serviço:</label>
-                  <span class="roi-hint">Valor médio que cada cliente paga ao seu negócio</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 3: Ticket Médio -->
+            <div class="roi-step-pane" data-step="3">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Passo 03 • Ticket Médio</span>
+                <h3 class="roi-step-title">Qual o valor médio pago por cliente ou contrato?</h3>
+                <p class="roi-step-desc">Valor médio aproximado de cada compra, serviço, consulta ou contratação:</p>
+              </div>
+
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="goal-ticket-input" data-step="-50" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <span class="roi-currency">R$</span>
                     <input type="number" id="goal-ticket-input" class="roi-number-input" value="250" min="10" max="200000" step="10">
+                    <span class="roi-unit">por cliente</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="goal-ticket-input" data-step="50" aria-label="Aumentar">+</button>
                 </div>
+
+                <div class="roi-quick-chips centered-chips">
+                  <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="90">R$ 90 (Estética)</button>
+                  <button type="button" class="quick-chip active" data-target="goal-ticket-input" data-val="250">R$ 250 (Clínica)</button>
+                  <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="650">R$ 650 (Serviços)</button>
+                  <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="1800">R$ 1.800 (Consultoria)</button>
+                  <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="5000">R$ 5.000+ (Alto Ticket)</button>
+                </div>
+
+                <input type="range" id="goal-ticket-slider" min="30" max="5000" value="250" step="10" class="roi-slider">
+                <div class="slider-ticks">
+                  <span>R$ 30</span>
+                  <span>R$ 500</span>
+                  <span>R$ 1.500</span>
+                  <span>R$ 3.000</span>
+                  <span>R$ 5.000+</span>
+                </div>
               </div>
-              <div class="roi-quick-chips">
-                <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="90">R$ 90 (Estética/Corte)</button>
-                <button type="button" class="quick-chip active" data-target="goal-ticket-input" data-val="250">R$ 250 (Consulta/Clínica)</button>
-                <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="650">R$ 650 (Serviços/Reparos)</button>
-                <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="1800">R$ 1.800 (Consultoria/Advocacia)</button>
-                <button type="button" class="quick-chip" data-target="goal-ticket-input" data-val="5000">R$ 5.000+ (Alto Ticket)</button>
-              </div>
-              <input type="range" id="goal-ticket-slider" min="30" max="5000" value="250" step="10" class="roi-slider">
-              <div class="slider-ticks">
-                <span>R$ 30</span>
-                <span>R$ 500</span>
-                <span>R$ 1.500</span>
-                <span>R$ 3.000</span>
-                <span>R$ 5.000+</span>
+
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-calc-btn" data-goto="4">
+                  <span>Gerar Projeção de Retorno</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- PAINEL 2: VENDAS & TICKET DIRETO (Desbloqueado com Steppers e Chips) -->
+          <!-- MODO 2: VENDAS & TICKET DIRETO -->
           <div class="sim-panel" id="sim-panel-direct">
-            <div class="sim-panel-header">
-              <span class="sim-panel-badge">Projeção Rápida por Volume & Ticket Médio</span>
-              <p class="sim-panel-desc">Digite livremente os valores, use os atalhos rápidos ou selecione um nicho como referência.</p>
-            </div>
+            <!-- Passo 1: Nicho -->
+            <div class="roi-step-pane active" data-step="1">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Passo 01 • Perfil Comercial & Segmento</span>
+                <h3 class="roi-step-title">Qual é o segmento de atuação da sua empresa?</h3>
+                <p class="roi-step-desc">Selecione seu segmento comercial para calibrarmos as referências e projeções:</p>
+              </div>
 
-            <div class="roi-control-group">
-              <label class="roi-label">1. Escolha um nicho para carregar referências de mercado:</label>
-              <div class="niche-selector-pills" id="roi-niche-pills">
-                <button type="button" class="niche-pill active" data-niche="barber" data-ticket="90" data-clients="15">Barbearia / Estética</button>
-                <button type="button" class="niche-pill" data-niche="clinic" data-ticket="350" data-clients="12">Clínica / Saúde</button>
-                <button type="button" class="niche-pill" data-niche="fitness" data-ticket="180" data-clients="20">Academia / Studio</button>
-                <button type="button" class="niche-pill" data-niche="lawyer" data-ticket="1800" data-clients="5">Advocacia / Consultoria</button>
-                <button type="button" class="niche-pill" data-niche="reforms" data-ticket="850" data-clients="10">Reformas / Serviços</button>
-                <button type="button" class="niche-pill" data-niche="store" data-ticket="220" data-clients="25">Comércio / Varejo</button>
-                <button type="button" class="niche-pill" data-niche="realestate" data-ticket="3500" data-clients="3">Imobiliária / Alto Ticket</button>
+              <div class="niche-grid-modern">
+                <div class="niche-card-modern active" data-niche="barber" data-ticket="90" data-clients="15" data-target="5000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <strong class="niche-name">Estética & Cuidados</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 90</span>
+                </div>
+                <div class="niche-card-modern" data-niche="clinic" data-ticket="350" data-clients="12" data-target="15000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                  </div>
+                  <strong class="niche-name">Clínicas & Saúde</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 350</span>
+                </div>
+                <div class="niche-card-modern" data-niche="lawyer" data-ticket="1800" data-clients="5" data-target="25000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <strong class="niche-name">Consultoria & Advocacia</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 1.800</span>
+                </div>
+                <div class="niche-card-modern" data-niche="reforms" data-ticket="650" data-clients="10" data-target="10000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                  </div>
+                  <strong class="niche-name">Engenharia & Reformas</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 650</span>
+                </div>
+                <div class="niche-card-modern" data-niche="store" data-ticket="220" data-clients="25" data-target="8000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  </div>
+                  <strong class="niche-name">Varejo & Franquias</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 220</span>
+                </div>
+                <div class="niche-card-modern" data-niche="realestate" data-ticket="3500" data-clients="3" data-target="35000">
+                  <div class="niche-icon-box">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-3"></path><path d="M9 9v.01"></path><path d="M9 12v.01"></path><path d="M9 15v.01"></path><path d="M9 18v.01"></path></svg>
+                  </div>
+                  <strong class="niche-name">Imobiliário & Alto Padrão</strong>
+                  <span class="niche-ref">Benchmark: ~R$ 3.500</span>
+                </div>
+              </div>
+
+              <!-- Pílulas preservadas para compatibilidade interna -->
+              <div style="display: none;" aria-hidden="true" id="roi-niche-pills">
+                <button type="button" class="niche-pill active" data-niche="barber" data-ticket="90" data-clients="15">Estética</button>
+                <button type="button" class="niche-pill" data-niche="clinic" data-ticket="350" data-clients="12">Saúde</button>
+                <button type="button" class="niche-pill" data-niche="lawyer" data-ticket="1800" data-clients="5">Advocacia</button>
+                <button type="button" class="niche-pill" data-niche="reforms" data-ticket="650" data-clients="10">Reformas</button>
+                <button type="button" class="niche-pill" data-niche="store" data-ticket="220" data-clients="25">Varejo</button>
+                <button type="button" class="niche-pill" data-niche="realestate" data-ticket="3500" data-clients="3">Imóveis</button>
+              </div>
+
+              <div class="roi-step-actions end-only">
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="2">
+                  <span>Avançar para Demanda de Clientes</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
               </div>
             </div>
 
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="roi-clients-input" class="roi-label">2. Novos clientes mensais vindos pelo site:</label>
-                  <span class="roi-hint">Arraste a barra, clique nos atalhos ou digite qualquer quantidade</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 2: Clientes -->
+            <div class="roi-step-pane" data-step="2">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Passo 02 • Demanda de Novos Clientes</span>
+                <h3 class="roi-step-title">Quantos novos clientes você deseja atender por mês?</h3>
+                <p class="roi-step-desc">Volume estimado de novos atendimentos ou contratos fechados via presença digital:</p>
+              </div>
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="roi-clients-input" data-step="-5" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <input type="number" id="roi-clients-input" class="roi-number-input" value="15" min="1" max="5000" step="1">
-                    <span class="roi-unit">clientes</span>
+                    <span class="roi-unit">clientes/mês</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="roi-clients-input" data-step="5" aria-label="Aumentar">+</button>
                 </div>
+                <div class="roi-quick-chips centered-chips">
+                  <button type="button" class="quick-chip" data-target="roi-clients-input" data-val="5">5 clientes</button>
+                  <button type="button" class="quick-chip active" data-target="roi-clients-input" data-val="15">15 clientes</button>
+                  <button type="button" class="quick-chip" data-target="roi-clients-input" data-val="30">30 clientes</button>
+                  <button type="button" class="quick-chip" data-target="roi-clients-input" data-val="60">60 clientes</button>
+                </div>
+                <input type="range" id="roi-clients-slider" min="1" max="150" value="15" step="1" class="roi-slider">
               </div>
-              <div class="roi-quick-chips">
-                <button type="button" class="quick-chip" data-target="roi-clients-input" data-val="5">5 clientes</button>
-                <button type="button" class="quick-chip active" data-target="roi-clients-input" data-val="15">15 clientes</button>
-                <button type="button" class="quick-chip" data-target="roi-clients-input" data-val="30">30 clientes</button>
-                <button type="button" class="quick-chip" data-target="roi-clients-input" data-val="60">60 clientes</button>
-                <button type="button" class="quick-chip" data-target="roi-clients-input" data-val="120">120+ clientes</button>
-              </div>
-              <input type="range" id="roi-clients-slider" min="1" max="150" value="15" step="1" class="roi-slider">
-              <div class="slider-ticks">
-                <span>1</span>
-                <span>30</span>
-                <span>60</span>
-                <span>100</span>
-                <span>150+</span>
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="1">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="3">
+                  <span>Avançar para o Ticket Médio</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
               </div>
             </div>
 
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="roi-ticket-input" class="roi-label">3. Ticket médio de cada cliente/serviço:</label>
-                  <span class="roi-hint">Arraste a barra, use os atalhos rápidos ou digite qualquer valor</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 3: Ticket Médio -->
+            <div class="roi-step-pane" data-step="3">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Passo 03 • Ticket Médio</span>
+                <h3 class="roi-step-title">Qual o ticket médio de cada venda ou serviço?</h3>
+                <p class="roi-step-desc">Valor médio aproximado faturado em cada contratação ou transação:</p>
+              </div>
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="roi-ticket-input" data-step="-50" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <span class="roi-currency">R$</span>
                     <input type="number" id="roi-ticket-input" class="roi-number-input" value="250" min="10" max="200000" step="10">
+                    <span class="roi-unit">por cliente</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="roi-ticket-input" data-step="50" aria-label="Aumentar">+</button>
                 </div>
+                <div class="roi-quick-chips centered-chips">
+                  <button type="button" class="quick-chip" data-target="roi-ticket-input" data-val="90">R$ 90</button>
+                  <button type="button" class="quick-chip active" data-target="roi-ticket-input" data-val="250">R$ 250</button>
+                  <button type="button" class="quick-chip" data-target="roi-ticket-input" data-val="600">R$ 600</button>
+                  <button type="button" class="quick-chip" data-target="roi-ticket-input" data-val="1800">R$ 1.800</button>
+                </div>
+                <input type="range" id="roi-ticket-slider" min="30" max="5000" value="250" step="10" class="roi-slider">
               </div>
-              <div class="roi-quick-chips">
-                <button type="button" class="quick-chip" data-target="roi-ticket-input" data-val="90">R$ 90</button>
-                <button type="button" class="quick-chip active" data-target="roi-ticket-input" data-val="250">R$ 250</button>
-                <button type="button" class="quick-chip" data-target="roi-ticket-input" data-val="600">R$ 600</button>
-                <button type="button" class="quick-chip" data-target="roi-ticket-input" data-val="1800">R$ 1.800</button>
-                <button type="button" class="quick-chip" data-target="roi-ticket-input" data-val="5000">R$ 5.000+</button>
-              </div>
-              <input type="range" id="roi-ticket-slider" min="30" max="5000" value="250" step="10" class="roi-slider">
-              <div class="slider-ticks">
-                <span>R$ 30</span>
-                <span>R$ 500</span>
-                <span>R$ 1.500</span>
-                <span>R$ 3.000</span>
-                <span>R$ 5.000+</span>
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-calc-btn" data-goto="4">
+                  <span>Gerar Projeção de Retorno</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- PAINEL 3: FUNIL DE CONVERSÃO (Tráfego -> WhatsApp -> Venda) -->
+          <!-- MODO 3: FUNIL DE CONVERSÃO -->
           <div class="sim-panel" id="sim-panel-funnel">
-            <div class="sim-panel-header">
-              <span class="sim-panel-badge">Modelo Consultivo Baseado em Funil Real</span>
-              <p class="sim-panel-desc">Calcula o fluxo completo: buscas locais no Google, cliques para o WhatsApp e taxa de fechamento no atendimento.</p>
-            </div>
-
-            <!-- Pipeline Visual Dinâmico -->
-            <div class="sim-pipeline">
-              <div class="pipeline-step">
-                <span class="step-label">Visitas no Site</span>
-                <strong class="step-val" id="pip-visits">1.000</strong>
+            <!-- Passo 1: Visitas -->
+            <div class="roi-step-pane active" data-step="1">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Etapa 1 de 3 • Tráfego Regional</span>
+                <h3 class="roi-step-title">Visitantes estimados no site por mês:</h3>
+                <p class="roi-step-desc">Pessoas da sua cidade/região buscando seus serviços:</p>
               </div>
-              <div class="pipeline-arrow">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </div>
-              <div class="pipeline-step">
-                <span class="step-label">WhatsApp</span>
-                <strong class="step-val" id="pip-leads">60</strong>
-              </div>
-              <div class="pipeline-arrow">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </div>
-              <div class="pipeline-step">
-                <span class="step-label">Vendas Fechadas</span>
-                <strong class="step-val highlight" id="pip-sales">15</strong>
-              </div>
-              <div class="pipeline-arrow">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </div>
-              <div class="pipeline-step">
-                <span class="step-label">Receita Estimada</span>
-                <strong class="step-val success" id="pip-revenue">R$ 3.000</strong>
-              </div>
-            </div>
-
-            <!-- 1. Visitas Mensais -->
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="funnel-visits-slider" class="roi-label">1. Visitantes estimados no site / mês:</label>
-                  <span class="roi-hint">Pessoas da sua região buscando seus serviços no Google</span>
-                </div>
-                <div class="roi-stepper-wrap">
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="funnel-visits-input" data-step="-200" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <input type="number" id="funnel-visits-input" class="roi-number-input" value="1000" min="100" max="50000" step="100">
-                    <span class="roi-unit">visitas</span>
+                    <span class="roi-unit">visitas/mês</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="funnel-visits-input" data-step="200" aria-label="Aumentar">+</button>
                 </div>
+                <div class="roi-quick-chips centered-chips">
+                  <button type="button" class="quick-chip" data-target="funnel-visits-input" data-val="500">500 visitas</button>
+                  <button type="button" class="quick-chip active" data-target="funnel-visits-input" data-val="1000">1.000 visitas</button>
+                  <button type="button" class="quick-chip" data-target="funnel-visits-input" data-val="2500">2.500 visitas</button>
+                  <button type="button" class="quick-chip" data-target="funnel-visits-input" data-val="5000">5.000 visitas</button>
+                </div>
+                <input type="range" id="funnel-visits-slider" min="100" max="5000" value="1000" step="50" class="roi-slider">
               </div>
-              <div class="roi-quick-chips">
-                <button type="button" class="quick-chip" data-target="funnel-visits-input" data-val="500">500 visitas</button>
-                <button type="button" class="quick-chip active" data-target="funnel-visits-input" data-val="1000">1.000 visitas</button>
-                <button type="button" class="quick-chip" data-target="funnel-visits-input" data-val="2500">2.500 visitas</button>
-                <button type="button" class="quick-chip" data-target="funnel-visits-input" data-val="5000">5.000 visitas</button>
-              </div>
-              <input type="range" id="funnel-visits-slider" min="100" max="5000" value="1000" step="50" class="roi-slider">
-              <div class="slider-ticks">
-                <span>100</span>
-                <span>1.000</span>
-                <span>2.500</span>
-                <span>5.000+</span>
+              <div class="roi-step-actions end-only">
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="2">
+                  <span>Avançar para Taxas de Conversão</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
               </div>
             </div>
 
-            <!-- 2. Conversão WhatsApp -->
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="funnel-conv-slider" class="roi-label">2. Taxa de conversão para WhatsApp:</label>
-                  <span class="roi-hint">Média de mercado para páginas sob medida: 4% a 10%</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 2: Taxas de Conversão -->
+            <div class="roi-step-pane" data-step="2">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Etapa 2 de 3 • Eficiência de Fechamento</span>
+                <h3 class="roi-step-title">Conversão do Site para WhatsApp & Fechamento:</h3>
+                <p class="roi-step-desc">Quantas pessoas chamam e quantas compram:</p>
+              </div>
+              <div class="roi-control-group clean-group">
+                <label for="funnel-conv-input" class="roi-label">1. Taxa de cliques para WhatsApp:</label>
+                <div class="roi-step-val-display" style="margin: 12px 0;">
                   <button type="button" class="stepper-btn" data-target="funnel-conv-input" data-step="-1" aria-label="Diminuir">-</button>
                   <div class="roi-input-field-wrap">
                     <input type="number" id="funnel-conv-input" class="roi-number-input" value="6.0" min="1" max="30" step="0.5">
@@ -659,24 +786,10 @@
                   </div>
                   <button type="button" class="stepper-btn" data-target="funnel-conv-input" data-step="1" aria-label="Aumentar">+</button>
                 </div>
-              </div>
-              <input type="range" id="funnel-conv-slider" min="1" max="20" value="6" step="0.5" class="roi-slider">
-              <div class="slider-ticks">
-                <span>1% (básico)</span>
-                <span>5% (médio)</span>
-                <span>10% (ótimo)</span>
-                <span>20%</span>
-              </div>
-            </div>
+                <input type="range" id="funnel-conv-slider" min="1" max="20" value="6" step="0.5" class="roi-slider">
 
-            <!-- 3. Fechamento no Atendimento -->
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="funnel-close-slider" class="roi-label">3. Taxa de fechamento no atendimento:</label>
-                  <span class="roi-hint">De cada 10 pessoas que chamam no WhatsApp, quantas compram</span>
-                </div>
-                <div class="roi-stepper-wrap">
+                <label for="funnel-close-input" class="roi-label" style="margin-top: 24px;">2. Taxa de fechamento no atendimento:</label>
+                <div class="roi-step-val-display" style="margin: 12px 0;">
                   <button type="button" class="stepper-btn" data-target="funnel-close-input" data-step="-5" aria-label="Diminuir">-</button>
                   <div class="roi-input-field-wrap">
                     <input type="number" id="funnel-close-input" class="roi-number-input" value="25" min="5" max="90" step="1">
@@ -684,179 +797,208 @@
                   </div>
                   <button type="button" class="stepper-btn" data-target="funnel-close-input" data-step="5" aria-label="Aumentar">+</button>
                 </div>
+                <input type="range" id="funnel-close-slider" min="5" max="60" value="25" step="1" class="roi-slider">
               </div>
-              <input type="range" id="funnel-close-slider" min="5" max="60" value="25" step="1" class="roi-slider">
-              <div class="slider-ticks">
-                <span>5%</span>
-                <span>25% (1 a cada 4)</span>
-                <span>40%</span>
-                <span>60%</span>
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="1">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="3">
+                  <span>Avançar para Ticket Médio</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
               </div>
             </div>
 
-            <!-- 4. Ticket Médio -->
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="funnel-ticket-slider" class="roi-label">4. Ticket médio de venda / serviço:</label>
-                  <span class="roi-hint">Valor médio recebido por cada cliente fechado</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 3: Ticket Médio -->
+            <div class="roi-step-pane" data-step="3">
+              <div class="roi-step-header">
+                <span class="roi-step-badge">Etapa 3 de 3 • Ticket Médio</span>
+                <h3 class="roi-step-title">Ticket médio de venda / serviço:</h3>
+                <p class="roi-step-desc">Valor médio recebido por cliente fechado:</p>
+              </div>
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="funnel-ticket-input" data-step="-50" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <span class="roi-currency">R$</span>
                     <input type="number" id="funnel-ticket-input" class="roi-number-input" value="200" min="20" max="100000" step="10">
+                    <span class="roi-unit">por venda</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="funnel-ticket-input" data-step="50" aria-label="Aumentar">+</button>
                 </div>
+                <input type="range" id="funnel-ticket-slider" min="30" max="3000" value="200" step="10" class="roi-slider">
               </div>
-              <input type="range" id="funnel-ticket-slider" min="30" max="3000" value="200" step="10" class="roi-slider">
-              <div class="slider-ticks">
-                <span>R$ 30</span>
-                <span>R$ 500</span>
-                <span>R$ 1.500</span>
-                <span>R$ 3.000+</span>
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-calc-btn" data-goto="4">
+                  <span>Gerar Projeção de Retorno</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- PAINEL 4: CUSTO DE OPORTUNIDADE (Vendas Perdidas para a Concorrência) -->
+          <!-- MODO 4: CUSTO DE OPORTUNIDADE -->
           <div class="sim-panel" id="sim-panel-opportunity">
-            <div class="sim-panel-header">
-              <span class="sim-panel-badge badge-warning">Diagnóstico de Vendas Deixadas na Mesa</span>
-              <p class="sim-panel-desc">Descubra quanto dinheiro sua empresa deixa para os concorrentes todo mês quando clientes pesquisam no Google e encontram quem tem site profissional.</p>
-            </div>
-
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="opp-lost-slider" class="roi-label">1. Clientes perdidos para a concorrência / mês:</label>
-                  <span class="roi-hint">Buscas locais que não te acham ou escolhem quem tem site</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 1: Vendas Perdidas -->
+            <div class="roi-step-pane active" data-step="1">
+              <div class="roi-step-header">
+                <span class="roi-step-badge badge-warning">Etapa 1 de 3 • Vendas Perdidas</span>
+                <h3 class="roi-step-title">Clientes perdidos para a concorrência por mês:</h3>
+                <p class="roi-step-desc">Buscas no Google que não te encontram ou escolhem quem tem site:</p>
+              </div>
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="opp-lost-input" data-step="-2" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <input type="number" id="opp-lost-input" class="roi-number-input" value="12" min="1" max="500" step="1">
-                    <span class="roi-unit">clientes</span>
+                    <span class="roi-unit">clientes/mês</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="opp-lost-input" data-step="2" aria-label="Aumentar">+</button>
                 </div>
+                <div class="roi-quick-chips centered-chips">
+                  <button type="button" class="quick-chip" data-target="opp-lost-input" data-val="5">5 clientes</button>
+                  <button type="button" class="quick-chip active" data-target="opp-lost-input" data-val="12">12 clientes</button>
+                  <button type="button" class="quick-chip" data-target="opp-lost-input" data-val="25">25 clientes</button>
+                  <button type="button" class="quick-chip" data-target="opp-lost-input" data-val="50">50 clientes</button>
+                </div>
+                <input type="range" id="opp-lost-slider" min="1" max="50" value="12" step="1" class="roi-slider">
               </div>
-              <div class="roi-quick-chips">
-                <button type="button" class="quick-chip" data-target="opp-lost-input" data-val="5">5 clientes</button>
-                <button type="button" class="quick-chip active" data-target="opp-lost-input" data-val="12">12 clientes</button>
-                <button type="button" class="quick-chip" data-target="opp-lost-input" data-val="25">25 clientes</button>
-                <button type="button" class="quick-chip" data-target="opp-lost-input" data-val="50">50 clientes</button>
-              </div>
-              <input type="range" id="opp-lost-slider" min="1" max="50" value="12" step="1" class="roi-slider">
-              <div class="slider-ticks">
-                <span>1</span>
-                <span>10</span>
-                <span>25</span>
-                <span>40</span>
-                <span>50+</span>
+              <div class="roi-step-actions end-only">
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="2">
+                  <span>Avançar para Ticket Médio</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
               </div>
             </div>
 
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="opp-ticket-slider" class="roi-label">2. Ticket médio deixado na mesa:</label>
-                  <span class="roi-hint">Valor médio de cada venda ou orçamento perdido</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 2: Ticket Deixado na Mesa -->
+            <div class="roi-step-pane" data-step="2">
+              <div class="roi-step-header">
+                <span class="roi-step-badge badge-warning">Etapa 2 de 3 • Ticket Médio</span>
+                <h3 class="roi-step-title">Ticket médio deixado na mesa:</h3>
+                <p class="roi-step-desc">Valor médio de cada venda ou orçamento que vai para o concorrente:</p>
+              </div>
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="opp-ticket-input" data-step="-50" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <span class="roi-currency">R$</span>
                     <input type="number" id="opp-ticket-input" class="roi-number-input" value="250" min="20" max="100000" step="10">
+                    <span class="roi-unit">por cliente</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="opp-ticket-input" data-step="50" aria-label="Aumentar">+</button>
                 </div>
+                <input type="range" id="opp-ticket-slider" min="30" max="3000" value="250" step="10" class="roi-slider">
               </div>
-              <input type="range" id="opp-ticket-slider" min="30" max="3000" value="250" step="10" class="roi-slider">
-              <div class="slider-ticks">
-                <span>R$ 30</span>
-                <span>R$ 500</span>
-                <span>R$ 1.500</span>
-                <span>R$ 3.000+</span>
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="1">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-next-btn" data-goto="3">
+                  <span>Avançar para Margem Líquida</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
               </div>
             </div>
 
-            <div class="roi-control-group">
-              <div class="roi-slider-header">
-                <div>
-                  <label for="opp-margin-slider" class="roi-label">3. Margem líquida estimada do seu negócio:</label>
-                  <span class="roi-hint">Percentual que sobra líquido após os custos operacionais</span>
-                </div>
-                <div class="roi-stepper-wrap">
+            <!-- Passo 3: Margem Líquida -->
+            <div class="roi-step-pane" data-step="3">
+              <div class="roi-step-header">
+                <span class="roi-step-badge badge-warning">Etapa 3 de 3 • Margem</span>
+                <h3 class="roi-step-title">Margem líquida estimada do seu negócio:</h3>
+                <p class="roi-step-desc">Percentual que sobra limpo após os custos operacionais:</p>
+              </div>
+              <div class="roi-control-group clean-group">
+                <div class="roi-step-val-display">
                   <button type="button" class="stepper-btn" data-target="opp-margin-input" data-step="-5" aria-label="Diminuir">-</button>
-                  <div class="roi-input-field-wrap">
+                  <div class="roi-input-field-wrap giant-field">
                     <input type="number" id="opp-margin-input" class="roi-number-input" value="45" min="10" max="95" step="5">
                     <span class="roi-unit">%</span>
                   </div>
                   <button type="button" class="stepper-btn" data-target="opp-margin-input" data-step="5" aria-label="Aumentar">+</button>
                 </div>
+                <input type="range" id="opp-margin-slider" min="10" max="90" value="45" step="5" class="roi-slider">
               </div>
-              <input type="range" id="opp-margin-slider" min="10" max="90" value="45" step="5" class="roi-slider">
-              <div class="slider-ticks">
-                <span>10%</span>
-                <span>30%</span>
-                <span>50%</span>
-                <span>70%</span>
-                <span>90%</span>
+              <div class="roi-step-actions">
+                <button type="button" class="btn-secondary-lg roi-step-prev-btn" data-goto="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  <span>Voltar</span>
+                </button>
+                <button type="button" class="btn-primary-lg roi-step-calc-btn" data-goto="4">
+                  <span>Gerar Projeção de Retorno</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </button>
               </div>
             </div>
           </div>
 
-        </div>
+          <!-- ETAPA 4: RESULTADO DAS ETAPAS (Apresentado Somente ao Fim!) -->
+          <div class="roi-step-pane" id="roi-results-step-pane" data-step="4">
+            <div class="roi-results-card-modern">
+              <div class="results-top-modern">
+                <div class="results-tag-wrap">
+                  <span class="results-badge" id="roi-results-badge">Projeção Financeira Consolidada</span>
+                </div>
+                <div class="payback-pill" id="roi-payback-pill">Payback em 4 dias</div>
+              </div>
 
-        <!-- Painel de Resultados do ROI -->
-        <div class="roi-results-card">
-          <div class="results-top">
-            <span class="results-badge" id="roi-results-badge">Projeção de Retorno Estimada</span>
-            <div class="payback-pill" id="roi-payback-pill">Se paga em 12 dias</div>
+              <div class="roi-metric-highlight-modern">
+                <span class="roi-highlight-label" id="roi-highlight-label">Faturamento Mensal Adicional Projetado:</span>
+                <div class="roi-highlight-value" id="roi-monthly-result">R$ 10.000<small>/mês</small></div>
+                <p class="roi-highlight-sub" id="roi-annual-result">Equivalente a <strong>R$ 120.000,00</strong> anuais em novas receitas</p>
+              </div>
+
+              <!-- Micro KPI Highlights Grid -->
+              <div class="roi-kpi-grid" id="roi-kpi-grid">
+                <div class="roi-kpi-item">
+                  <span class="roi-kpi-lbl" id="kpi-1-lbl">Demanda Necessária</span>
+                  <strong class="roi-kpi-val" id="kpi-1-val">40 vendas/mês</strong>
+                </div>
+                <div class="roi-kpi-item">
+                  <span class="roi-kpi-lbl" id="kpi-2-lbl">Ritmo de Conversão</span>
+                  <strong class="roi-kpi-val" id="kpi-2-val">~1.3 /dia</strong>
+                </div>
+                <div class="roi-kpi-item">
+                  <span class="roi-kpi-lbl" id="kpi-3-lbl">Eficiência de Capital (ROI)</span>
+                  <strong class="roi-kpi-val highlight" id="kpi-3-val">100.0x ao ano</strong>
+                </div>
+              </div>
+
+              <div class="roi-comparison-mini">
+                <div class="comparison-row">
+                  <span id="comp-row-1-lbl">Aporte de Setup do Site:</span>
+                  <strong style="color: #94A3B8;" id="comp-row-1-val">R$ 1.200</strong>
+                </div>
+                <div class="comparison-row">
+                  <span id="comp-row-2-lbl">Retorno Líquido Projetado (1º Ano):</span>
+                  <strong style="color: #10B981;" id="roi-net-return">+ R$ 118.800,00</strong>
+                </div>
+              </div>
+
+              <div class="roi-result-actions">
+                <a href="#contato" class="btn-primary-lg full-width" id="btn-roi-cta">
+                  <span id="btn-roi-cta-text">Iniciar Projeto para Bater Essa Meta</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+                <button type="button" class="btn-secondary-lg full-width" id="btn-export-proposal" style="justify-content: center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  <span>Baixar Proposta Comercial em PDF</span>
+                </button>
+                <button type="button" class="btn-ghost-recalc" data-goto="2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  <span>Revisar Parâmetros / Recalcular</span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div class="roi-metric-highlight">
-            <span class="roi-highlight-label" id="roi-highlight-label">Faturamento Mensal Adicional:</span>
-            <div class="roi-highlight-value" id="roi-monthly-result">R$ 3.000<small>/mês</small></div>
-            <p class="roi-highlight-sub" id="roi-annual-result">Equivalente a <strong>R$ 36.000,00</strong> extras por ano</p>
-          </div>
-
-          <!-- Micro KPI Highlights Grid -->
-          <div class="roi-kpi-grid" id="roi-kpi-grid">
-            <div class="roi-kpi-item">
-              <span class="roi-kpi-lbl" id="kpi-1-lbl">Leads WhatsApp</span>
-              <strong class="roi-kpi-val" id="kpi-1-val">60 /mês</strong>
-            </div>
-            <div class="roi-kpi-item">
-              <span class="roi-kpi-lbl" id="kpi-2-lbl">Vendas Novas</span>
-              <strong class="roi-kpi-val" id="kpi-2-val">15 clientes</strong>
-            </div>
-            <div class="roi-kpi-item">
-              <span class="roi-kpi-lbl" id="kpi-3-lbl">Multiplicador ROI</span>
-              <strong class="roi-kpi-val highlight" id="kpi-3-val">30x ao ano</strong>
-            </div>
-          </div>
-
-          <div class="roi-comparison-mini">
-            <div class="comparison-row">
-              <span id="comp-row-1-lbl">Investimento Único no Site:</span>
-              <strong style="color: #94A3B8;" id="comp-row-1-val">R$ 1.200</strong>
-            </div>
-            <div class="comparison-row">
-              <span id="comp-row-2-lbl">Retorno Líquido no 1º Ano:</span>
-              <strong style="color: #10B981;" id="roi-net-return">+ R$ 34.800,00</strong>
-            </div>
-          </div>
-
-          <a href="#contato" class="btn-primary-lg full-width" id="btn-roi-cta">
-            <span id="btn-roi-cta-text">Quero Estruturar Esse Funil de Vendas</span>
-          </a>
-          <button type="button" class="btn-secondary-lg full-width" id="btn-export-proposal" style="margin-top: 10px; justify-content: center;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            <span>Baixar Proposta Comercial em PDF</span>
-          </button>
         </div>
       </div>
     </div>

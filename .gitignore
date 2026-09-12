@@ -7,3 +7,8 @@ dist/
 .DS_Store
 Thumbs.db
 .playwright-mcp/
+.vscode/
+.cursor/
+.claude/
+.mcp.json
+agent/

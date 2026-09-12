@@ -2,53 +2,8 @@ import { ModernPortfolioCarousel } from './modern-carousel.js';
 import { PROJECTS_DATA, getBrandContrastMode } from './projectsData.js';
 import { initStaggerText } from './stagger-text.js';
 import { VideoShowcaseEngine } from './video-showcase-engine.js';
-import { initPlateStack, showLoadingScreen } from './plate-stack-loader.js';
+import { showLoadingScreen } from './plate-stack-loader.js';
 import { initAllLiquidCarve } from './liquid-carve.js';
-
-// ==========================================================================
-// 3D PLATE STACK PRELOADER LIFECYCLE (ORIGINKIT 3D WEBGL)
-// ==========================================================================
-const preloaderEl = document.getElementById('site-preloader');
-const preloaderCanvasBox = document.getElementById('preloader-canvas-container');
-
-if (preloaderEl && preloaderCanvasBox) {
-  const plateStackInstance = initPlateStack(preloaderCanvasBox, {
-    baseColor: '#334155',
-    accentColor: '#38BDF8',
-    speed: 71,
-    distance: 11,
-    stack: {
-      count: 5,
-      rounded: 26,
-      stagger: 250
-    }
-  });
-
-  const dismissPreloader = () => {
-    if (!preloaderEl || preloaderEl.classList.contains('preloader-hidden')) return;
-    preloaderEl.classList.add('preloader-hidden');
-    setTimeout(() => {
-      plateStackInstance.destroy();
-      preloaderEl.remove();
-    }, 600);
-  };
-
-  const statusEl = document.getElementById('preloader-status-text');
-  setTimeout(() => {
-    if (statusEl) statusEl.textContent = 'Carregando componentes e alta performance...';
-  }, 1000);
-  setTimeout(() => {
-    if (statusEl) statusEl.textContent = 'Ambiente pronto.';
-  }, 2000);
-
-  const minTimer = new Promise(res => setTimeout(res, 2300));
-  const docReady = new Promise(res => {
-    if (document.readyState === 'complete') res();
-    else window.addEventListener('load', res, { once: true });
-  });
-
-  Promise.all([minTimer, docReady]).then(dismissPreloader);
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Stagger Text Rise Animation System
@@ -812,24 +767,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Result card
-        if (resultsBadge) resultsBadge.textContent = 'Engenharia Reversa por Meta';
-        if (paybackPill) paybackPill.textContent = `Investimento pago em ${paybackDays} dias`;
-        if (highlightLabel) highlightLabel.textContent = 'Meta Mensal Projetada:';
+        if (resultsBadge) resultsBadge.textContent = 'Projeção Financeira por Meta';
+        if (paybackPill) paybackPill.textContent = `Payback em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Faturamento Mensal Adicional Projetado:';
         if (monthlyResult) monthlyResult.innerHTML = `R$ ${target.toLocaleString('pt-BR')}<small>/mês</small>`;
-        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> faturados ao ano`;
+        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> anuais em novas receitas`;
 
-        if (kpi1Lbl) kpi1Lbl.textContent = 'Clientes Necessários';
-        if (kpi1Val) kpi1Val.textContent = `${clients} vendas/mês`;
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Demanda Necessária';
+        if (kpi1Val) kpi1Val.textContent = `${clients} ${clients === 1 ? 'venda/mês' : 'vendas/mês'}`;
         if (kpi2Lbl) kpi2Lbl.textContent = 'Ritmo de Conversão';
         if (kpi2Val) kpi2Val.textContent = dailyRate >= 1 ? `~${dailyRate.toFixed(1)} /dia` : `~${Math.max(1, Math.round(weeklyRate))} /sem`;
-        if (kpi3Lbl) kpi3Lbl.textContent = 'Multiplicador ROI';
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Eficiência de Capital (ROI)';
         if (kpi3Val) kpi3Val.textContent = `${multiplier}x ao ano`;
 
-        if (compRow1Lbl) compRow1Lbl.textContent = 'Investimento Único no Site:';
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Aporte de Setup do Site:';
         if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
-        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido no 1º Ano:';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido Projetado (1º Ano):';
         if (netReturn) netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
-        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Atingir Essa Meta com Meu Site';
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Iniciar Projeto para Bater Essa Meta';
 
         simPayload = {
           niche: `Meta Reversa (R$ ${target}/mês, ${clients} clientes a R$ ${ticket})`,
@@ -862,24 +817,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pipRevenue) pipRevenue.textContent = `R$ ${monthly.toLocaleString('pt-BR')}`;
 
         // Atualiza card de resultados
-        if (resultsBadge) resultsBadge.textContent = 'Projeção por Funil de Atração';
-        if (paybackPill) paybackPill.textContent = `Se paga em ${paybackDays} dias`;
-        if (highlightLabel) highlightLabel.textContent = 'Faturamento Mensal Adicional:';
+        if (resultsBadge) resultsBadge.textContent = 'Projeção por Funil de Conversão';
+        if (paybackPill) paybackPill.textContent = `Payback em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Faturamento Mensal Adicional Projetado:';
         if (monthlyResult) monthlyResult.innerHTML = `R$ ${monthly.toLocaleString('pt-BR')}<small>/mês</small>`;
-        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> extras por ano`;
+        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> anuais em novas receitas`;
 
-        if (kpi1Lbl) kpi1Lbl.textContent = 'Leads WhatsApp';
-        if (kpi1Val) kpi1Val.textContent = `${leads.toLocaleString('pt-BR')} /mês`;
-        if (kpi2Lbl) kpi2Lbl.textContent = 'Vendas Novas';
-        if (kpi2Val) kpi2Val.textContent = `${sales.toLocaleString('pt-BR')} clientes`;
-        if (kpi3Lbl) kpi3Lbl.textContent = 'Multiplicador ROI';
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Demanda Qualificada';
+        if (kpi1Val) kpi1Val.textContent = `${leads.toLocaleString('pt-BR')} leads/mês`;
+        if (kpi2Lbl) kpi2Lbl.textContent = 'Ritmo de Conversão';
+        if (kpi2Val) kpi2Val.textContent = `${sales.toLocaleString('pt-BR')} vendas/mês`;
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Eficiência de Capital (ROI)';
         if (kpi3Val) kpi3Val.textContent = `${multiplier}x ao ano`;
 
-        if (compRow1Lbl) compRow1Lbl.textContent = 'Investimento Único no Site:';
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Aporte de Setup do Site:';
         if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
-        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido no 1º Ano:';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido Projetado (1º Ano):';
         if (netReturn) netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
-        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Estruturar Esse Funil de Vendas';
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Estruturar Funil de Atração para Minha Empresa';
 
         simPayload = {
           niche: `Funil (${visits} visitas, ${leads} leads, ${sales} vendas)`,
@@ -902,24 +857,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const paybackDays = daily > 0 ? Math.max(1, Math.round(1200 / daily)) : 30;
         const multiplier = (annual / 1200).toFixed(1);
 
-        if (resultsBadge) resultsBadge.textContent = 'Projeção de Retorno Estimada';
-        if (paybackPill) paybackPill.textContent = `Se paga em ${paybackDays} dias`;
-        if (highlightLabel) highlightLabel.textContent = 'Faturamento Mensal Adicional:';
+        if (resultsBadge) resultsBadge.textContent = 'Projeção Comercial Consolidada';
+        if (paybackPill) paybackPill.textContent = `Payback em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Faturamento Mensal Adicional Projetado:';
         if (monthlyResult) monthlyResult.innerHTML = `R$ ${monthly.toLocaleString('pt-BR')}<small>/mês</small>`;
-        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> extras por ano`;
+        if (annualResult) annualResult.innerHTML = `Equivalente a <strong>R$ ${annual.toLocaleString('pt-BR')},00</strong> anuais em novas receitas`;
 
-        if (kpi1Lbl) kpi1Lbl.textContent = 'Clientes / Mês';
-        if (kpi1Val) kpi1Val.textContent = `${clients.toLocaleString('pt-BR')} novos`;
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Demanda de Clientes';
+        if (kpi1Val) kpi1Val.textContent = `${clients.toLocaleString('pt-BR')} novos/mês`;
         if (kpi2Lbl) kpi2Lbl.textContent = 'Ticket Médio';
         if (kpi2Val) kpi2Val.textContent = `R$ ${ticket.toLocaleString('pt-BR')}`;
-        if (kpi3Lbl) kpi3Lbl.textContent = 'Multiplicador ROI';
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Eficiência de Capital (ROI)';
         if (kpi3Val) kpi3Val.textContent = `${multiplier}x ao ano`;
 
-        if (compRow1Lbl) compRow1Lbl.textContent = 'Investimento Único no Site:';
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Aporte de Setup do Site:';
         if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
-        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido no 1º Ano:';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Retorno Líquido Projetado (1º Ano):';
         if (netReturn) netReturn.textContent = `+ R$ ${net.toLocaleString('pt-BR')},00`;
-        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Gerar Esse Faturamento';
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Estruturar Captação para Esse Faturamento';
 
         simPayload = {
           niche: activeNiche,
@@ -944,24 +899,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const paybackDays = dailyProfit > 0 ? Math.max(1, Math.round(1200 / dailyProfit)) : 15;
         const multiplier = (annualProfitLost / 1200).toFixed(1);
 
-        if (resultsBadge) resultsBadge.textContent = 'Vendas Perdidas para Concorrentes';
-        if (paybackPill) paybackPill.textContent = `Estanca prejuízo em ${paybackDays} dias`;
-        if (highlightLabel) highlightLabel.textContent = 'Faturamento Deixado na Mesa:';
+        if (resultsBadge) resultsBadge.textContent = 'Auditoria de Custo de Oportunidade';
+        if (paybackPill) paybackPill.textContent = `Recuperação em ${paybackDays} dias`;
+        if (highlightLabel) highlightLabel.textContent = 'Demanda Deixada na Mesa (Sem Site):';
         if (monthlyResult) monthlyResult.innerHTML = `R$ ${monthlyLost.toLocaleString('pt-BR')}<small>/mês</small>`;
         if (annualResult) annualResult.innerHTML = `Prejuízo anual invisível de <strong>R$ ${annualLost.toLocaleString('pt-BR')},00</strong>`;
 
-        if (kpi1Lbl) kpi1Lbl.textContent = 'Vendas Perdidas';
+        if (kpi1Lbl) kpi1Lbl.textContent = 'Oportunidades Perdidas';
         if (kpi1Val) kpi1Val.textContent = `${lost.toLocaleString('pt-BR')} /mês`;
-        if (kpi2Lbl) kpi2Lbl.textContent = `Lucro Perdido (${margin}%)`;
+        if (kpi2Lbl) kpi2Lbl.textContent = `Margem Operacional (${margin}%)`;
         if (kpi2Val) kpi2Val.textContent = `R$ ${Math.round(monthlyProfitLost).toLocaleString('pt-BR')}/mês`;
-        if (kpi3Lbl) kpi3Lbl.textContent = 'Potencial Protegido';
-        if (kpi3Val) kpi3Val.textContent = `${multiplier}x o site`;
+        if (kpi3Lbl) kpi3Lbl.textContent = 'Eficiência de Retorno';
+        if (kpi3Val) kpi3Val.textContent = `${multiplier}x o setup`;
 
-        if (compRow1Lbl) compRow1Lbl.textContent = 'Custo do Site (Setup Único):';
+        if (compRow1Lbl) compRow1Lbl.textContent = 'Aporte de Setup do Site:';
         if (compRow1Val) compRow1Val.textContent = 'R$ 1.200';
-        if (compRow2Lbl) compRow2Lbl.textContent = 'Lucro Recuperado no 1º Ano:';
+        if (compRow2Lbl) compRow2Lbl.textContent = 'Lucro Operacional Recuperado (1º Ano):';
         if (netReturn) netReturn.textContent = `+ R$ ${Math.round(netRecovery).toLocaleString('pt-BR')},00`;
-        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Quero Estancar Essa Perda no Google';
+        if (btnRoiCtaText) btnRoiCtaText.textContent = 'Recuperar Demanda Perdida na Minha Região';
 
         simPayload = {
           niche: `Custo Oportunidade (${lost} perdidos, margem ${margin}%)`,
@@ -992,7 +947,7 @@ document.addEventListener('DOMContentLoaded', () => {
     bindSync(oppTicketSlider, oppTicketInput, calculate);
     bindSync(oppMarginSlider, oppMarginInput, calculate);
 
-    // Navegação de abas
+    // Navegação de abas (Modos de Simulação)
     modeTabs.forEach(tab => {
       tab.addEventListener('click', () => {
         modeTabs.forEach(t => t.classList.remove('active'));
@@ -1005,6 +960,24 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
 
+        // Atualiza rótulos do Stepper conforme o modo
+        const lblStep2 = document.getElementById('step-label-2');
+        const lblStep3 = document.getElementById('step-label-3');
+        if (currentMode === 'goal') {
+          if (lblStep2) lblStep2.textContent = 'Meta Alvo';
+          if (lblStep3) lblStep3.textContent = 'Ticket Médio';
+        } else if (currentMode === 'direct') {
+          if (lblStep2) lblStep2.textContent = 'Clientes';
+          if (lblStep3) lblStep3.textContent = 'Ticket Médio';
+        } else if (currentMode === 'funnel') {
+          if (lblStep2) lblStep2.textContent = 'Visitas';
+          if (lblStep3) lblStep3.textContent = 'Conversão';
+        } else if (currentMode === 'opportunity') {
+          if (lblStep2) lblStep2.textContent = 'Perdas';
+          if (lblStep3) lblStep3.textContent = 'Ticket & Margem';
+        }
+
+        goToStep(1);
         calculate();
       });
     });
@@ -1026,6 +999,108 @@ document.addEventListener('DOMContentLoaded', () => {
         calculate();
       });
     });
+
+    // ==========================================================================
+    // SISTEMA DO WIZARD POR ETAPAS (ROI STEPPER)
+    // ==========================================================================
+    let currentStep = 1;
+    const stepTabs = document.querySelectorAll('.roi-wizard-step');
+    const resultsStepPane = document.getElementById('roi-results-step-pane');
+    const modernNicheCards = document.querySelectorAll('.niche-card-modern');
+
+    function goToStep(step) {
+      if (step < 1) step = 1;
+      if (step > 4) step = 4;
+      currentStep = step;
+
+      // Atualiza tabs do stepper e linhas conectoras
+      stepTabs.forEach(tab => {
+        const s = parseInt(tab.dataset.step, 10);
+        tab.classList.toggle('active', s === currentStep);
+        tab.classList.toggle('completed', s < currentStep);
+      });
+
+      for (let i = 1; i <= 3; i++) {
+        const line = document.getElementById(`step-line-${i}`);
+        if (line) {
+          line.classList.toggle('active', currentStep > i);
+        }
+      }
+
+      // Oculta todos os painéis de etapas
+      document.querySelectorAll('.roi-step-pane').forEach(p => p.classList.remove('active'));
+
+      if (currentStep === 4) {
+        // Exibe o painel de resultados do ROI
+        if (resultsStepPane) resultsStepPane.classList.add('active');
+        calculate();
+      } else {
+        // Exibe a etapa atual dentro do modo ativo
+        const activePanel = document.querySelector('.sim-panel.active');
+        if (activePanel) {
+          const pane = activePanel.querySelector(`.roi-step-pane[data-step="${currentStep}"]`);
+          if (pane) pane.classList.add('active');
+        }
+      }
+    }
+
+    // Botões de navegação das etapas (data-goto)
+    document.querySelectorAll('[data-goto]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetStep = parseInt(btn.dataset.goto, 10);
+        if (!isNaN(targetStep)) {
+          goToStep(targetStep);
+          const wizardCard = document.querySelector('.roi-wizard-card');
+          if (wizardCard && window.innerWidth < 820) {
+            wizardCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+
+    // Clique direto nos marcadores do Stepper
+    stepTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetStep = parseInt(tab.dataset.step, 10);
+        if (!isNaN(targetStep)) {
+          goToStep(targetStep);
+        }
+      });
+    });
+
+    // Cards Modernos de Seleção de Nicho (Etapa 1)
+    modernNicheCards.forEach(card => {
+      card.addEventListener('click', () => {
+        modernNicheCards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+
+        const ticket = parseInt(card.dataset.ticket, 10);
+        const target = parseInt(card.dataset.target, 10);
+
+        if (goalTicketInput && !isNaN(ticket)) {
+          goalTicketInput.value = ticket;
+          if (goalTicketSlider) goalTicketSlider.value = ticket;
+          syncChipsForInput(goalTicketInput);
+        }
+        if (goalTargetInput && !isNaN(target)) {
+          goalTargetInput.value = target;
+          if (goalTargetSlider) goalTargetSlider.value = target;
+          syncChipsForInput(goalTargetInput);
+        }
+
+        if (directTicketInput && !isNaN(ticket)) {
+          directTicketInput.value = ticket;
+          if (directTicketSlider) directTicketSlider.value = ticket;
+          syncChipsForInput(directTicketInput);
+        }
+
+        calculate();
+      });
+    });
+
+    // Inicia no Passo 1
+    goToStep(1);
 
     // Gerador de Proposta Executiva em PDF (Impressão com 3D Plate Stack Loader)
     if (btnExportProposal) {

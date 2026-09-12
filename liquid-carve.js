@@ -74,35 +74,35 @@ export function applyLiquidCarve(element, userOptions = {}) {
     const isSecondary = element.classList.contains('btn-secondary-lg');
     const isProposal = element.id === 'btn-export-proposal';
 
-    let defaultFill = '#2563EB';
-    let defaultBlob = '#38BDF8';
+    let defaultFill = '#000000';
+    let defaultBlob = '#71717A';
 
     if (isInputField) {
-      defaultFill = isLight ? '#FFFFFF' : '#0B1120';
-      defaultBlob = isLight ? '#2563EB' : '#38BDF8';
+      defaultFill = isLight ? '#FFFFFF' : '#0A0A0C';
+      defaultBlob = isLight ? '#27272A' : '#71717A';
     } else if (isPrimary) {
       if (isLight) {
-        defaultFill = '#0F172A';
-        defaultBlob = '#2563EB';
+        defaultFill = '#000000';
+        defaultBlob = '#52525B';
       } else {
         defaultFill = '#FFFFFF';
-        defaultBlob = '#38BDF8';
+        defaultBlob = '#A1A1AA';
       }
     } else if (isSecondary) {
       if (isLight) {
         defaultFill = '#FFFFFF';
-        defaultBlob = '#38BDF8';
+        defaultBlob = '#71717A';
       } else {
-        defaultFill = '#0B1120';
-        defaultBlob = '#2563EB';
+        defaultFill = '#000000';
+        defaultBlob = '#3F3F46';
       }
     } else if (isProposal) {
       if (isLight) {
-        defaultFill = '#EFF6FF';
-        defaultBlob = '#38BDF8';
+        defaultFill = '#F4F4F5';
+        defaultBlob = '#71717A';
       } else {
-        defaultFill = '#1E293B';
-        defaultBlob = '#2563EB';
+        defaultFill = '#18181C';
+        defaultBlob = '#52525B';
       }
     }
 
