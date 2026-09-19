@@ -5276,22 +5276,7 @@ html.lenis, html.lenis body {
 }
 
 .step-roman-num {
-  position: absolute;
-  top: 18px;
-  right: 22px;
-  font-family: var(--font-heading);
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: rgba(255, 255, 255, 0.08);
-  letter-spacing: 1.5px;
-  transition: color 0.4s ease, transform 0.4s ease;
-  user-select: none;
-}
-
-.process-step-card:hover .step-roman-num,
-.process-step-card.step-active-in-view .step-roman-num {
-  color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-2px);
+  display: none !important;
 }
 
 .process-kinetic-spine {

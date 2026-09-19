@@ -312,25 +312,14 @@ export class ParallaxExperienceEngine {
 
   /**
    * 5. Process Scroll Storytelling Progress Tracker
-   * Connects step cards with Roman numerals & continuous drawing line
+   * Connects step cards with continuous drawing line
    */
   initProcessScrollTracker() {
     const processSection = document.getElementById('processo');
     if (!processSection) return;
 
-    // Enhance step cards with Roman Numeral Badges (designxhand luxury styling)
-    const romanNumerals = ['I', 'II', 'III', 'IV'];
-    const stepCards = processSection.querySelectorAll('.process-step-card');
-
-    stepCards.forEach((card, idx) => {
-      let romanBadge = card.querySelector('.step-roman-num');
-      if (!romanBadge && romanNumerals[idx]) {
-        romanBadge = document.createElement('span');
-        romanBadge.className = 'step-roman-num';
-        romanBadge.textContent = romanNumerals[idx];
-        card.prepend(romanBadge);
-      }
-    });
+    // Ensure any existing Roman numeral badges are removed
+    processSection.querySelectorAll('.step-roman-num').forEach(el => el.remove());
 
     // Add continuous glowing spine / line behind the grid
     const processGrid = processSection.querySelector('.process-timeline-grid, .process-grid');
