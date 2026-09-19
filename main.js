@@ -82,15 +82,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeLabelText = document.getElementById('theme-label-text');
 
   function initTheme() {
-    const savedTheme = localStorage.getItem('localweb_theme');
-    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    const savedTheme = localStorage.getItem('localweb_theme_v2');
+    const initialTheme = savedTheme || 'light';
     setTheme(initialTheme);
   }
 
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('localweb_theme_v2', theme);
     localStorage.setItem('localweb_theme', theme);
+
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', theme === 'light' ? '#FFFFFF' : '#000000');
+    }
 
     if (themeLabelText) {
       themeLabelText.textContent = theme === 'light' ? 'Claro' : 'Escuro';
@@ -102,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
     const nextTheme = current === 'light' ? 'dark' : 'light';
     setTheme(nextTheme);
   }
