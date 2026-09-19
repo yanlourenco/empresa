@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize White Desert Inspired Showcase Carousel
   initShowcaseCarousel();
 
-  // DOM Elements - Feedback & Section
-  const projectsSection = document.getElementById('projetos');
+  // DOM Elements - Feedback & Section (Legacy 3D Section guard)
+  const projectsSection = document.querySelector('.projects-section');
   const fbAvatar = document.getElementById('fb-avatar');
   const fbClientName = document.getElementById('fb-client-name');
   const fbClientRole = document.getElementById('fb-client-role');

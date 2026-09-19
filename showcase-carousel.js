@@ -17,7 +17,7 @@
 
 export class ShowcaseCarousel {
   constructor(options = {}) {
-    this.container = document.querySelector(options.containerSelector || '#showcase-carousel');
+    this.container = document.querySelector(options.containerSelector || '#projetos, #showcase-carousel');
     if (!this.container) return;
 
     this.viewport = this.container.querySelector('.showcase-viewport');
@@ -390,11 +390,11 @@ export class ShowcaseCarousel {
  * Global Initialization Helper
  */
 export function initShowcaseCarousel() {
-  const container = document.getElementById('showcase-carousel');
+  const container = document.querySelector('#projetos, #showcase-carousel');
   if (!container) return null;
 
   return new ShowcaseCarousel({
-    containerSelector: '#showcase-carousel',
+    containerSelector: '#projetos, #showcase-carousel',
     autoPlay: true,
     autoPlayInterval: 4800,
     loop: true
