@@ -74,9 +74,9 @@ export class ModernPortfolioCarousel {
           
           <!-- Card Header Bar -->
           <div class="card-browser-bar">
-            <div class="card-url-pill">
+            <div class="card-url-pill" title="${project.id}.localwebpro.com.br">
               <svg class="lock-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-              <span>${project.id}.localwebpro.com.br</span>
+              <span class="url-text">${project.id}.localwebpro.com.br</span>
             </div>
             ${isVideo ? `<span class="card-badge-video">${project.videoBadge || 'VÍDEO SHOWCASE'}</span>` : `<span class="card-badge-niche">${project.niche.split('&')[0]}</span>`}
           </div>

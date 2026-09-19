@@ -5,10 +5,20 @@ import { VideoShowcaseEngine } from './video-showcase-engine.js';
 import { showLoadingScreen } from './plate-stack-loader.js';
 import { initAllLiquidCarve } from './liquid-carve.js';
 import { initAwwwardsEffects } from './awwwards-interactions.js';
+import { initParallaxEngine } from './parallax-engine.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Stagger Text Rise Animation System
+  // Initialize Stagger Text Rise Animation System (Anti-clipping typography)
   initStaggerText();
+
+  // Initialize Parallax & Lenis Smooth Inertia Engine (inspired by designxhand.com)
+  initParallaxEngine();
+
+  // Initialize Awwwards Design System & Kinetic Interactions
+  initAwwwardsEffects();
+
+  // Initialize Liquid Carve cursor interactions
+  initAllLiquidCarve();
 
   // DOM Elements - Feedback & Section
   const projectsSection = document.getElementById('projetos');
