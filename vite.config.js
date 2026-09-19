@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import tailwindcss from '@tailwindcss/vite';
 import { query } from './db/index.js';
 
 function neonApiPlugin() {
@@ -468,7 +469,12 @@ function neonApiPlugin() {
 }
 
 export default defineConfig({
-  plugins: [neonApiPlugin()],
+  plugins: [tailwindcss(), neonApiPlugin()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './')
+    }
+  },
   build: {
     rollupOptions: {
       input: {

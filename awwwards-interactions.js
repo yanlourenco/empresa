@@ -11,8 +11,6 @@
 
 export function initAwwwardsEffects() {
   initScrollProgressBar();
-  initCursorSpotlight();
-  initMagneticButtons();
   initMetricCounterAnimation();
   initScrollReveal();
 }

@@ -6,6 +6,7 @@ import { showLoadingScreen } from './plate-stack-loader.js';
 import { initAllLiquidCarve } from './liquid-carve.js';
 import { initAwwwardsEffects } from './awwwards-interactions.js';
 import { initParallaxEngine } from './parallax-engine.js';
+import { initShowcaseCarousel } from './showcase-carousel.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Stagger Text Rise Animation System (Anti-clipping typography)
@@ -17,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Awwwards Design System & Kinetic Interactions
   initAwwwardsEffects();
 
-  // Initialize Liquid Carve cursor interactions
-  initAllLiquidCarve();
+  // Initialize White Desert Inspired Showcase Carousel
+  initShowcaseCarousel();
 
   // DOM Elements - Feedback & Section
   const projectsSection = document.getElementById('projetos');
@@ -1339,11 +1340,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!toast) return;
 
     const events = [
-      { avatar: 'BM', title: 'Dovena Farmácia', time: 'há 3 min', msg: 'Atingiu +340% em agendamentos pelo novo site.' },
-      { avatar: 'LV', title: 'Barbearia Dark Beard', time: 'há 8 min', msg: '100% da agenda preenchida na 1ª semana do lançamento.' },
-      { avatar: 'BG', title: 'Be Greater Studio', time: 'há 15 min', msg: '85 novas matrículas registradas no 1º mês.' },
-      { avatar: 'JM', title: 'Jacket Masters', time: 'há 24 min', msg: '+4.8x retenção de clientes e 14.2% em conversão.' },
-      { avatar: 'SO', title: 'Soundar Audio', time: 'há 38 min', msg: 'R$ 78.000 em pré-vendas faturadas pelo novo site.' }
+      { avatar: 'MB', title: 'Tavolla Milano', time: 'há 2 min', msg: '+420% em reservas online com o novo site e comanda digital.' },
+      { avatar: 'TH', title: 'FRZN™ Store', time: 'há 6 min', msg: 'R$ 42.000 em vendas na primeira semana do novo e-commerce.' },
+      { avatar: 'MB', title: 'Tavolla Milano', time: 'há 12 min', msg: 'Mais de 2.400 reservas online confirmadas no mês.' },
+      { avatar: 'TH', title: 'FRZN™ Store', time: 'há 19 min', msg: 'Primeiro lote da Coleção Arctic 01 esgotado em tempo recorde.' }
     ];
 
     let currentIndex = 0;

@@ -21,6 +21,7 @@
   <meta name="theme-color" content="#000000">
   
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./showcase-carousel.css">
 </head>
 <body>
   <!-- Awwwards Luxury Texture Overlay -->
@@ -234,13 +235,9 @@
 
       <!-- Filtros Rápidos de Nicho / Segmento -->
       <div class="projects-niche-filters" id="projects-niche-filters">
-        <button class="niche-filter-pill active" data-niche="all">Todos os Segmentos</button>
-        <button class="niche-filter-pill" data-niche="Saúde & Farmacêutica">Saúde & Clínicas</button>
-        <button class="niche-filter-pill" data-niche="Barbearia & Estética Masculina">Barbearias & Estética</button>
+        <button class="niche-filter-pill active" data-niche="all">Todos os Projetos</button>
+        <button class="niche-filter-pill" data-niche="Gastronomia & Hospitalidade">Gastronomia & Hospitalidade</button>
         <button class="niche-filter-pill" data-niche="Moda Urbana & E-commerce">Moda & Streetwear</button>
-        <button class="niche-filter-pill" data-niche="Academias & Studios">Fitness & Academias</button>
-        <button class="niche-filter-pill" data-niche="Design 3D & Branding Digital">Design & Vídeo</button>
-        <button class="niche-filter-pill" data-niche="Tecnologia & Som Profissional">Áudio & Eletrônicos</button>
       </div>
 
       <!-- Container do Carrossel 3D Minimalista & Dinâmico -->
@@ -253,10 +250,10 @@
         <div class="feedback-card">
           <div class="feedback-header">
             <div class="client-meta">
-              <div class="client-avatar" id="fb-avatar">BM</div>
+              <div class="client-avatar" id="fb-avatar">MB</div>
               <div class="client-info">
-                <h4 id="fb-client-name">Dra. Beatriz Mendes</h4>
-                <p id="fb-client-role">Diretora Técnica • Dovena Farmácia</p>
+                <h4 id="fb-client-name">Marco Bellini</h4>
+                <p id="fb-client-role">Chef Executivo & Diretor • Tavolla Milano</p>
               </div>
             </div>
             <div class="feedback-rating-badge">
@@ -272,21 +269,21 @@
           </div>
 
           <blockquote class="feedback-quote" id="fb-quote">
-            "A LocalWeb Pro transformou a forma como nossos pacientes agendam consultas e compram medicamentos. Nosso atendimento no WhatsApp triplicou de eficiência e o site carrega instantaneamente."
+            "A LocalWeb Pro elevou a experiência digital do nosso restaurante a um nível internacional. As reservas automáticas e a comanda digital no smartphone dos clientes eliminaram filas e encantaram nosso público."
           </blockquote>
 
           <div class="feedback-footer">
             <div class="meta-item">
               <span class="meta-label">Projeto Entregue:</span>
-              <strong id="fb-project-title">Dovena - Farmácia & Clínica</strong>
+              <strong id="fb-project-title">Tavolla — Milano Cucina Contemporanea</strong>
             </div>
             <div class="meta-item">
               <span class="meta-label">Prazo de Produção:</span>
-              <strong id="fb-delivery-time">5 Dias Úteis</strong>
+              <strong id="fb-delivery-time">6 Dias Úteis</strong>
             </div>
             <div class="meta-item">
               <span class="meta-label">Resultado Obtido:</span>
-              <strong class="highlight-val" id="fb-results-metric">+340% em agendamentos</strong>
+              <strong class="highlight-val" id="fb-results-metric">+420% em reservas online</strong>
             </div>
           </div>
 
@@ -313,7 +310,7 @@
         <div class="modal-header-left">
           <div class="modal-address-bar">
             <svg class="lock-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-            <span class="modal-url" id="modal-url-display">https://dovena.localwebpro.com.br</span>
+            <span class="modal-url" id="modal-url-display">https://tavolla.vercel.app</span>
           </div>
         </div>
 
@@ -361,6 +358,95 @@
 
     </div>
   </div>
+
+  <!-- ==========================================================================
+       SHOWCASE CAROUSEL (WHITE DESERT INSPIRED)
+       Vitrine de Expedições Digitais & Soluções Flagship
+       ========================================================================== -->
+  <section class="showcase-carousel-section" id="showcase-carousel" role="region" aria-roledescription="carousel" aria-label="Vitrine de Expedições Digitais e Projetos de Alto Padrão">
+    <div class="container">
+      
+      <!-- Cabeçalho Minimalista com Título e Setas Circulares -->
+      <div class="showcase-header-row">
+        <div class="showcase-title-col">
+          <span class="showcase-tag">Showcase Flagship // Alta Performance</span>
+          <h2 class="showcase-title">Expedições Digitais & Projetos Flagship</h2>
+          <p class="showcase-subtitle">Design editorial, carregamento instantâneo e engenharia de conversão. Conheça nossos projetos ao vivo.</p>
+        </div>
+
+        <!-- Controles de Navegação (Setas Anterior / Próxima) -->
+        <div class="showcase-nav-controls" role="group" aria-label="Controles do carrossel">
+          <button type="button" class="showcase-arrow-btn showcase-arrow-prev" aria-label="Slide anterior" title="Slide anterior">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button type="button" class="showcase-arrow-btn showcase-arrow-next" aria-label="Próximo slide" title="Próximo slide">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Viewport do Carrossel com Efeito Parallax via Wheel e Touch -->
+      <div class="showcase-viewport" tabindex="0" aria-live="polite">
+        <div class="showcase-track">
+
+          <!-- Slide 1: Tavolla Milano -->
+          <article class="showcase-slide" role="group" aria-roledescription="slide" aria-label="Slide 1 de 2: Tavolla Milano Cucina Contemporanea">
+            <div class="showcase-bg-wrapper">
+              <img src="/projects/tavolla-restaurant.jpg" alt="Tavolla Milano Cucina Contemporanea" class="showcase-bg-img" loading="eager" />
+              <div class="showcase-vignette-overlay"></div>
+            </div>
+            
+            <div class="showcase-card-top">
+              <span class="showcase-index-num">01 / 02</span>
+              <span class="showcase-quiet-tag">Gastronomia & Hospitalidade</span>
+            </div>
+
+            <div class="showcase-card-bottom">
+              <h3 class="showcase-card-title">Tavolla — Milano Cucina</h3>
+              <p class="showcase-card-desc">Alta hospitalidade milanesa com comanda digital em tempo real, reserva de mesas online, massas aos 30 gemas em mármore Botticino e adega de vinhos DOP.</p>
+              <a href="https://tavolla.vercel.app/" target="_blank" rel="noopener noreferrer" class="showcase-action-row" aria-label="Acessar Tavolla Milano ao vivo">
+                <span>Acessar Site Ao Vivo</span>
+                <svg class="showcase-action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Slide 2: FRZN Store -->
+          <article class="showcase-slide" role="group" aria-roledescription="slide" aria-label="Slide 2 de 2: FRZN Store Streetwear Técnico Ártico">
+            <div class="showcase-bg-wrapper">
+              <img src="/projects/frzn-winterwear.jpg" alt="FRZN Store Streetwear Técnico Ártico" class="showcase-bg-img" loading="lazy" />
+              <div class="showcase-vignette-overlay"></div>
+            </div>
+            
+            <div class="showcase-card-top">
+              <span class="showcase-index-num">02 / 02</span>
+              <span class="showcase-quiet-tag">Moda & E-Commerce Flagship</span>
+            </div>
+
+            <div class="showcase-card-bottom">
+              <h3 class="showcase-card-title">FRZN™ Store — Streetwear Ártico</h3>
+              <p class="showcase-card-desc">E-commerce cinematográfico para vestuário técnico de alta montanha e inverno extremo, com micro-interações GSAP fluidas, transições Ice Glaze e checkout direto.</p>
+              <a href="http://frznstore.vercel.app/" target="_blank" rel="noopener noreferrer" class="showcase-action-row" aria-label="Acessar FRZN Store ao vivo">
+                <span>Acessar Site Ao Vivo</span>
+                <svg class="showcase-action-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Indicadores de Paginação e Dica de Scroll -->
+      <div class="showcase-footer-row">
+        <div class="showcase-dots" role="tablist" aria-label="Paginação do carrossel"></div>
+        <div class="showcase-scroll-hint" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="7"/><line x1="12" y1="6" x2="12" y2="10"/></svg>
+          <span>Use a roda do mouse ou arraste para navegar</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
 
   <!-- Seção Calculadora Interativa de Retorno (ROI) -->
   <section class="roi-section" id="calculadora">
@@ -1295,13 +1381,13 @@
 
   <!-- Notificações Flutuantes de Prova Social (Social Proof Toast) -->
   <div class="social-proof-toast" id="social-proof-toast" aria-live="polite">
-    <div class="toast-avatar" id="toast-avatar">BM</div>
+    <div class="toast-avatar" id="toast-avatar">MB</div>
     <div class="toast-content">
       <div class="toast-title-row">
-        <strong class="toast-title" id="toast-title">Dovena Farmácia</strong>
-        <span class="toast-time" id="toast-time">há 4 min</span>
+        <strong class="toast-title" id="toast-title">Tavolla Milano</strong>
+        <span class="toast-time" id="toast-time">há 3 min</span>
       </div>
-      <p class="toast-msg" id="toast-msg">Atingiu +340% em agendamentos pelo novo site.</p>
+      <p class="toast-msg" id="toast-msg">+420% em reservas online com o novo site e comanda digital.</p>
     </div>
     <button class="toast-close" id="btn-close-toast" aria-label="Fechar notificação">×</button>
   </div>

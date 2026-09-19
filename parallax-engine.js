@@ -26,9 +26,7 @@ export class ParallaxExperienceEngine {
   init() {
     this.initLenis();
     this.initScrollParallax();
-    this.initInteractive3DTilt();
     this.initProcessScrollTracker();
-    this.initHeroAtmosphere();
     this.bindEvents();
   }
 
